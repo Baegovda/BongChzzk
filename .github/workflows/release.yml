@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run tests
+        run: node --test
+
+      - name: Check manifest version
+        run: |
+          set -eu
+          TAG="${GITHUB_REF_NAME#v}"
+          VERSION="$(node --input-type=module -e "import {readFileSync} from 'node:fs'; process.stdout.write(JSON.parse(readFileSync('manifest.json','utf8')).version)")"
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "manifest.json version ${VERSION} does not match tag ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+          echo "manifest version ${VERSION} matches ${GITHUB_REF_NAME}"
+
+      - name: Build zip
+        run: |
+          set -eu
+          VERSION="${GITHUB_REF_NAME#v}"
+          zip -r "bongchzzk-${VERSION}.zip" \
+            manifest.json \
+            content.js \
+            popup.html \
+            popup.js \
+            README.md \
+            CHANGELOG.md \
+            lib \
+            icons
+
+      - name: Extract changelog notes
+        run: |
+          set -eu
+          VERSION="${GITHUB_REF_NAME#v}"
+          node scripts/extract-changelog.js "$VERSION" CHANGELOG.md > release-notes.md
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: Baegovda/BongChzzk
+        run: |
+          set -eu
+          VERSION="${GITHUB_REF_NAME#v}"
+          gh release create "${GITHUB_REF_NAME}" \
+            "bongchzzk-${VERSION}.zip" \
+            --title "${GITHUB_REF_NAME}" \
+            --notes-file release-notes.md

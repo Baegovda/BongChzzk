@@ -1,5 +1,5 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
-<style>body{width:250px;font:13px sans-serif;padding:10px;background:#141517;color:#eee}h3{margin:0 0 10px;color:#00ffa3}label{display:flex;justify-content:space-between;align-items:center;margin:8px 0}input[type=number]{width:60px}.c{margin-top:12px;padding-top:8px;border-top:1px solid #333;color:#aaa}button{font-size:11px}</style>
+<style>body{width:250px;font:13px sans-serif;padding:10px;background:#141517;color:#eee}h3{margin:0 0 10px;color:#00ffa3}label{display:flex;justify-content:space-between;align-items:center;margin:8px 0}input[type=number]{width:60px}.c{margin-top:12px;padding-top:8px;border-top:1px solid #333;color:#aaa}button{font-size:11px}.tools{margin-top:10px;display:flex;gap:6px}#updateStatus{color:#aaa;margin:6px 0;word-break:keep-all}#updateStatus.error{color:#ff6b6b}details{margin-top:6px;color:#aaa}#githubToken{width:100%;box-sizing:border-box}</style>
 </head><body>
 <h3>BongChzzk</h3>
 <label>자동 복구 사용<input type="checkbox" id="enabled"></label>
@@ -7,4 +7,17 @@
 <label>복구 간격(초)<input type="number" id="cooldown" min="3" max="120"></label>
 <label>화면 알림 표시<input type="checkbox" id="toast"></label>
 <div class="c">복구 횟수: <b id="count">0</b> <button id="reset">초기화</button><div id="last"></div></div>
-<script src="popup.js"></script></body></html>
+<div class="tools">
+  <button id="checkUpdate" type="button">업데이트 확인</button>
+  <button id="manage" type="button">확장 프로그램 관리</button>
+</div>
+<p id="updateStatus" role="status"></p>
+<p id="updateLinks" hidden>
+  <button id="openRelease" type="button">릴리스 페이지</button>
+  <button id="openZip" type="button">zip 다운로드</button>
+</p>
+<details><summary>GitHub 토큰 (비공개 저장소용)</summary>
+  <input type="password" id="githubToken" placeholder="github_pat_… (Contents: Read)" autocomplete="off">
+  <div>이 기기에만 저장됩니다(chrome.storage.local).</div>
+</details>
+<script type="module" src="popup.js"></script></body></html>

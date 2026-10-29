@@ -1,3 +1,5 @@
+import { checkForUpdate, openExtensionsPage, TOKEN_KEY } from './lib/updates.js';
+
 const DEF = { enabled: true, threshold: 5, cooldown: 10, toast: true };
 const $ = id => document.getElementById(id);
 chrome.storage.sync.get(DEF, v => {
@@ -15,3 +17,46 @@ function showCount() {
 }
 $('reset').onclick = () => chrome.storage.local.set({ recoverCount: 0, lastRecover: 0 }, showCount);
 showCount();
+
+const updateButton = $('checkUpdate');
+const updateStatus = $('updateStatus');
+const updateLinks = $('updateLinks');
+const openRelease = $('openRelease');
+const openZip = $('openZip');
+const tokenBox = $(TOKEN_KEY);
+let releaseUrl = '';
+let zipUrl = '';
+
+function setUpdate(text, isError) {
+  updateStatus.textContent = text || '';
+  updateStatus.classList.toggle('error', Boolean(isError));
+}
+
+function showReleaseLinks(htmlUrl, downloadUrl) {
+  releaseUrl = htmlUrl || '';
+  zipUrl = downloadUrl || '';
+  updateLinks.hidden = !releaseUrl && !zipUrl;
+  openRelease.hidden = !releaseUrl;
+  openZip.hidden = !zipUrl;
+}
+
+chrome.storage.local.get({ [TOKEN_KEY]: '' }, (v) => { tokenBox.value = v[TOKEN_KEY] || ''; });
+tokenBox.addEventListener('change', () => chrome.storage.local.set({ [TOKEN_KEY]: tokenBox.value.trim() }));
+$('manage').addEventListener('click', () => { openExtensionsPage(); });
+openRelease.addEventListener('click', () => { if (releaseUrl) chrome.tabs.create({ url: releaseUrl }); });
+openZip.addEventListener('click', () => { if (zipUrl) chrome.tabs.create({ url: zipUrl }); });
+updateButton.addEventListener('click', async () => {
+  updateButton.disabled = true;
+  showReleaseLinks('', '');
+  setUpdate('확인 중…');
+  try {
+    const token = tokenBox.value.trim();
+    const result = await checkForUpdate(chrome.runtime.getManifest().version, { token });
+    setUpdate(result.message, false);
+    if (!result.upToDate) showReleaseLinks(result.htmlUrl, result.zipUrl);
+  } catch (error) {
+    setUpdate(error?.message || '업데이트 정보를 가져오지 못했습니다.', true);
+  } finally {
+    updateButton.disabled = false;
+  }
+});

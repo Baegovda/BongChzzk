@@ -1,16 +1,38 @@
 {
   "manifest_version": 3,
   "name": "BongChzzk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "치지직 영상이 무한 버퍼링에 빠지면 페이지 새로고침 없이 플레이어만 자동으로 복구합니다.",
-  "permissions": ["storage"],
-  "host_permissions": ["https://chzzk.naver.com/*"],
-  "content_scripts": [{
-    "matches": ["https://chzzk.naver.com/*"],
-    "js": ["content.js"],
-    "run_at": "document_idle",
-    "all_frames": true
-  }],
-  "action": {"default_popup": "popup.html", "default_icon": {"16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png"}},
-  "icons": {"16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png"}
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://chzzk.naver.com/*",
+    "https://api.github.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chzzk.naver.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
 }

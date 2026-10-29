@@ -21,3 +21,16 @@
 ## 설정
 툴바 아이콘 클릭: 사용 여부, 버퍼링 판정 시간, 복구 간격, 화면 알림, 복구 횟수 확인.
 콘솔(F12)에 `[BongChzzk]` 로그가 남습니다.
+
+## 업데이트
+
+팝업의 **업데이트 확인**을 누르면 GitHub 최신 릴리스(`Baegovda/BongChzzk`)와 현재 버전을 비교합니다. 새 버전이 있으면 **zip 다운로드**로 받아 기존 폴더에 덮어쓴 뒤, **확장 프로그램 관리**에서 새로고침(↻)하세요.
+
+저장소가 비공개라면 팝업의 "GitHub 토큰"에 Fine-grained 토큰(이 저장소, Contents: Read)을 넣어야 확인됩니다. zip 다운로드는 GitHub에 로그인된 브라우저에서 열립니다.
+
+## 릴리스 방법
+
+1. `manifest.json`, `package.json`의 `version`을 올립니다.
+2. `CHANGELOG.md` 맨 위에 `## [x.y.z] - YYYY-MM-DD` 섹션을 추가합니다.
+3. `node --test` 후 `main`에 커밋/푸시합니다.
+4. `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin vX.Y.Z` → Actions가 `bongchzzk-X.Y.Z.zip` 릴리스를 만듭니다.
