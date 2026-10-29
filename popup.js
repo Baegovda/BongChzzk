@@ -1,4 +1,4 @@
-import { checkForUpdate, openExtensionsPage, TOKEN_KEY } from './lib/updates.js';
+import { checkForUpdate, openExtensionsPage } from './lib/updates.js';
 
 const DEF = { enabled: true, threshold: 5, cooldown: 10, toast: true };
 const $ = id => document.getElementById(id);
@@ -23,7 +23,6 @@ const updateStatus = $('updateStatus');
 const updateLinks = $('updateLinks');
 const openRelease = $('openRelease');
 const openZip = $('openZip');
-const tokenBox = $(TOKEN_KEY);
 let releaseUrl = '';
 let zipUrl = '';
 
@@ -40,8 +39,6 @@ function showReleaseLinks(htmlUrl, downloadUrl) {
   openZip.hidden = !zipUrl;
 }
 
-chrome.storage.local.get({ [TOKEN_KEY]: '' }, (v) => { tokenBox.value = v[TOKEN_KEY] || ''; });
-tokenBox.addEventListener('change', () => chrome.storage.local.set({ [TOKEN_KEY]: tokenBox.value.trim() }));
 $('manage').addEventListener('click', () => { openExtensionsPage(); });
 openRelease.addEventListener('click', () => { if (releaseUrl) chrome.tabs.create({ url: releaseUrl }); });
 openZip.addEventListener('click', () => { if (zipUrl) chrome.tabs.create({ url: zipUrl }); });
@@ -50,8 +47,7 @@ updateButton.addEventListener('click', async () => {
   showReleaseLinks('', '');
   setUpdate('확인 중…');
   try {
-    const token = tokenBox.value.trim();
-    const result = await checkForUpdate(chrome.runtime.getManifest().version, { token });
+    const result = await checkForUpdate(chrome.runtime.getManifest().version);
     setUpdate(result.message, false);
     if (!result.upToDate) showReleaseLinks(result.htmlUrl, result.zipUrl);
   } catch (error) {

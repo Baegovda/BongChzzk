@@ -26,8 +26,6 @@
 
 팝업의 **업데이트 확인**을 누르면 GitHub 최신 릴리스(`Baegovda/BongChzzk`)와 현재 버전을 비교합니다. 새 버전이 있으면 **zip 다운로드**로 받아 기존 폴더에 덮어쓴 뒤, **확장 프로그램 관리**에서 새로고침(↻)하세요.
 
-저장소가 비공개라면 팝업의 "GitHub 토큰"에 Fine-grained 토큰(이 저장소, Contents: Read)을 넣어야 확인됩니다. zip 다운로드는 GitHub에 로그인된 브라우저에서 열립니다.
-
 ## 릴리스 방법
 
 1. `manifest.json`, `package.json`의 `version`을 올립니다.
