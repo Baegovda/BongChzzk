@@ -55,7 +55,7 @@ const handleChange = (ev: Event) => {
   width: 150px;
 
   &:focus {
-    border-color: #4caf50;
+    border-color: var(--be-accent, #4caf50);
     box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
     outline: none;
   }

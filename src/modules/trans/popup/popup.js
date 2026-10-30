@@ -1,33 +1,16 @@
 import { canTranslateUrl, languageLabel, normalizeSettings, resolveModel, STORAGE_KEY } from '../lib/settings.js';
 import { MESSAGES } from '../lib/messages.js';
 import { blockedToggle, refreshToggle, settleToggle, startToggle } from '../lib/toggle-state.js';
-import { checkForUpdate, openExtensionsPage, openUpdatePage } from '../lib/updates.js';
 
 const enabledBox = document.querySelector('#enabled');
 const switchState = document.querySelector('#switchState');
 const statusEl = document.querySelector('#status');
 const metaEl = document.querySelector('#meta');
 const optionsButton = document.querySelector('#options');
-const updateButton = document.querySelector('#checkUpdate');
-const manageButton = document.querySelector('#manage');
-const updateStatus = document.querySelector('#updateStatus');
-const updateLinks = document.querySelector('#updateLinks');
-const openRelease = document.querySelector('#openRelease');
-const openZip = document.querySelector('#openZip');
-const doUpdate = document.querySelector('#doUpdate');
-
-let releaseUrl = '';
-let zipUrl = '';
-let assetUrl = '';
 
 function setStatus(text, isError) {
   statusEl.textContent = text || '';
   statusEl.classList.toggle('error', Boolean(isError));
-}
-
-function setUpdate(text, isError) {
-  updateStatus.textContent = text || '';
-  updateStatus.classList.toggle('error', Boolean(isError));
 }
 
 function describe(status) {
@@ -108,16 +91,6 @@ async function refresh() {
   setStatus(response?.ok === false ? response.message : describe(status), Boolean(status?.error || response?.ok === false));
 }
 
-function showReleaseLinks(htmlUrl, downloadUrl, directAsset) {
-  releaseUrl = htmlUrl || '';
-  zipUrl = downloadUrl || '';
-  assetUrl = directAsset || '';
-  updateLinks.hidden = !releaseUrl && !zipUrl && !assetUrl;
-  openRelease.hidden = !releaseUrl;
-  openZip.hidden = !zipUrl;
-  doUpdate.hidden = !assetUrl;
-}
-
 async function init() {
   const stored = await chrome.storage.local.get(STORAGE_KEY);
   const settings = normalizeSettings(stored[STORAGE_KEY]);
@@ -131,32 +104,6 @@ async function init() {
   hasKey = Boolean(settings.apiKey);
   if (!hasKey) setStatus(MESSAGES.NO_API_KEY, true);
   optionsButton.addEventListener('click', () => chrome.tabs.create({ url: chrome.runtime.getURL('trans/options/options.html') }));
-  manageButton.addEventListener('click', () => {
-    openExtensionsPage();
-  });
-  openRelease.addEventListener('click', () => {
-    if (releaseUrl) chrome.tabs.create({ url: releaseUrl });
-  });
-  openZip.addEventListener('click', () => {
-    if (zipUrl) chrome.tabs.create({ url: zipUrl });
-  });
-  doUpdate.addEventListener('click', () => {
-    if (assetUrl) openUpdatePage();
-  });
-  updateButton.addEventListener('click', async () => {
-    updateButton.disabled = true;
-    showReleaseLinks('', '', '');
-    setUpdate('확인 중…');
-    try {
-      const result = await checkForUpdate(chrome.runtime.getManifest().version);
-      setUpdate(result.message, false);
-      if (!result.upToDate) showReleaseLinks(result.htmlUrl, result.zipUrl, result.assetUrl);
-    } catch (error) {
-      setUpdate(error?.message || '업데이트 정보를 가져오지 못했습니다.', true);
-    } finally {
-      updateButton.disabled = false;
-    }
-  });
   enabledBox.addEventListener('change', () => {
     const turnOn = enabledBox.checked;
     const generation = ++toggleGeneration;

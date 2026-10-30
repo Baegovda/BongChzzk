@@ -976,7 +976,7 @@ body {
 // 1.0.6: 치지직 탭과 같은 배치 (제목 → 알약 하위 메뉴 → 2열 카드, 행 = 왼쪽 이름 / 오른쪽 조작)
 // 팝업(dc.html) 셸 안에서만 적용된다.
 // ============================================================
-body .refresher-app-shell {
+body #refresher-app.refresher-app-shell {
   .refresher-title-zone {
     background: var(--be-bg, var(--refresher-bg));
     display: block;
@@ -1069,11 +1069,33 @@ body .refresher-app-shell {
 
 body:has(> #app > .refresher-app-shell) { margin: 0; }
 body #refresher-app.refresher-app-shell { width: 100%; }
-body .refresher-app-shell .tab0 .update-panel {
-  border-radius: var(--be-radius-lg, 12px);
-  margin-bottom: 0;
-  padding: 8px 14px 10px;
-  h4 { font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--be-muted, inherit); }
-  button { font-size: 12px; padding: 6px 12px; }
-  .update-panel__auto-title { font-size: 13px; font-weight: 500; }
+// 1.0.7: 디시 팝업 안의 선택칸·입력칸도 공통 어두운 테마(디시 페이지 본문 UI는 변수 기본값 그대로)
+body #refresher-app.refresher-app-shell {
+  select, .refresher-options, input[type="text"], input[type="number"], textarea {
+    background-color: var(--be-surface-2, #fff);
+    border: 1px solid var(--be-border-strong, #ccc);
+    border-radius: var(--be-radius-sm, 4px);
+    color: var(--be-text, inherit);
+    font: 12px/1.3 var(--be-font, inherit);
+    &:focus, &:focus-visible { border-color: var(--be-accent, #4caf50); box-shadow: var(--be-focus, none); outline: none; }
+  }
+  .refresher-options { height: 28px; padding: 0 6px; option { background: var(--be-surface-2, #fff); color: var(--be-text, #000); } }
+  .tab6 .be-grid { margin-top: 2px; }
+  .be-sec > h4 {
+    color: var(--be-muted, inherit); font-size: 11px; font-weight: 600; letter-spacing: .06em;
+    margin: 8px 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--be-border, #ddd);
+  }
+  .be-sec .be-hint { color: var(--be-muted, inherit); font-size: 12px; letter-spacing: 0; line-height: 1.5; margin: 4px 0; b { color: var(--be-text-2, inherit); } }
+  .be-sec .be-actions button { font-size: 12px; padding: 6px 12px; }
+  .refresher-setting .control input[type="text"] { max-width: 180px; width: 180px; }
+  input[type="range"] { accent-color: var(--be-accent, #4caf50); }
+  .tab4 .refresher-module {
+    background-color: var(--be-surface, #f8f8f8); border: 1px solid var(--be-border, transparent);
+    border-radius: var(--be-radius-lg, 12px); margin-bottom: 8px; padding: 10px 14px;
+    .title, h2, h3, p { color: var(--be-text, inherit); font-size: 13px; }
+  }
+  .tab3 .section-header h2 {
+    color: var(--be-muted, inherit); font-size: 11px; font-weight: 600; letter-spacing: .06em; margin: 0 0 6px;
+  }
+  .be-empty { margin-top: 4px; }
 }

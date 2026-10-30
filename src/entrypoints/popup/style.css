@@ -24,3 +24,9 @@ iframe.active { display: block; }
 #updateStatus, #ioStatus { color: var(--be-text-2); }
 #updateStatus.ok, #ioStatus.ok { color: var(--be-ok); }
 #updateStatus.error, #ioStatus.error { color: var(--be-error); }
+.be-notes { background: var(--be-surface-2); border-radius: var(--be-radius-sm); padding: 6px 10px; margin: 6px 0; }
+.be-notes[hidden], .be-hint[hidden] { display: none; }
+.be-notes small { color: var(--be-muted); font-size: 11px; font-weight: 600; }
+.be-notes p { margin: 2px 0 0; max-height: 84px; overflow: auto; white-space: pre-wrap; word-break: break-word; font-size: 12px; color: var(--be-text-2); }
+.be-links { display: flex; gap: 12px; }
+#lastChecked { color: var(--be-text-2); }

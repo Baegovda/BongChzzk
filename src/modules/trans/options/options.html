@@ -118,28 +118,14 @@
           <button class="primary" id="save" type="submit">저장</button>
           <button id="checkKey" type="button">키 확인</button>
         </div>
-        <div class="actions">
-          <button id="exportSettings" type="button">설정 내보내기</button>
-          <button id="importSettings" type="button">설정 가져오기</button>
-          <input id="importFile" type="file" accept="application/json,.json" hidden>
-        </div>
-        <p class="hint">화면에 있는 키와 모델 설정을 JSON으로 저장하거나 다시 불러옵니다. 파일에 API 키가 들어 있으니 남에게 보내지 마세요. manifest의 <code>key</code> 때문에 다른 폴더에서 다시 로드해도 같은 확장 프로그램 ID를 쓰며, 확장 프로그램을 제거하지 않았다면 저장소가 유지됩니다. 완전히 삭제한 뒤에는 이 파일로 다시 가져오세요.</p>
+        <p class="hint">설정 파일 내보내기·가져오기는 BongExtend 팝업의 <b>업데이트·설정</b> 탭(백업·복원)에서 모든 모듈을 한 번에 합니다. 그 파일에는 API 키가 들어 있으니 남에게 보내지 마세요.</p>
         <p id="status" role="status"></p>
       </form>
 
       <section class="note be-card">
         <h2>버전</h2>
         <p id="versionLine"></p>
-        <div class="actions">
-          <button id="checkUpdate" type="button">업데이트 확인</button>
-          <button id="manage" type="button">확장 프로그램 관리</button>
-        </div>
-        <p id="updateStatus" role="status"></p>
-        <p id="updateLinks" hidden>
-          <button class="primary" id="doUpdate" type="button" hidden>지금 업데이트</button>
-          <button id="openRelease" type="button">릴리스 페이지</button>
-          <button id="openZip" type="button">zip 다운로드</button>
-        </p>
+        <p class="hint">업데이트 확인은 BongExtend 팝업의 <b>업데이트·설정</b> 탭에서 합니다.</p>
       </section>
 
       <section class="note be-card">

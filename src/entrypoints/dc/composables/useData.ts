@@ -121,7 +121,7 @@ export function useData() {
     };
 
     const clearData = async (): Promise<void> => {
-        if (!confirm("모든 설정과 사용자 데이터를 초기화할까요?")) return;
+        if (!confirm("디시 설정·차단·메모를 초기화할까요? 다른 모듈 설정은 그대로입니다.")) return;
 
         loading.value = true;
         try {

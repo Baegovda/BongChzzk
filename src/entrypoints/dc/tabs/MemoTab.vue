@@ -1,7 +1,7 @@
 <template>
   <div class="tab tab3">
     <div class="section-header">
-      <h2>데이터 관리</h2>
+      <h2>메모 목록 내보내기·가져오기</h2>
       <div class="section-actions">
         <button @click="exportMemo">내보내기</button>
         <button @click="importMemo">가져오기</button>

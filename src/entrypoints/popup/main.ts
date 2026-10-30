@@ -60,50 +60,82 @@ moduleSwitch.addEventListener("change", async () => {
         : "껐어요. 열려 있던 페이지는 새로고침(F5)하면 빠져요.";
 });
 
-// ===== 업데이트 (하나로 합친 업데이트: 옛 BongDC 방식) =====
+// ===== 업데이트 (BongExtend 전체에서 업데이트 UI는 이 탭 하나뿐) =====
 type UpdateStatus = {
     currentVersion?: string; latestVersion?: string; updateAvailable?: boolean;
-    releaseUrl?: string; downloadUrl?: string; error?: string; message?: string;
+    releaseUrl?: string; downloadUrl?: string; releaseNotes?: string; error?: string;
+    lastCheckedAt?: number; autoCheck?: boolean;
 };
 const updateStatus = $("updateStatus");
 const doUpdate = $<HTMLButtonElement>("doUpdate");
+const downloadZip = $<HTMLButtonElement>("downloadZip");
 const openRelease = $<HTMLButtonElement>("openRelease");
+const checkBtn = $<HTMLButtonElement>("checkUpdate");
+const autoCheck = $<HTMLInputElement>("autoCheck");
+const lastChecked = $("lastChecked");
+const notesBox = $("releaseNotesBox");
+const notes = $("releaseNotes");
+const updateHint = $("updateHint");
 let releaseUrl = "";
 $("ver").textContent = chrome.runtime.getManifest().version;
+
+const setStatus = (text: string, kind = "") => { updateStatus.textContent = text; updateStatus.className = kind; };
 
 const renderUpdate = (s: UpdateStatus | null | undefined) => {
     if (!s) return;
     const cur = chrome.runtime.getManifest().version;
     releaseUrl = s.releaseUrl || "";
-    openRelease.hidden = !releaseUrl;
     const available = Boolean(s.updateAvailable && s.latestVersion && isNewerVersion(s.latestVersion, cur));
-    if (s.error) {
-        updateStatus.textContent = s.error;
-        updateStatus.className = "error";
-    } else if (available) {
-        updateStatus.textContent = `${cur} → ${s.latestVersion} 업데이트 가능`;
-        updateStatus.className = "ok";
-    } else if (s.latestVersion) {
-        updateStatus.textContent = `최신 버전입니다. (${cur})`;
-        updateStatus.className = "";
-    }
-    doUpdate.hidden = !available;
+    if (s.error) setStatus(s.error, "error");
+    else if (available) setStatus(`${cur} → ${s.latestVersion} 업데이트 가능`, "ok");
+    else if (s.latestVersion) setStatus("최신 버전입니다.");
+    if (typeof s.autoCheck === "boolean") autoCheck.checked = s.autoCheck;
+    lastChecked.textContent = s.lastCheckedAt ? new Date(s.lastCheckedAt).toLocaleString("ko-KR") : "아직 확인하지 않음";
+    doUpdate.hidden = !available || !s.downloadUrl;
+    downloadZip.hidden = !available || !s.downloadUrl;
+    openRelease.hidden = !available || !releaseUrl;
+    updateHint.hidden = doUpdate.hidden;
+    notesBox.hidden = !(available && s.releaseNotes);
+    notes.textContent = available ? s.releaseNotes || "" : "";
 };
 
-$("checkUpdate").addEventListener("click", async () => {
-    updateStatus.textContent = "확인 중…";
-    updateStatus.className = "";
+const check = async (force: boolean) => {
+    if (force) { checkBtn.disabled = true; setStatus("확인 중…"); }
     try {
-        renderUpdate(await sendMessage("checkForUpdate", {force: true}) as UpdateStatus);
+        renderUpdate(await sendMessage("checkForUpdate", {force}) as UpdateStatus);
     } catch (error) {
-        updateStatus.textContent = (error as Error)?.message || "업데이트 정보를 가져오지 못했습니다.";
-        updateStatus.className = "error";
+        if (force) setStatus((error as Error)?.message || "업데이트 정보를 가져오지 못했습니다.", "error");
+    } finally {
+        checkBtn.disabled = false;
+    }
+};
+
+checkBtn.addEventListener("click", () => void check(true));
+doUpdate.addEventListener("click", () => void chrome.tabs.create({url: chrome.runtime.getURL("/update.html")}));
+downloadZip.addEventListener("click", async () => {
+    try {
+        const r = await sendMessage("applyUpdate", undefined) as {ok: boolean; error?: string};
+        if (!r?.ok) setStatus(r?.error || "zip을 받지 못했습니다.", "error");
+        else setStatus("zip 다운로드를 시작했어요. 압축을 기존 폴더에 덮어쓴 뒤 확장 프로그램을 새로고침하세요.", "ok");
+    } catch {
+        setStatus("zip을 받지 못했습니다.", "error");
     }
 });
-doUpdate.addEventListener("click", () => void chrome.tabs.create({url: chrome.runtime.getURL("/update.html")}));
 openRelease.addEventListener("click", () => { if (releaseUrl) void chrome.tabs.create({url: releaseUrl}); });
 $("manage").addEventListener("click", () => void chrome.tabs.create({url: `chrome://extensions/?id=${chrome.runtime.id}`}));
-sendMessage("getUpdateStatus", undefined).then((s) => renderUpdate(s as UpdateStatus)).catch(() => {});
+autoCheck.addEventListener("change", async () => {
+    const want = autoCheck.checked;
+    try {
+        renderUpdate(await sendMessage("setUpdateAutoCheck", {enabled: want}) as UpdateStatus);
+    } catch {
+        autoCheck.checked = !want;
+        setStatus("자동 확인 설정을 저장하지 못했습니다.", "error");
+    }
+});
+sendMessage("getUpdateStatus", undefined).then((s) => {
+    renderUpdate(s as UpdateStatus);
+    if ((s as UpdateStatus)?.autoCheck) void check(false);
+}).catch(() => {});
 
 // ===== 설정 내보내기·가져오기 =====
 const ioStatus = $("ioStatus");

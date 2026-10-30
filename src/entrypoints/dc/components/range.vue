@@ -74,7 +74,7 @@ const handleChange = () => {
     &::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      background: #4caf50;
+      background: var(--be-accent, #4caf50);
       border-radius: 50%;
       cursor: pointer;
       height: 18px;
@@ -88,7 +88,7 @@ const handleChange = () => {
     }
 
     &::-moz-range-thumb {
-      background: #4caf50;
+      background: var(--be-accent, #4caf50);
       border: none;
       border-radius: 50%;
       cursor: pointer;

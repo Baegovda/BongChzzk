@@ -9,11 +9,8 @@ import {
   STORAGE_KEY,
   isValidModelId,
   normalizeSettings,
-  parseSettingsImport,
-  serializeSettings,
 } from '../lib/settings.js';
 import { saveSettings } from '../lib/settings-store.js';
-import { checkForUpdate, openExtensionsPage, openUpdatePage } from '../lib/updates.js';
 
 const form = document.querySelector('#settings');
 const apiKey = document.querySelector('#apiKey');
@@ -32,23 +29,10 @@ const savedCalls = document.querySelector('#savedCalls');
 const resetStatsButton = document.querySelector('#resetCacheStats');
 const statusEl = document.querySelector('#status');
 const clearButton = document.querySelector('#clearCache');
-const exportButton = document.querySelector('#exportSettings');
-const importButton = document.querySelector('#importSettings');
-const importFile = document.querySelector('#importFile');
 const checkKeyButton = document.querySelector('#checkKey');
 const versionLine = document.querySelector('#versionLine');
-const updateButton = document.querySelector('#checkUpdate');
-const manageButton = document.querySelector('#manage');
-const updateStatus = document.querySelector('#updateStatus');
-const updateLinks = document.querySelector('#updateLinks');
-const openRelease = document.querySelector('#openRelease');
-const openZip = document.querySelector('#openZip');
-const doUpdate = document.querySelector('#doUpdate');
 
 const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
-let releaseUrl = '';
-let zipUrl = '';
-let assetUrl = '';
 
 function addOptions(select, choices, valueKey) {
   for (const choice of choices) {
@@ -71,11 +55,6 @@ addOptions(cacheMaxBytes, CACHE_SIZE_CHOICES, 'bytes');
 function setStatus(text, kind) {
   statusEl.textContent = text;
   statusEl.className = kind || '';
-}
-
-function setUpdate(text, kind) {
-  updateStatus.textContent = text;
-  updateStatus.className = kind || '';
 }
 
 function selectedValue(name, fallback) {
@@ -223,36 +202,6 @@ checkKeyButton.addEventListener('click', async () => {
   }
 });
 
-exportButton.addEventListener('click', () => {
-  const payload = serializeSettings(draftSettings());
-  const blob = new Blob([payload], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'bongtrans-settings.json';
-  link.click();
-  URL.revokeObjectURL(url);
-  setStatus('설정 파일을 저장했습니다. API 키가 포함되어 있습니다.', 'ok');
-});
-
-importButton.addEventListener('click', () => {
-  importFile.click();
-});
-
-importFile.addEventListener('change', async () => {
-  const file = importFile.files && importFile.files[0];
-  importFile.value = '';
-  if (!file) return;
-  try {
-    const next = parseSettingsImport(await file.text());
-    await saveSettings(next);
-    fill(next);
-    setStatus('설정을 가져왔습니다.', 'ok');
-  } catch (error) {
-    setStatus(error?.message || '설정을 가져오지 못했습니다.', 'error');
-  }
-});
-
 clearButton.addEventListener('click', async () => {
   const confirmed = confirm('저장된 번역 캐시를 지울까요? 같은 문장도 다시 API로 번역합니다. 누적 통계는 남습니다.');
   if (!confirmed) return;
@@ -275,43 +224,6 @@ resetStatsButton.addEventListener('click', async () => {
   }
   renderCacheStats(response);
   setStatus('캐시 통계를 초기화했습니다.', 'ok');
-});
-
-function showReleaseLinks(htmlUrl, downloadUrl, directAsset) {
-  releaseUrl = htmlUrl || '';
-  zipUrl = downloadUrl || '';
-  assetUrl = directAsset || '';
-  updateLinks.hidden = !releaseUrl && !zipUrl && !assetUrl;
-  openRelease.hidden = !releaseUrl;
-  openZip.hidden = !zipUrl;
-  doUpdate.hidden = !assetUrl;
-}
-
-manageButton.addEventListener('click', () => {
-  openExtensionsPage();
-});
-openRelease.addEventListener('click', () => {
-  if (releaseUrl) chrome.tabs.create({ url: releaseUrl });
-});
-openZip.addEventListener('click', () => {
-  if (zipUrl) chrome.tabs.create({ url: zipUrl });
-});
-doUpdate.addEventListener('click', () => {
-  if (assetUrl) openUpdatePage();
-});
-updateButton.addEventListener('click', async () => {
-  updateButton.disabled = true;
-  showReleaseLinks('', '', '');
-  setUpdate('확인 중…', '');
-  try {
-    const result = await checkForUpdate(chrome.runtime.getManifest().version);
-    setUpdate(result.message, result.upToDate ? 'ok' : 'warn');
-    if (!result.upToDate) showReleaseLinks(result.htmlUrl, result.zipUrl, result.assetUrl);
-  } catch (error) {
-    setUpdate(error?.message || '업데이트 정보를 가져오지 못했습니다.', 'error');
-  } finally {
-    updateButton.disabled = false;
-  }
 });
 
 versionLine.textContent = `설치된 버전 ${chrome.runtime.getManifest().version}`;

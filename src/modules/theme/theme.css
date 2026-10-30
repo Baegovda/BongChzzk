@@ -164,3 +164,8 @@
 }
 .be-subnav > *:hover { color: var(--be-text); background: var(--be-surface-2); }
 .be-subnav > .active { color: var(--be-accent); background: var(--be-accent-soft); border-color: rgba(62, 197, 220, .35); }
+
+/* 빈 상태·불러오는 중 안내 (1.0.7) */
+.be-empty { color: var(--be-muted); font-size: 12px; text-align: center; padding: 24px 12px; margin: 0; border: 1px dashed var(--be-border); border-radius: var(--be-radius-lg); }
+/* 키보드 포커스 링: 버튼·링크·하위 메뉴 */
+.be-page button:focus-visible, .be-page a:focus-visible, .be-page input[type=checkbox]:focus-visible, .be-subnav > *:focus-visible { outline: none; box-shadow: var(--be-focus); }
