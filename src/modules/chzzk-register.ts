@@ -11,11 +11,13 @@ export const CHZZK_SCRIPT_FILES = [
     "chzzk/lib/watch.js",
     "chzzk/lib/wide.js",
     "chzzk/lib/player.js",
+    "chzzk/lib/autoplay.js",
     "chzzk/content.js",
     "chzzk/content-following.js",
     "chzzk/content-extras.js",
     "chzzk/content-watch.js",
-    "chzzk/content-wide.js"
+    "chzzk/content-wide.js",
+    "chzzk/content-autoplay.js"
 ];
 
 export const CHZZK_MATCHES = ["https://chzzk.naver.com/*"];
