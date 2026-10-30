@@ -112,6 +112,7 @@
   setInterval(() => {
     if (!cfg.enabled) return;
     const now = Date.now();
+    if (globalThis.__bongAdActive) { for (const v of tracked) { const s = states.get(v); if (s) { s.stallSince = 0; s.lastTime = v.currentTime; } } return; } // 광고 중엔 복구 안 함
     for (const v of tracked) {
       if (!v.isConnected) { tracked.delete(v); continue; }
       const s = states.get(v);

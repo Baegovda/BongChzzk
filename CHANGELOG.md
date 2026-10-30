@@ -5,6 +5,17 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-10-30
+
+### Fixed
+- 채팅 헤더 시청자 수가 보이지 않던 문제를 고쳤습니다. 이제 "채팅" 제목 바로 옆에 표시됩니다.
+
+### Added
+- 시청자 수에 눈 아이콘을 붙였습니다(라이브 빨강, 다시보기 회색). 숫자가 늘면 초록, 줄면 빨강으로 잠깐 깜빡입니다.
+- 후원 랭킹 닉네임 가리기: 주간 랭킹을 숨기지 않을 때 랭킹 속 닉네임을 흐리게 가립니다(기본 꺼짐).
+- 타임머신 안내창 숨김: 실시간 버튼을 누를 때 뜨는 치트키/타임머신 안내창을 숨깁니다(자동 클릭 없이 숨기기만, 타임머신 기능은 그대로 동작).
+- 광고 방지(실험적): 광고가 감지되면 건너뛰기 버튼을 누르고, 광고 영상을 음소거·끝으로 넘기며 광고 화면을 가립니다. 광고 중에는 버퍼링 자동 복구가 개입하지 않습니다.
+
 ## [1.5.1] - 2026-10-30
 
 ### Fixed

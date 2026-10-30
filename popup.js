@@ -1,7 +1,7 @@
 import { checkForUpdate, openExtensionsPage } from './lib/updates.js';
 
 const DEF = { enabled: true, threshold: 5, cooldown: 10, toast: true, lockQuality: true, targetQuality: 1080, followRefresh: true, followInterval: 5,
-  vivid: true, hideRanking: true, chatFontSize: 0, viewerChat: true, viewerOverlay: true, arrowSeek: true, seekSeconds: 5, autoWide: true, watchEnabled: true };
+  vivid: true, hideRanking: true, chatFontSize: 0, viewerChat: true, viewerOverlay: true, arrowSeek: true, seekSeconds: 5, autoWide: true, watchEnabled: true, blurRankNames: false, hideTimeGuide: true, adSkip: true };
 const $ = id => document.getElementById(id);
 chrome.storage.sync.get(DEF, v => {
   for (const k in DEF) { const el = $(k); if (el.type === 'checkbox') el.checked = v[k]; else el.value = String(v[k]); }
