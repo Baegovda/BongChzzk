@@ -207,6 +207,27 @@
     guideObs.observe(root, { childList: true, subtree: true });
   }, 1000);
 
+  // ── body 바로 아래에 붙는 치트키·타임머신 구매 안내 팝업 ('실시간' 버튼) ──
+  function checkBodyGuide(node) {
+    if (!cfg.hideTimeGuide || !node || node.nodeType !== 1 || node.parentNode !== document.body) return;
+    if (node.id === 'root' || node.id?.startsWith('bongchzzk') || node.classList.contains('bongchzzk-guidehide')) return;
+    const dlg = node.matches('[role="alertdialog"]') ? node : node.querySelector('[role="alertdialog"]');
+    if (!dlg || !P.isPurchaseGuideDialogText(dlg.textContent)) return;
+    node.classList.add('bongchzzk-guidehide');
+    node.style.setProperty('display', 'none', 'important');
+    setTimeout(() => {
+      const close = node.querySelector('button[aria-label="팝업 닫기"]');
+      if (close) close.click();
+      setTimeout(() => { if (document.body.style.overflow === 'hidden' && !document.querySelector('body > :not(.bongchzzk-guidehide) [role="alertdialog"], body > [role="alertdialog"]:not(.bongchzzk-guidehide)')) document.body.style.overflow = ''; }, 300);
+    }, 0);
+  }
+  function startBodyGuide() {
+    if (!document.body) return setTimeout(startBodyGuide, 100);
+    for (const n of document.body.children) checkBodyGuide(n);
+    new MutationObserver(ms => { for (const m of ms) for (const n of m.addedNodes) checkBodyGuide(n); }).observe(document.body, { childList: true });
+  }
+  if (window === window.top) startBodyGuide();
+
   // ── 광고 방지 (best effort): 클래스 + 화면 텍스트(AD 1/1, N 초 후 SKIP, SKIP, 광고 페이지 보기)로 감지 ──
   let adWasActive = false, adTimer = 0;
   const muteSaved = new WeakMap(); // 광고 영상의 원래 음소거 상태

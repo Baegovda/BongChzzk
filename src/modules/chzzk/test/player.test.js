@@ -54,3 +54,10 @@ test('adTextKind / isSafeSkipLabel / isAdDuration', () => {
   assert.equal(P.isAdDuration(NaN), false);
   assert.equal(P.isAdActive({ textHits: 1 }), true);
 });
+
+test('isPurchaseGuideDialogText', () => {
+  assert.equal(P.isPurchaseGuideDialogText('치트키를 구매하면\n타임머신 기능을 이용할 수 있어요! 치트키 구매 혜택 다시보기 무제한 치트키 구매하기'), true);
+  assert.equal(P.isPurchaseGuideDialogText('방송을 신고하시겠어요? 취소 신고'), false);
+  assert.equal(P.isPurchaseGuideDialogText('치트키 사용법'), false);
+  assert.equal(P.isPurchaseGuideDialogText(null), false);
+});
