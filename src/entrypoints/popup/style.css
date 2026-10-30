@@ -16,6 +16,7 @@ main { flex: 1; min-height: 0; position: relative; }
 iframe { border: 0; width: 100%; height: 100%; display: none; background: var(--be-bg); }
 iframe.active { display: block; }
 .panel { padding: 8px 20px 16px; overflow: auto; height: 100%; }
+.panel.be-shell { padding: 14px 16px; }
 .panel h2 { font-size: 13px; color: var(--be-text); margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--be-border); }
 .panel p { margin: 6px 0; }
 .panel #ver { color: var(--be-accent); }

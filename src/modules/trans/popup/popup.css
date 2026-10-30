@@ -1,28 +1,8 @@
-/* 번역 탭. 색·글꼴·버튼은 공통 테마(/theme/theme.css). */
-body { max-width: 560px; padding: 16px 20px; }
-header { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
-header img { border-radius: 8px; }
-h1 { margin: 0; font-size: 15px; font-weight: 700; }
-#meta { margin: 2px 0 0; color: var(--be-muted); font-size: 12px; }
-
-/* 큰 ON/OFF 스위치 (input은 숨기고 트랙으로 그림) */
-.switch { position: relative; display: flex; align-items: center; gap: 12px; margin: 0 0 12px; padding: 12px 14px; cursor: pointer;
-  background: var(--be-surface); border: 1px solid var(--be-border); border-radius: var(--be-radius-lg); }
-.be-page .switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.track { position: relative; flex: 0 0 auto; width: 46px; height: 26px; border-radius: 999px; background: var(--be-surface-3); border: 1px solid var(--be-border-strong); transition: background 160ms ease; }
-.thumb { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #9aa0ad; transition: transform 160ms ease, background 160ms ease; }
-.switch input:checked + .track { background: var(--be-accent); border-color: var(--be-accent); }
-.switch input:checked + .track .thumb { transform: translateX(20px); background: #fff; }
-.switch input:focus-visible + .track { box-shadow: var(--be-focus); }
-.switch input:disabled + .track { opacity: 0.5; }
-.switch-copy { display: flex; flex-direction: column; gap: 2px; }
-.switch-copy strong { font-size: 14px; letter-spacing: 0.04em; }
-.switch-copy small { color: var(--be-muted); font-size: 12px; }
-@media (prefers-reduced-motion: reduce) { .track, .thumb { transition: none; } }
-
-#status { min-height: 2.6em; margin: 0; color: var(--be-text-2); font-size: 12px; line-height: 1.5; white-space: pre-wrap; }
+/* 번역 탭. 색·글꼴·버튼·레이아웃은 공통 테마(/theme/theme.css). */
+.switch { cursor: pointer; }
+#switchState { margin-left: 4px; font-size: 11px; letter-spacing: .04em; color: var(--be-muted); }
+.switch input:checked ~ * #switchState, #switchState.on { color: var(--be-accent); }
+#status { min-height: 2.6em; margin: 6px 0 4px; color: var(--be-text-2); font-size: 12px; line-height: 1.5; white-space: pre-wrap; }
 #status.error, #updateStatus.error { color: var(--be-error); }
-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-.tools, #updateLinks { display: flex; flex-wrap: wrap; gap: 6px; }
-#updateLinks[hidden] { display: none; }
 #updateStatus { min-height: 1.2em; margin: 4px 0 0; color: var(--be-text-2); font-size: 12px; line-height: 1.5; }
+.be-hint { margin: 6px 0 4px; }

@@ -1,5 +1,5 @@
 <template>
-  <div id="refresher-app" class="options-page">
+  <div id="refresher-app" class="options-page refresher-app-shell">
     <BlockDialog
         :block-detect-mode-type-names="blockDetectModeTypeNames"
         :block-key-names="blockKeyNames"
@@ -11,8 +11,11 @@
     />
 
     <div class="refresher-title-zone">
-      <h1>설정</h1>
-      <div class="float-right">
+      <div class="be-title">
+        <h3>디시 설정</h3>
+        <span class="be-sub">BongExtend · 디시인사이드 리프레셔</span>
+      </div>
+      <div class="be-subnav float-right">
         <p
             v-for="tabItem in tabs"
             :key="tabItem.id"
@@ -130,7 +133,7 @@ html, body {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 10px 24px;
+    padding: 18px 24px 0 !important;
     box-sizing: border-box;
     z-index: auto;
   }
@@ -140,7 +143,7 @@ html, body {
     width: 100% !important;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px 24px 40px;
+    padding: 6px 24px 40px !important;
     height: auto !important;
     box-sizing: border-box;
     overflow-y: visible;

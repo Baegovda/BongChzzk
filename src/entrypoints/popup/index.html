@@ -22,28 +22,37 @@
     <iframe data-frame="chzzk" title="치지직 설정"></iframe>
     <iframe data-frame="trans" title="번역"></iframe>
     <iframe data-frame="dc" title="디시 설정"></iframe>
-    <section class="panel" data-frame="update" hidden>
-        <h2>업데이트</h2>
-        <p>설치된 버전 <b id="ver"></b></p>
-        <p id="updateStatus" role="status">확인 전</p>
-        <div class="row">
-            <button id="checkUpdate" type="button">업데이트 확인</button>
-            <button class="primary" hidden id="doUpdate" type="button">지금 업데이트</button>
-            <button hidden id="openRelease" type="button">릴리스 페이지</button>
-            <button id="manage" type="button">확장 프로그램 관리</button>
+    <section class="panel be-shell" data-frame="update" hidden>
+        <div class="be-title"><h3>업데이트·설정</h3><span class="be-sub">버전 확인과 설정 백업</span></div>
+        <div class="be-grid">
+            <section class="be-card be-sec">
+                <h4>업데이트</h4>
+                <div class="be-row"><span>설치된 버전</span><b id="ver"></b></div>
+                <div class="be-row"><span>상태</span><span id="updateStatus" role="status">확인 전</span></div>
+                <div class="be-actions">
+                    <button id="checkUpdate" type="button">업데이트 확인</button>
+                    <button class="primary" hidden id="doUpdate" type="button">지금 업데이트</button>
+                    <button hidden id="openRelease" type="button">릴리스 페이지</button>
+                    <button id="manage" type="button">확장 프로그램 관리</button>
+                </div>
+                <p class="be-hint">지금 업데이트를 누르면 새 탭이 열립니다. 처음 한 번만 압축을 푼 BongExtend 폴더(manifest.json이 있는 곳)를 고르면, 그다음부터는 바뀐 파일만 넣고 확장을 다시 켭니다.</p>
+            </section>
+            <section class="be-card be-sec">
+                <h4>설정 내보내기·가져오기</h4>
+                <div class="be-actions">
+                    <button id="exportAll" type="button">설정 내보내기(파일)</button>
+                    <button id="importAll" type="button">설정 가져오기(파일)</button>
+                    <button id="importPaste" type="button">붙여넣어 가져오기</button>
+                    <input accept="application/json,.json,.txt" hidden id="importFile" type="file">
+                </div>
+                <p id="ioStatus" role="status"></p>
+                <p class="be-hint">가져오기는 BongExtend 파일, 옛 BongTrans 설정 파일(bongtrans-settings.json), 옛 BongDC 데이터(디시 탭 → 데이터 → 내보내기로 복사한 글)를 모두 받습니다. 내보낸 파일에는 Gemini API 키가 들어 있으니 남에게 주지 마세요.</p>
+            </section>
+            <section class="be-card be-sec be-wide">
+                <h4>정보</h4>
+                <p class="be-hint">GPL-3.0 · 디시 모듈은 green1052의 DCRefresher-Reborn을 바탕으로 합니다. <a href="https://github.com/Baegovda/BongExtend" target="_blank" rel="noopener">GitHub</a></p>
+            </section>
         </div>
-        <p class="hint">지금 업데이트를 누르면 새 탭이 열립니다. 처음 한 번만 압축을 푼 BongExtend 폴더(manifest.json이 있는 곳)를 고르면, 그다음부터는 바뀐 파일만 넣고 확장을 다시 켭니다.</p>
-
-        <h2>설정 내보내기·가져오기</h2>
-        <p class="hint">가져오기는 BongExtend 파일, 옛 BongTrans 설정 파일(bongtrans-settings.json), 옛 BongDC 데이터(디시 탭 → 데이터 → 내보내기로 복사한 글)를 모두 받습니다. 내보낸 파일에는 Gemini API 키가 들어 있으니 남에게 주지 마세요.</p>
-        <div class="row">
-            <button id="exportAll" type="button">설정 내보내기(파일)</button>
-            <button id="importAll" type="button">설정 가져오기(파일)</button>
-            <button id="importPaste" type="button">붙여넣어 가져오기</button>
-            <input accept="application/json,.json,.txt" hidden id="importFile" type="file">
-        </div>
-        <p id="ioStatus" role="status"></p>
-        <p class="hint">GPL-3.0 · 디시 모듈은 green1052의 DCRefresher-Reborn을 바탕으로 합니다. <a href="https://github.com/Baegovda/BongExtend" target="_blank" rel="noopener">GitHub</a></p>
     </section>
 </main>
 <script src="./main.ts" type="module"></script>

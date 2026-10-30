@@ -138,3 +138,29 @@
 @media (prefers-reduced-motion: reduce) {
   .be-page *, .be-page *::after { transition: none !important; }
 }
+
+/* ---- 공통 레이아웃 (1.0.6): 치지직 탭 모양을 기준으로 모든 탭이 같이 쓴다 ---- */
+.be-shell { padding: 14px 16px; }
+.be-title { display: flex; align-items: baseline; gap: 10px; margin: 0 0 10px; min-height: 22px; }
+.be-page .be-title h3, .be-title h3 { margin: 0; font-size: 15px; font-weight: 700; color: var(--be-text); }
+.be-title .be-sub { color: var(--be-muted); font-size: 12px; }
+.be-title .be-spacer { flex: 1; }
+.be-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
+.be-grid > .be-wide { grid-column: 1 / -1; }
+.be-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.be-sec { padding: 4px 14px 8px; min-width: 0; }
+.be-page .be-sec > h4, .be-sec > h4 { margin: 8px 0 2px; }
+.be-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 30px; margin: 0; color: var(--be-text-2); }
+.be-row + .be-row { border-top: 1px solid rgba(255, 255, 255, .035); }
+.be-row .be-row-text { display: flex; flex-direction: column; min-width: 0; }
+.be-row .be-row-text small, .be-hint { color: var(--be-muted); font-size: 12px; line-height: 1.5; word-break: keep-all; }
+.be-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 0 4px; }
+.be-actions[hidden] { display: none; }
+/* 제목 아래 하위 메뉴(알약 모양) */
+.be-subnav { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 10px; }
+.be-subnav > * {
+  font: 600 12px/1 var(--be-font); color: var(--be-muted); background: transparent;
+  border: 1px solid transparent; border-radius: 999px; padding: 6px 12px; cursor: pointer; margin: 0;
+}
+.be-subnav > *:hover { color: var(--be-text); background: var(--be-surface-2); }
+.be-subnav > .active { color: var(--be-accent); background: var(--be-accent-soft); border-color: rgba(62, 197, 220, .35); }

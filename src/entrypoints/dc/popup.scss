@@ -972,3 +972,108 @@ body {
     }
   }
 }
+// ============================================================
+// 1.0.6: 치지직 탭과 같은 배치 (제목 → 알약 하위 메뉴 → 2열 카드, 행 = 왼쪽 이름 / 오른쪽 조작)
+// 팝업(dc.html) 셸 안에서만 적용된다.
+// ============================================================
+body .refresher-app-shell {
+  .refresher-title-zone {
+    background: var(--be-bg, var(--refresher-bg));
+    display: block;
+    padding: 14px 16px 0;
+
+    .be-title { margin-bottom: 8px; }
+    .be-title h3 { font-size: 15px; letter-spacing: 0; }
+    .be-sub { letter-spacing: 0; }
+    .open-options-btn { align-self: center; height: 26px; margin: 0; width: 26px; }
+
+    .float-right.be-subnav {
+      margin: 0 0 4px;
+      p {
+        border-radius: 999px;
+        font-size: 12px;
+        letter-spacing: 0;
+        margin: 0;
+        padding: 6px 12px;
+        &:hover { background: var(--be-surface-2, transparent); color: var(--be-text, inherit); }
+        &.active { background: var(--be-accent-soft, transparent); color: var(--be-accent, var(--refresher-primary)); }
+      }
+    }
+  }
+
+  .tab { padding: 6px 16px 14px; }
+
+  // 버전·링크 한 줄
+  .tab0 > .info { display: block; margin: 0 0 8px; }
+  .tab0 .text { display: block; font-size: 12px; color: var(--be-muted, inherit);
+    h3 { display: none; }
+    .version { font-weight: 600; }
+  }
+
+  .settings { margin-top: 10px; }
+  .settings > div:last-child:not(:only-child),
+  .settings > div:has(> .refresher-setting-category),
+  .tab1 > div:has(> .refresher-setting-category) {
+    align-items: start;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  h3.need-refresh { font-size: 13px; font-weight: 500; color: var(--be-muted, inherit); letter-spacing: 0; }
+
+  .refresher-setting-category {
+    border-radius: var(--be-radius-lg, 12px);
+    margin: 0;
+    min-width: 0;
+    padding: 4px 14px 8px;
+
+    & > h3 {
+      color: var(--be-muted, inherit);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      margin: 8px 0 2px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--be-border, transparent);
+      svg { height: 14px; width: 14px; }
+    }
+
+    .refresher-setting {
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      min-height: 30px;
+      padding: 5px 0;
+      width: 100%;
+
+      & + .refresher-setting { border-top: 1px solid rgba(255, 255, 255, .035); }
+      &[data-changed="true"] { margin-left: 0; .info { transform: translateX(6px); } .control { transform: none; } }
+      .info::before { left: -10px; width: 3px; }
+
+      .info {
+        flex: 1 1 auto;
+        margin: 0;
+        min-width: 0;
+        h4 { color: var(--be-text-2, inherit); font-size: 13px; font-weight: 500; letter-spacing: 0; }
+        p { font-size: 12px; letter-spacing: 0; color: var(--be-muted, inherit); }
+        .mute { font-size: 11px; }
+      }
+
+      .control { flex: 0 0 auto; justify-content: flex-end; max-width: 50%; }
+    }
+  }
+
+  .refresher-module { border-radius: var(--be-radius-lg, 12px); }
+}
+
+body:has(> #app > .refresher-app-shell) { margin: 0; }
+body #refresher-app.refresher-app-shell { width: 100%; }
+body .refresher-app-shell .tab0 .update-panel {
+  border-radius: var(--be-radius-lg, 12px);
+  margin-bottom: 0;
+  padding: 8px 14px 10px;
+  h4 { font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--be-muted, inherit); }
+  button { font-size: 12px; padding: 6px 12px; }
+  .update-panel__auto-title { font-size: 13px; font-weight: 500; }
+}

@@ -1,13 +1,6 @@
 <template>
   <div class="tab tab0">
     <div class="info">
-      <div class="icon-wrap">
-        <img
-            :src="iconUrl"
-            class="icon"
-        />
-      </div>
-
       <div class="text">
         <h3>BongExtend</h3>
         <p>
@@ -190,7 +183,6 @@
 
 <script lang="ts" setup>
 import {computed, inject, ref} from "vue";
-import iconUrl from "@/assets/icon.png";
 import {describeUpdate} from "@/core/update/release";
 import {sendMessage} from "@/http/messaging";
 import SettingsModule from "../components/settingsModule.vue";
