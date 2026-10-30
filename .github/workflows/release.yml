@@ -1,89 +1,73 @@
 name: Release
-
 on:
-  push:
-    tags:
-      - "v*"
-
-permissions:
-  contents: write
+    push:
+        tags:
+            - "v*"
+    workflow_dispatch:
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    release:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
+            -   name: Setup Bun
+                uses: oven-sh/setup-bun@v2
 
-      - name: Run tests
-        run: node --test
+            -   name: Setup Node
+                uses: actions/setup-node@v4
+                with:
+                    node-version: 22
 
-      - name: Check manifest version
-        run: |
-          set -eu
-          TAG="${GITHUB_REF_NAME#v}"
-          VERSION="$(node --input-type=module -e "import {readFileSync} from 'node:fs'; process.stdout.write(JSON.parse(readFileSync('manifest.json','utf8')).version)")"
-          if [ "$TAG" != "$VERSION" ]; then
-            echo "manifest.json version ${VERSION} does not match tag ${GITHUB_REF_NAME}"
-            exit 1
-          fi
-          echo "manifest version ${VERSION} matches ${GITHUB_REF_NAME}"
+            -   name: Install Dependencies
+                run: bun install
 
-      - name: Build zip
-        run: |
-          set -eu
-          VERSION="${GITHUB_REF_NAME#v}"
-          zip -r "bongchzzk-${VERSION}.zip" \
-            manifest.json \
-            content.js \
-            content-following.js \
-            content-extras.js \
-            content-watch.js \
-            content-wide.js \
-            popup.html \
-            popup.js \
-            update.html \
-            update.js \
-            README.md \
-            CHANGELOG.md \
-            lib/*.js \
-            icons
+            -   name: Test
+                run: bun run test
 
-      - name: Verify zip contains every file the manifest references
-        run: |
-          set -eu
-          VERSION="${GITHUB_REF_NAME#v}"
-          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('manifest.json','utf8'));const f=new Set();(m.content_scripts||[]).forEach(c=>(c.js||[]).concat(c.css||[]).forEach(x=>f.add(x)));if(m.action&&m.action.default_popup)f.add(m.action.default_popup);Object.values(m.icons||{}).forEach(x=>f.add(x));fs.writeFileSync('required-files.txt',[...f].join('\n')+'\n')"
-          unzip -Z1 "bongchzzk-${VERSION}.zip" | sort > zip-files.txt
-          while read -r f; do
-            grep -qx "$f" zip-files.txt || { echo "missing in zip: $f"; exit 1; }
-          done < required-files.txt
-          for f in popup.js update.html update.js lib/updates.js lib/zip.js lib/installer.js lib/watch.js lib/wide.js lib/player.js lib/guard.js; do
-            grep -qx "$f" zip-files.txt || { echo "missing in zip: $f"; exit 1; }
-          done
-          for f in content*.js; do
-            grep -qx "$f" zip-files.txt || { echo "missing in zip: $f"; exit 1; }
-          done
+            -   name: Check tag matches package version
+                if: github.ref_type == 'tag'
+                run: |
+                    set -eu
+                    TAG="${GITHUB_REF_NAME#v}"
+                    VERSION="$(bun -e "process.stdout.write(JSON.parse(require('fs').readFileSync('package.json','utf8')).version)")"
+                    if [ "$TAG" != "$VERSION" ]; then
+                      echo "package.json version ${VERSION} does not match tag ${GITHUB_REF_NAME}"
+                      exit 1
+                    fi
+                    echo "package.json version ${VERSION} matches ${GITHUB_REF_NAME}"
 
-      - name: Extract changelog notes
-        run: |
-          set -eu
-          VERSION="${GITHUB_REF_NAME#v}"
-          node scripts/extract-changelog.js "$VERSION" CHANGELOG.md > release-notes.md
+            -   name: Build
+                run: bun run zip
 
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: Baegovda/BongChzzk
-        run: |
-          set -eu
-          VERSION="${GITHUB_REF_NAME#v}"
-          gh release create "${GITHUB_REF_NAME}" \
-            "bongchzzk-${VERSION}.zip" \
-            --title "${GITHUB_REF_NAME}" \
-            --notes-file release-notes.md
+            -   name: Verify zip contents
+                run: |
+                    set -eu
+                    VERSION="$(bun -e "process.stdout.write(JSON.parse(require('fs').readFileSync('package.json','utf8')).version)")"
+                    bun scripts/verify-release-zip.ts "$VERSION"
+
+            -   name: Extract changelog notes
+                if: github.ref_type == 'tag'
+                run: |
+                    set -eu
+                    bun scripts/extract-changelog.ts "${GITHUB_REF_NAME#v}" CHANGELOG.md > release-notes.md
+
+            -   name: Create GitHub Release
+                if: github.ref_type == 'tag'
+                env:
+                    GH_TOKEN: ${{ github.token }}
+                    GH_REPO: Baegovda/BongChrome
+                run: |
+                    set -eu
+                    TAG="${GITHUB_REF_NAME}"
+                    VERSION="${TAG#v}"
+                    ZIP=".output/bongchrome-${VERSION}-chrome.zip"
+                    if gh release view "$TAG" >/dev/null 2>&1; then
+                      gh release upload "$TAG" "$ZIP" --clobber
+                      gh release edit "$TAG" --notes-file release-notes.md
+                    else
+                      gh release create "$TAG" "$ZIP" --title "BongChrome ${VERSION}" --notes-file release-notes.md
+                    fi

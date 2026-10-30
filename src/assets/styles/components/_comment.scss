@@ -1,0 +1,26 @@
+@use "../variables" as *;
+
+// ============================================================
+// User badge — dark mode override (global, rest in user.vue)
+// ============================================================
+
+html:has(#css-darkmode) {
+  .refresher-user {
+    &[data-me="true"] {
+      background-color: var(--refresher-user-me-bg);
+    }
+  }
+}
+
+// ============================================================
+// cmt_nickbox (layout, used outside component scope)
+// ============================================================
+
+.cmt_nickbox {
+  display: flex;
+}
+
+// 유동 댓글의 닉(em)이 IP/ISP 문자열에 밀려 너비 0이 되지 않게 한다.
+.comment_box .cmt_nickbox .nickname > em {
+  flex-shrink: 0;
+}

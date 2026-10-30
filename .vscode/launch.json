@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "DCRefresher 실행",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ${workspaceFolder}/scripts/dev-restart.ps1",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

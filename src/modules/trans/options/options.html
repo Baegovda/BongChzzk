@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BongChrome 번역 설정</title>
+    <link rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <img src="../icons/icon48.png" width="48" height="48" alt="">
+        <div>
+          <h1>BongChrome 번역</h1>
+          <p>현재 페이지의 보이는 글을 Gemini로 번역합니다. 키는 이 브라우저에만 저장됩니다.</p>
+        </div>
+      </header>
+
+      <form id="settings">
+        <label class="field" for="apiKey">
+          <span>Gemini API 키</span>
+          <input id="apiKey" name="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="AIza...">
+        </label>
+        <label class="check" for="showKey">
+          <input id="showKey" type="checkbox">
+          <span>키 표시</span>
+        </label>
+        <p class="hint">
+          무료 키는 <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer">Google AI Studio</a>에서 만듭니다.
+          키 페이지: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/apikey</a>
+        </p>
+
+        <fieldset>
+          <legend>모델</legend>
+          <label class="choice">
+            <input type="radio" name="modelChoice" value="gemini-3.5-flash-lite" checked>
+            <span><strong>gemini-3.5-flash-lite</strong><small>기본값. 새 계정에서 권장하는 저비용 모델</small></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="modelChoice" value="gemini-3.1-flash-lite">
+            <span><strong>gemini-3.1-flash-lite</strong><small>이전 기본 모델. 혼잡하면 다른 모델로 넘어감</small></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="modelChoice" value="custom">
+            <span><strong>직접 입력</strong><small>models/ 접두사는 없어도 됩니다</small></span>
+          </label>
+          <label class="field" for="customModel">
+            <span>사용자 지정 모델</span>
+            <input id="customModel" name="customModel" type="text" autocomplete="off" spellcheck="false" placeholder="gemini-3.5-flash-lite" disabled>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>혼잡할 때 대체 모델</legend>
+          <label class="choice">
+            <input type="radio" name="fallbackChoice" value="gemini-3.5-flash-lite" checked>
+            <span><strong>gemini-3.5-flash-lite</strong><small>기본 대체 모델</small></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="fallbackChoice" value="gemini-3.1-flash-lite">
+            <span><strong>gemini-3.1-flash-lite</strong></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="fallbackChoice" value="custom">
+            <span><strong>직접 입력</strong></span>
+          </label>
+          <label class="field" for="customFallback">
+            <span>대체 모델</span>
+            <input id="customFallback" name="customFallback" type="text" autocomplete="off" spellcheck="false" placeholder="gemini-3.1-flash-lite" disabled>
+          </label>
+          <p class="hint">기본 모델이 혼잡(503)하거나 없으면(404) 대체 모델로 넘어갑니다. 그래도 안 되면 나머지 기본 제공 모델을 한 번 더 시도합니다. 키 오류와 할당량 초과는 넘어가지 않습니다.</p>
+        </fieldset>
+
+        <label class="field" for="targetLanguage">
+          <span>번역할 언어</span>
+          <select id="targetLanguage" name="targetLanguage"></select>
+        </label>
+        <p class="hint">기본값은 한국어입니다. 원문 언어는 문장마다 자동으로 감지합니다.</p>
+
+        <label class="check" for="prioritizeCursor">
+          <input id="prioritizeCursor" name="prioritizeCursor" type="checkbox">
+          <span>마우스 커서 근처 글을 우선</span>
+        </label>
+        <p class="hint">기본값은 꺼짐입니다. 켜면 화면에 들어온 문장 중 커서에 가까운 것부터 다음 묶음으로 보냅니다. 이미 보낸 요청은 취소하지 않습니다.</p>
+
+        <label class="check" for="revealAnimation">
+          <input id="revealAnimation" name="revealAnimation" type="checkbox" checked>
+          <span>번역 등장 애니메이션</span>
+        </label>
+        <p class="hint">기본값은 켜짐입니다. 번역을 기다리는 동안 은은한 프리즘 빛이 돌고, 번역이 도착하면 무지개 스캔이 글을 지나가며 원문이 번역문으로 바뀝니다. 끄면 바로 바꿉니다. 시스템에서 움직임 줄이기를 켠 경우에는 짧은 페이드만 사용합니다.</p>
+
+        <fieldset>
+          <legend>번역 캐시</legend>
+          <div class="cache-stats" id="cacheStats">
+            <p><span>저장된 문장</span><strong id="cacheCount">…</strong></p>
+            <p><span>대략적인 용량</span><strong id="cacheBytes">…</strong></p>
+            <p><span>캐시로 아낀 문장</span><strong id="savedStrings">…</strong></p>
+            <p><span>아낀 API 호출</span><strong id="savedCalls">…</strong></p>
+          </div>
+          <p class="hint">아낀 문장과 API 호출은 누적입니다. 캐시를 지워도 이 숫자는 남고, 통계 초기화만 0으로 되돌립니다. 용량은 번역문과 키의 UTF-8 크기 근사치입니다.</p>
+          <label class="field" for="cacheMaxAgeDays">
+            <span>오래된 항목 삭제</span>
+            <select id="cacheMaxAgeDays" name="cacheMaxAgeDays"></select>
+          </label>
+          <label class="field" for="cacheMaxBytes">
+            <span>최대 용량</span>
+            <select id="cacheMaxBytes" name="cacheMaxBytes"></select>
+          </label>
+          <p class="hint">기본 보관 기간은 90일입니다. 기간이 지난 항목을 지우고, 용량 한도를 넘으면 마지막 사용이 오래된 항목부터 지웁니다. 삭제 안 함과 제한 없음을 같이 고르면 자동으로 지우지 않습니다.</p>
+          <div class="actions">
+            <button id="resetCacheStats" type="button">통계 초기화</button>
+            <button id="clearCache" type="button">번역 캐시 지우기</button>
+          </div>
+        </fieldset>
+
+        <div class="actions">
+          <button id="save" type="submit">저장</button>
+          <button id="checkKey" type="button">키 확인</button>
+        </div>
+        <div class="actions">
+          <button id="exportSettings" type="button">설정 내보내기</button>
+          <button id="importSettings" type="button">설정 가져오기</button>
+          <input id="importFile" type="file" accept="application/json,.json" hidden>
+        </div>
+        <p class="hint">화면에 있는 키와 모델 설정을 JSON으로 저장하거나 다시 불러옵니다. 파일에 API 키가 들어 있으니 남에게 보내지 마세요. manifest의 <code>key</code> 때문에 다른 폴더에서 다시 로드해도 같은 확장 프로그램 ID를 쓰며, 확장 프로그램을 제거하지 않았다면 저장소가 유지됩니다. 완전히 삭제한 뒤에는 이 파일로 다시 가져오세요.</p>
+        <p id="status" role="status"></p>
+      </form>
+
+      <section class="note">
+        <h2>버전</h2>
+        <p id="versionLine"></p>
+        <div class="actions">
+          <button id="checkUpdate" type="button">업데이트 확인</button>
+          <button id="manage" type="button">확장 프로그램 관리</button>
+        </div>
+        <p id="updateStatus" role="status"></p>
+        <p id="updateLinks" hidden>
+          <button id="doUpdate" type="button" hidden>지금 업데이트</button>
+          <button id="openRelease" type="button">릴리스 페이지</button>
+          <button id="openZip" type="button">zip 다운로드</button>
+        </p>
+      </section>
+
+      <section class="note">
+        <h2>개인정보</h2>
+        <p>번역하는 문장은 사용자의 API 키로 Google Gemini API에 전송됩니다. 이 확장 프로그램의 서버는 없습니다. 키와 번역 캐시는 이 기기의 <code>chrome.storage.local</code>과 IndexedDB에만 있습니다.</p>
+        <p>무료 등급에서는 입력한 글이 Google 모델 개선에 쓰일 수 있습니다. 유료 등급의 데이터 사용 여부는 모델마다 다르니 <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">요금 페이지</a>를 확인하세요.</p>
+      </section>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

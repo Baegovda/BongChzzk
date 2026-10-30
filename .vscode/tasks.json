@@ -1,0 +1,40 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "DCRefresher 실행",
+            "type": "shell",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ${workspaceFolder}/scripts/dev-restart.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PATH": "${env:PATH};${env:USERPROFILE}\\.bun\\bin"
+                }
+            },
+            "runOptions": {
+                "instanceLimit": 5
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "wxt",
+                "pattern": {
+                    "regexp": "^$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "WXT",
+                    "endsPattern": "Opened browser|Press o \\+ enter"
+                }
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "focus": false
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}

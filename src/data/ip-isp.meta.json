@@ -1,0 +1,104 @@
+{
+  "generated": "2026-10-24",
+  "apnicSerial": "20261025",
+  "iptoasnLastModified": "Sat, 24 Oct 2026 18:20:39 GMT",
+  "krDelegatedAddresses": 112475456,
+  "entries": 1667,
+  "high": 1418,
+  "low": 54,
+  "mixed": 195,
+  "highConfidenceEntryShare": 0.851,
+  "krDelegatedAddressShareInLabeled16": 0.951,
+  "krDelegatedAddressShareInHigh16": 0.826,
+  "krDelegatedAddressShareInLow16": 0.028,
+  "krDelegatedAddressShareInMixed16": 0.097,
+  "labels": {
+    "KT": 697,
+    "LG U+": 289,
+    "SK브로드밴드": 250,
+    "혼합": 195,
+    "SKT 모바일": 108,
+    "LG헬로비전": 19,
+    "삼성SDS": 16,
+    "딜라이브": 12,
+    "드림라인": 11,
+    "세종텔레콤": 9,
+    "LG U+ 모바일": 7,
+    "LG CNS": 5,
+    "KINX": 2,
+    "스마일서브": 2,
+    "다우기술": 2,
+    "아시아나IDT": 2,
+    "KISTI": 2,
+    "KAIST": 2,
+    "강남케이블": 2,
+    "서울대": 2,
+    "국가정보자원관리원": 2,
+    "드림마크원": 1,
+    "성균관대": 1,
+    "인천공항공사": 1,
+    "JCN울산": 1,
+    "ETRI": 1,
+    "커넥트웨이브": 1,
+    "POSTECH": 1,
+    "한국원자력연구원": 1,
+    "항우연": 1,
+    "대우정보시스템": 1,
+    "경북대": 1,
+    "KIST": 1,
+    "고려대": 1,
+    "경희대": 1,
+    "서강대": 1,
+    "부산대": 1,
+    "연세대": 1,
+    "중앙대": 1,
+    "영남대": 1
+  },
+  "sources": [
+    {
+      "name": "APNIC delegated statistics",
+      "url": "https://ftp.apnic.net/stats/apnic/delegated-apnic-latest",
+      "license": "APNIC conditions of use: free to download and use. No accuracy guarantee. Not an authoritative statement of where resources are currently used."
+    },
+    {
+      "name": "IPtoASN ip2asn-v4",
+      "url": "https://iptoasn.com/data/ip2asn-v4.tsv.gz",
+      "license": "Public Domain Dedication and License (PDDL) 1.0"
+    },
+    {
+      "name": "RouteViews BGP (upstream of IPtoASN)",
+      "url": "https://www.routeviews.org/",
+      "license": "CC BY 4.0. Attribute RouteViews (www.routeviews.org)."
+    }
+  ],
+  "notUsed": [
+    "KISA/KRNIC WHOIS: bulk queries are blocked and redistribution is not granted.",
+    "RIPEstat and other ripe.net materials: reproduction for third parties needs written permission.",
+    "CAIDA RouteViews pfx2as: CAIDA Acceptable Use Agreement does not clearly allow redistribution."
+  ],
+  "method": {
+    "population": "Each Korea-relevant /16 (at least half of its addresses are in an APNIC KR allocation/assignment, or announced with IPtoASN country KR).",
+    "weight": "Organization share is announced addresses in that /16 divided by 65536, not by the Korean slice alone.",
+    "clearWin": "Name the top organization when its share is at least 80%, or it is a major ISP with share at least 50% and a 15 point lead, or any other organization with share at least 70% and a 15 point lead. Otherwise label 혼합.",
+    "majorIsps": [
+      "KT",
+      "SK브로드밴드",
+      "LG U+",
+      "LG U+ 모바일",
+      "SKT 모바일",
+      "LG헬로비전",
+      "딜라이브",
+      "세종텔레콤",
+      "드림라인",
+      "SK텔링크"
+    ],
+    "display": "Extension shows the name, adds ? when share is under 80, and shows 혼합 for mixed prefixes. Tooltip lists share and other holders at 5% or more (up to 3)."
+  },
+  "limits": [
+    "A /16 cannot identify a person or a single subscriber.",
+    "VPN exit nodes and CGNAT are not labeled as VPN. Many customers share one prefix.",
+    "KT wired and KT mobile are both often originated by AS4766, so they stay 'KT' with kind unknown.",
+    "Some LG U+ mobile space is originated by the wired/backbone ASNs and is labeled LG U+, not LG U+ 모바일.",
+    "Prefixes that are less than half Korean are omitted, so a thin Korean assignment inside a foreign /16 is not applied to everyone showing that a.b."
+  ]
+}

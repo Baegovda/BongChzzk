@@ -1,0 +1,6 @@
+.output
+.wxt
+web-ext.config.ts
+.idea
+node_modules
+.env
