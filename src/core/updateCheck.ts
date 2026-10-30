@@ -95,7 +95,7 @@ const fetchLatestRelease = async () => {
         response = await fetch(`https://api.github.com/repos/${GITHUB_RELEASE_REPO}/releases/latest`, {
             headers: {
                 Accept: "application/vnd.github+json",
-                "User-Agent": "BongChrome",
+                "User-Agent": "BongExtend",
                 "X-GitHub-Api-Version": "2022-11-28"
             }
         });
@@ -182,7 +182,7 @@ const publishAvailability = async (updateAvailable: boolean, notify: boolean, ve
         await browser.notifications.create(UPDATE_NOTIFICATION_ID, {
             type: "basic",
             iconUrl: browser.runtime.getURL("/icons/128.png"),
-            title: "BongChrome 업데이트",
+            title: "BongExtend 업데이트",
             message: `새 버전 ${version}이 있습니다. 설정에서 받을 수 있습니다.`
         });
     } catch (error) {
@@ -222,7 +222,7 @@ const buildStatus = async (currentVersion = getCurrentExtensionVersion()): Promi
         updateAvailable,
         downloadUrl,
         downloadFilename: downloadUrl
-            ? filenameFromUrl(downloadUrl, `bongchrome-${latestVersion}-${browserName}.zip`)
+            ? filenameFromUrl(downloadUrl, `bongextend-${latestVersion}-${browserName}.zip`)
             : "",
         releaseNotes,
         releaseUrl,

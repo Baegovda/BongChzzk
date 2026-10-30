@@ -1,6 +1,6 @@
-// BongChrome: 치지직 모듈(옛 BongChzzk) 콘텐츠 스크립트를 동적으로 등록한다.
+// BongExtend: 치지직 모듈(옛 BongChzzk) 콘텐츠 스크립트를 동적으로 등록한다.
 // 파일 순서는 옛 BongChzzk manifest.json content_scripts 순서 그대로이고, 맨 앞에 저장소 구역 shim(lib/ns.js)만 더했다.
-export const CHZZK_SCRIPT_ID = "bongchrome-chzzk";
+export const CHZZK_SCRIPT_ID = "bongextend-chzzk";
 
 export const CHZZK_SCRIPT_FILES = [
     "chzzk/lib/ns.js",

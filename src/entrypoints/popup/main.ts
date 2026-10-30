@@ -1,4 +1,4 @@
-// BongChrome 팝업: 탭 하나에 모듈 화면 하나. 각 모듈 화면은 옛 확장 팝업을 그대로 iframe으로 띄운다.
+// BongExtend 팝업: 탭 하나에 모듈 화면 하나. 각 모듈 화면은 옛 확장 팝업을 그대로 iframe으로 띄운다.
 import {sendMessage} from "@/http/messaging";
 // @ts-ignore 순수 JS
 import {getModules, setModuleEnabled} from "@/modules/core-modules.js";
@@ -113,7 +113,7 @@ $("exportAll").addEventListener("click", async () => {
         const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = `bongchrome-settings-${new Date().toISOString().slice(0, 10)}.json`;
+        a.download = `bongextend-settings-${new Date().toISOString().slice(0, 10)}.json`;
         a.click();
         setTimeout(() => URL.revokeObjectURL(a.href), 5000);
         setIo("설정 파일을 저장했어요.", "ok");

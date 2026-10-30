@@ -1,4 +1,4 @@
-import {canApplyVersion, checkLatestRelease, isBongChromeManifest, type LatestRelease} from "@/core/update/release";
+import {canApplyVersion, checkLatestRelease, isBongExtendManifest, type LatestRelease} from "@/core/update/release";
 import {installSession, pendingDecision, versionLine, type WriteProgress} from "@/core/update/installPlan";
 import {fileKey, type PendingUpdate, type ZipFile} from "@/core/update/types";
 import {extractAll} from "@/core/update/zip";
@@ -32,7 +32,7 @@ if (import.meta.env.FIREFOX) {
     let release: LatestRelease | null = null;
 
     const openDb = (): Promise<IDBDatabase> => new Promise((resolve, reject) => {
-        const request = indexedDB.open("bongchrome-install", 1);
+        const request = indexedDB.open("bongextend-install", 1);
         request.onupgradeneeded = () => {
             const db = request.result;
             for (const name of ["kv", "pending"]) {
@@ -79,8 +79,8 @@ if (import.meta.env.FIREFOX) {
     };
 
     const verifyDir = async (dir: FileSystemDirectoryHandle) => {
-        if (!isBongChromeManifest(await manifestText(dir))) {
-            throw new Error("선택한 폴더는 BongChrome 확장 프로그램 폴더가 아닙니다. chrome://extensions 에서 불러온 압축을 푼 BongChrome 폴더(manifest.json이 있는 곳)를 선택하세요. 다운로드나 바탕화면 폴더 자체는 크롬이 고르지 못하게 막습니다.");
+        if (!isBongExtendManifest(await manifestText(dir))) {
+            throw new Error("선택한 폴더는 BongExtend 확장 프로그램 폴더가 아닙니다. chrome://extensions 에서 불러온 압축을 푼 BongExtend 폴더(manifest.json이 있는 곳)를 선택하세요. 다운로드나 바탕화면 폴더 자체는 크롬이 고르지 못하게 막습니다.");
         }
     };
 
@@ -98,7 +98,7 @@ if (import.meta.env.FIREFOX) {
                 await verifyDir(saved);
                 return saved;
             } catch {
-                // 저장된 폴더가 더 이상 BongChrome가 아니면 다시 고른다.
+                // 저장된 폴더가 더 이상 BongExtend가 아니면 다시 고른다.
             }
         }
 
@@ -110,10 +110,10 @@ if (import.meta.env.FIREFOX) {
             throw new Error("이 브라우저는 폴더 선택을 지원하지 않습니다.");
         }
 
-        setStatus("확장 프로그램 설치 폴더(압축을 푼 BongChrome 폴더)를 선택하세요…");
+        setStatus("확장 프로그램 설치 폴더(압축을 푼 BongExtend 폴더)를 선택하세요…");
         let dir: FileSystemDirectoryHandle;
         try {
-            dir = await window.showDirectoryPicker({mode: "readwrite", id: "bongchrome-install"});
+            dir = await window.showDirectoryPicker({mode: "readwrite", id: "bongextend-install"});
         } catch (error) {
             if (error instanceof DOMException && error.name === "AbortError") {
                 const cancel = new Error("폴더 선택이 취소되었습니다.");
@@ -272,7 +272,7 @@ if (import.meta.env.FIREFOX) {
 
             const manifest = files.find((file) => fileKey(file) === "manifest.json");
             const text = manifest ? new TextDecoder().decode(manifest.data) : "";
-            if (!isBongChromeManifest(text)) throw new Error("다운로드한 zip이 BongChrome가 아닙니다.");
+            if (!isBongExtendManifest(text)) throw new Error("다운로드한 zip이 BongExtend가 아닙니다.");
 
             const to = manifestVersionOf(files) || release.latest;
             if (!canApplyVersion(running, to)) {

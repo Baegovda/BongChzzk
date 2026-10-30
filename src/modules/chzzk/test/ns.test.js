@@ -1,4 +1,4 @@
-// BongChrome: 치지직 저장소 구역 shim(lib/ns.js) 확인
+// BongExtend: 치지직 저장소 구역 shim(lib/ns.js) 확인
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';

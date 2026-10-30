@@ -8,18 +8,18 @@ import { STORAGE_KEY } from './lib/settings.js';
 import { isModuleEnabled } from '../core-modules.js';
 import { createTranslator } from './lib/translator.js';
 
-// BongChrome: 우클릭 메뉴는 디시 모듈 메뉴와 함께 background.ts의 createContextMenus에서 만든다.
+// BongExtend: 우클릭 메뉴는 디시 모듈 메뉴와 함께 background.ts의 createContextMenus에서 만든다.
 // (removeAll을 각자 부르면 서로의 메뉴를 지우므로 여기서는 만들지 않는다.)
 export function createTransMenus() {
   return chrome.contextMenus.create({
     id: 'toggle-translation',
-    title: 'BongChrome: 페이지 번역 켜기/끄기',
+    title: 'BongExtend: 페이지 번역 켜기/끄기',
     contexts: ['page', 'action'],
     documentUrlPatterns: ['http://*/*', 'https://*/*'],
   });
 }
 
-// BongChrome: 서비스 워커는 background.ts 하나다. 거기서 이 함수를 한 번 불러 번역 모듈 처리기를 붙인다.
+// BongExtend: 서비스 워커는 background.ts 하나다. 거기서 이 함수를 한 번 불러 번역 모듈 처리기를 붙인다.
 let started = false;
 export function startTransBackground() {
 if (started) return;
@@ -64,7 +64,7 @@ async function requireTab(tabId) {
     throw error;
   }
   if (!(await isModuleEnabled('trans'))) {
-    const error = new Error('번역 모듈이 꺼져 있습니다. BongChrome 팝업의 번역 탭에서 켜 주세요.');
+    const error = new Error('번역 모듈이 꺼져 있습니다. BongExtend 팝업의 번역 탭에서 켜 주세요.');
     error.code = 'MODULE_OFF';
     throw error;
   }
@@ -344,7 +344,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return undefined;
 });
 
-// BongChrome: 단축키(chrome.commands)는 사용자 요청으로 모두 뺐다.
+// BongExtend: 단축키(chrome.commands)는 사용자 요청으로 모두 뺐다.
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === 'toggle-translation') {

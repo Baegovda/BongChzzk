@@ -1,4 +1,4 @@
-// BongChrome 공통: 모듈(치지직/번역/디시) 켜기·끄기 상태.
+// BongExtend 공통: 모듈(치지직/번역/디시) 켜기·끄기 상태.
 // chrome.storage.local 'core.modules' = { chzzk: true, trans: true, dc: true }
 export const MODULES_KEY = 'core.modules';
 export const MODULE_IDS = ['chzzk', 'trans', 'dc'];

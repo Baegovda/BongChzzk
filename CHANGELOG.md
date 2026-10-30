@@ -1,11 +1,16 @@
 # Changelog
 
-BongChrome 변경 이력. GitHub **[Releases](https://github.com/Baegovda/BongChrome/releases)** 와 같이 갑니다.
-설치 파일은 Releases의 `bongchrome-*-chrome.zip` 입니다 (Source code zip 아님).
+BongExtend 변경 이력. GitHub **[Releases](https://github.com/Baegovda/BongExtend/releases)** 와 같이 갑니다.
+설치 파일은 Releases의 `bongextend-*-chrome.zip` 입니다 (Source code zip 아님).
 
 옛 확장 이력: `docs/legacy/` (BongChzzk, BongTrans, BongDC).
 
 ---
+
+## [1.0.1] - 2026-10-31
+
+### 바뀐 점
+- 이름을 BongExtend로 변경 (레포 Baegovda/BongExtend, 설치 파일 `bongextend-*-chrome.zip`, 업데이트 폴더 저장소 이름 `bongextend-install`)
 
 ## [1.0.0] - 2026-10-31
 

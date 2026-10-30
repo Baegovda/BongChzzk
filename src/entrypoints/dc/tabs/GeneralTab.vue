@@ -9,7 +9,7 @@
       </div>
 
       <div class="text">
-        <h3>BongChrome</h3>
+        <h3>BongExtend</h3>
         <p>
           <span class="version">v{{ displayVersion }}</span>
           <a
@@ -131,7 +131,7 @@
           v-if="status.updateAvailable && canInPlaceUpdate"
           class="update-panel__hint"
       >
-        지금 업데이트는 새 탭에서 진행됩니다. 처음 한 번은 압축을 푼 BongChrome 폴더(manifest.json이 있는 곳)를 고르세요. 그 다음부터는 바뀐 파일만 넣고 확장을 다시 켭니다. zip만 받으려면 업데이트 받기를 쓰세요.
+        지금 업데이트는 새 탭에서 진행됩니다. 처음 한 번은 압축을 푼 BongExtend 폴더(manifest.json이 있는 곳)를 고르세요. 그 다음부터는 바뀐 파일만 넣고 확장을 다시 켭니다. zip만 받으려면 업데이트 받기를 쓰세요.
       </p>
       <p
           v-else-if="status.updateAvailable"
@@ -251,7 +251,7 @@ const installGuide = computed(() => {
 });
 
 const links = [
-  {text: "GitHub", url: "https://github.com/Baegovda/BongChrome"},
+  {text: "GitHub", url: "https://github.com/Baegovda/BongExtend"},
   {text: "도움말", url: "https://dcrefresher.green1052.com"}
 ];
 

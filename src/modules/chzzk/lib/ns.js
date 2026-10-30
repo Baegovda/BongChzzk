@@ -1,4 +1,4 @@
-// BongChrome: 치지직 모듈 설정 키를 'chzzk.' 접두사로 저장한다.
+// BongExtend: 치지직 모듈 설정 키를 'chzzk.' 접두사로 저장한다.
 // 기존 BongChzzk 코드는 chrome.storage 대신 BCStore를 부르고, 키 이름은 그대로 쓴다.
 (function (root) {
   if (root.BCStore) return;

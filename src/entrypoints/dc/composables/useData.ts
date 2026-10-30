@@ -3,7 +3,7 @@ import {normalizeStorageData} from "@/storage/migration";
 import {ref} from "vue";
 import {isOtherModuleKey, onlyDcKeys} from "@/storage/namespace";
 
-// BongChrome: 치지직(chzzk.*)·번역(trans.*)·공통(core.*) 키는 디시 데이터 작업에서 건드리지 않는다.
+// BongExtend: 치지직(chzzk.*)·번역(trans.*)·공통(core.*) 키는 디시 데이터 작업에서 건드리지 않는다.
 const dcLocalKeys = async (): Promise<string[]> =>
     Object.keys(await browser.storage.local.get(null)).filter((key) => !isOtherModuleKey(key));
 

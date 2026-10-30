@@ -37,7 +37,7 @@ describe("settings import", () => {
         expect(plan.sync["chzzk.enabled"]).toBe(false);
     });
 
-    test("BongChrome export round-trips", async () => {
+    test("BongExtend export round-trips", async () => {
         const local = {"trans.settings": {apiKey: "k"}, "chzzk.recoverCount": 2, "refresher:memo:UID": {a: 1}, "core.modules": {chzzk: true, trans: false, dc: true}};
         const sync = {"chzzk.vivid": false};
         const out = buildExport(local, sync);

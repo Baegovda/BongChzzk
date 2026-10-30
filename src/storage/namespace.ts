@@ -1,4 +1,4 @@
-// BongChrome 저장소 구역
+// BongExtend 저장소 구역
 // - 디시(BongDC) 모듈: 기존 키 그대로 `refresher:*` (옛 BongDC 내보내기 파일을 그대로 가져올 수 있게 유지)
 // - 치지직 모듈: `chzzk.*` (sync/local)
 // - 번역 모듈: `trans.*` (local)

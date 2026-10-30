@@ -96,7 +96,7 @@ describe("extractAll", () => {
     test("reads stored and deflate entries and skips directories", async () => {
         const big = new TextEncoder().encode("console.log(1);\n".repeat(200));
         const zip = makeZip([
-            {name: "manifest.json", data: new TextEncoder().encode('{"name":"BongChrome"}')},
+            {name: "manifest.json", data: new TextEncoder().encode('{"name":"BongExtend"}')},
             {name: "lib/"},
             {name: "lib/a.js", data: big, deflate: true}
         ]);
@@ -116,7 +116,7 @@ describe("extractAll", () => {
     });
 
     test("reads a zip copied into a non-zero byte offset", async () => {
-        const zip = makeZip([{name: "manifest.json", data: new TextEncoder().encode('{"name":"BongChrome"}')}]);
+        const zip = makeZip([{name: "manifest.json", data: new TextEncoder().encode('{"name":"BongExtend"}')}]);
         const padded = new Uint8Array(zip.length + 8);
         padded.set(zip, 8);
         const files = await extractAll(padded.subarray(8));

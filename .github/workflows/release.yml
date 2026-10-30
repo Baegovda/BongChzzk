@@ -59,15 +59,15 @@ jobs:
                 if: github.ref_type == 'tag'
                 env:
                     GH_TOKEN: ${{ github.token }}
-                    GH_REPO: Baegovda/BongChrome
+                    GH_REPO: Baegovda/BongExtend
                 run: |
                     set -eu
                     TAG="${GITHUB_REF_NAME}"
                     VERSION="${TAG#v}"
-                    ZIP=".output/bongchrome-${VERSION}-chrome.zip"
+                    ZIP=".output/bongextend-${VERSION}-chrome.zip"
                     if gh release view "$TAG" >/dev/null 2>&1; then
                       gh release upload "$TAG" "$ZIP" --clobber
                       gh release edit "$TAG" --notes-file release-notes.md
                     else
-                      gh release create "$TAG" "$ZIP" --title "BongChrome ${VERSION}" --notes-file release-notes.md
+                      gh release create "$TAG" "$ZIP" --title "BongExtend ${VERSION}" --notes-file release-notes.md
                     fi

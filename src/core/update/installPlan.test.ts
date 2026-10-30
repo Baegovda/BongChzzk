@@ -21,7 +21,7 @@ const textFile = (path: string, text: string): ZipFile => ({
 });
 
 const sampleFiles = (): ZipFile[] => [
-    textFile("manifest.json", '{"name":"BongChrome","version":"5.2.21"}'),
+    textFile("manifest.json", '{"name":"BongExtend","version":"5.2.21"}'),
     textFile("content.js", "console.log(1)"),
     textFile("popup.html", '<script type="module" src="/chunks/popup.js"></script>'),
     textFile("chunks/popup.js", "console.log('popup')"),

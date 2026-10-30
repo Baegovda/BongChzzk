@@ -1,12 +1,12 @@
 import {readFileSync} from "node:fs";
 import {missingReachable} from "../src/core/update/installPlan";
 import {manifestReferencedFiles} from "../src/core/update/manifestRefs";
-import {EXTENSION_NAME, isBongChromeManifest} from "../src/core/update/release";
+import {EXTENSION_NAME, isBongExtendManifest} from "../src/core/update/release";
 import {fileKey} from "../src/core/update/types";
 import {extractAll} from "../src/core/update/zip";
 import {CHZZK_SCRIPT_FILES} from "../src/modules/chzzk-register";
 
-// BongChrome: manifest에 안 적혔지만 코드가 여는 페이지(팝업 iframe, 번역 설정)와 치지직 동적 콘텐츠 스크립트
+// BongExtend: manifest에 안 적혔지만 코드가 여는 페이지(팝업 iframe, 번역 설정)와 치지직 동적 콘텐츠 스크립트
 const MODULE_PAGES = ["popup.html", "chzzk/popup.html", "trans/popup/popup.html", "trans/options/options.html", "dc.html", "options.html"];
 const MODULE_FILES = [...CHZZK_SCRIPT_FILES, "trans/content/content.js"];
 
@@ -51,7 +51,7 @@ const checkZip = async (name: string) => {
     const paths = new Set(files.map(fileKey));
     const manifestFile = files.find((file) => fileKey(file) === "manifest.json");
     const manifestText = manifestFile ? new TextDecoder().decode(manifestFile.data) : "";
-    if (!isBongChromeManifest(manifestText)) {
+    if (!isBongExtendManifest(manifestText)) {
         fail(`${name}: manifest name is not ${EXTENSION_NAME}`);
         return;
     }
@@ -77,7 +77,7 @@ const checkZip = async (name: string) => {
     }
 };
 
-await checkZip(`bongchrome-${expected}-chrome.zip`);
+await checkZip(`bongextend-${expected}-chrome.zip`);
 
 if (failures.length) {
     for (const message of failures) console.error(message);

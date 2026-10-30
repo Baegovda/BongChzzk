@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title BongChrome - 개발 테스트
+title BongExtend - 개발 테스트
 cd /d "%~dp0"
 
 where bun >nul 2>&1
@@ -16,7 +16,7 @@ if errorlevel 1 (
 )
 
 echo ========================================
-echo   BongChrome  개발 테스트
+echo   BongExtend  개발 테스트
 echo ========================================
 echo.
 echo  * Cursor에서 F5 눌러도 동일하게 실행됩니다

@@ -1,6 +1,6 @@
-# BongChrome — 에이전트 안내
+# BongExtend — 에이전트 안내
 
-BongChrome = BongChzzk(치지직) + BongTrans(Gemini 번역) + BongDC(디시, green1052/DCRefresher-Reborn 포크)를 합친 크롬 MV3 확장. 라이선스 GPL-3.0.
+BongExtend = BongChzzk(치지직) + BongTrans(Gemini 번역) + BongDC(디시, green1052/DCRefresher-Reborn 포크)를 합친 크롬 MV3 확장. 라이선스 GPL-3.0.
 오너(Guilliman / GitHub Baegovda)는 개발자가 아님. 화면 글, README, CHANGELOG, 보고는 한국어로 쉽게.
 
 ## 꼭 지킬 것
@@ -24,7 +24,7 @@ BongChrome = BongChzzk(치지직) + BongTrans(Gemini 번역) + BongDC(디시, gr
 - `bun install`
 - `bun run test` (= `bun test` 디시·공통 + `node --test` 치지직·번역)
 - `bun run build` → `.output/chrome-mv3/`
-- `bun run zip` → `.output/bongchrome-X.Y.Z-chrome.zip`, `bun scripts/verify-release-zip.ts X.Y.Z`
+- `bun run zip` → `.output/bongextend-X.Y.Z-chrome.zip`, `bun scripts/verify-release-zip.ts X.Y.Z`
 
 ## 릴리스
 - 버전은 `package.json` 하나. `CHANGELOG.md`에 `## [X.Y.Z]` 섹션.

@@ -1,4 +1,4 @@
-export const CACHE_STATS_KEY = 'trans.cacheStats'; // BongChrome: 번역 모듈 구역
+export const CACHE_STATS_KEY = 'trans.cacheStats'; // BongExtend: 번역 모듈 구역
 
 export const CACHE_AGE_CHOICES = [
   { days: 30, label: '30일' },

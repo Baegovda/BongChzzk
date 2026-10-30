@@ -18,10 +18,10 @@ import {MODULES_KEY, getModules} from "@/modules/core-modules.js";
 import {syncChzzkScripts} from "@/modules/chzzk-register";
 
 export default defineBackground(() => {
-    // ===== BongChrome: 번역 모듈(옛 BongTrans) 처리기 =====
+    // ===== BongExtend: 번역 모듈(옛 BongTrans) 처리기 =====
     startTransBackground();
 
-    // ===== BongChrome: 치지직 모듈(옛 BongChzzk) 콘텐츠 스크립트 등록 =====
+    // ===== BongExtend: 치지직 모듈(옛 BongChzzk) 콘텐츠 스크립트 등록 =====
     // 모듈 스위치를 끄면 등록을 풀어서 치지직 페이지에 아예 붙지 않게 한다.
     void syncChzzkScripts(getModules);
     browser.storage.onChanged.addListener((changes, area) => {
@@ -181,7 +181,7 @@ export default defineBackground(() => {
         void createContextMenus();
     });
 
-    // BongChrome: 단축키(commands)는 사용자 요청으로 모두 뺐다.
+    // BongExtend: 단축키(commands)는 사용자 요청으로 모두 뺐다.
 
     // dcrefresher.green1052.com/data 는 404다. 차단 목록을 받던 요청은 서비스 워커 오류만 남기므로 하지 않는다.
     // 이미 저장한 차단 목록은 storage에 그대로 둔다. 통신사 표만 GitHub develop에서 따로 확인한다.

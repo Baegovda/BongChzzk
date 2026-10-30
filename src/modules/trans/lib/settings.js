@@ -1,6 +1,6 @@
 import { normalizeCacheMaxAgeDays, normalizeCacheMaxBytes } from './cache-policy.js';
 
-export const STORAGE_KEY = 'trans.settings'; // BongChrome: 번역 모듈 구역
+export const STORAGE_KEY = 'trans.settings'; // BongExtend: 번역 모듈 구역
 
 export const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
 export const DEFAULT_FALLBACK_MODEL = 'gemini-3.5-flash-lite';

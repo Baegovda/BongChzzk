@@ -5,4 +5,4 @@ Read these files before doing anything else, in this order:
 
 They are the project instructions. Do not invent a parallel policy.
 
-Repo: https://github.com/Baegovda/BongChrome
+Repo: https://github.com/Baegovda/BongExtend

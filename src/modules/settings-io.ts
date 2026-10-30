@@ -1,6 +1,6 @@
-// BongChrome 설정 내보내기·가져오기
+// BongExtend 설정 내보내기·가져오기
 // 받는 형식
-//  1) BongChrome 파일: {type:"bongchrome-settings", chzzk:{sync,local}, trans:{settings}, dc:{...}, core:{...}}
+//  1) BongExtend 파일: {type:"bongextend-settings", chzzk:{sync,local}, trans:{settings}, dc:{...}, core:{...}}
 //  2) 옛 BongTrans 파일: {type:"page-translator-settings", settings:{...}}
 //  3) 옛 BongDC 데이터: 디시 탭 → 데이터 → 내보내기로 복사한 JSON (refresher:* 키)
 //  4) 옛 BongChzzk 설정 객체: {enabled, watchList, ...} (옛 확장에는 내보내기 버튼이 없어서 직접 만든 경우만)
@@ -9,7 +9,7 @@ import {normalizeSettings, SETTINGS_FILE_TYPE, STORAGE_KEY as TRANS_KEY} from "@
 import {normalizeStorageData} from "@/storage/migration";
 import {isOtherModuleKey, onlyDcKeys} from "@/storage/namespace";
 
-export const BONGCHROME_FILE_TYPE = "bongchrome-settings";
+export const BONGEXTEND_FILE_TYPE = "bongextend-settings";
 
 export const CHZZK_KEYS = [
     "enabled", "threshold", "cooldown", "toast", "lockQuality", "targetQuality", "followRefresh", "followInterval",
@@ -46,7 +46,7 @@ export const planImport = (text: string): ImportPlan => {
 
     const plan: ImportPlan = {labels: [], sync: {}, local: {}, dcReplace: null};
 
-    if (parsed.type === BONGCHROME_FILE_TYPE) {
+    if (parsed.type === BONGEXTEND_FILE_TYPE) {
         const chzzk = isObj(parsed.chzzk) ? parsed.chzzk : {};
         if (isObj(chzzk.sync) || isObj(chzzk.local)) {
             Object.assign(plan.sync, prefixed("chzzk.", chzzk.sync as Rec));
@@ -62,7 +62,7 @@ export const planImport = (text: string): ImportPlan => {
             plan.labels.push("디시");
         }
         if (isObj(parsed.core)) Object.assign(plan.local, prefixed("core.", parsed.core));
-        if (!plan.labels.length) throw new Error("BongChrome 설정 파일에 가져올 내용이 없어요.");
+        if (!plan.labels.length) throw new Error("BongExtend 설정 파일에 가져올 내용이 없어요.");
         return plan;
     }
 
@@ -90,7 +90,7 @@ export const planImport = (text: string): ImportPlan => {
         return plan;
     }
 
-    throw new Error("어느 확장의 설정인지 알 수 없어요. BongChrome·BongTrans·BongDC 설정만 가져올 수 있어요.");
+    throw new Error("어느 확장의 설정인지 알 수 없어요. BongExtend·BongTrans·BongDC 설정만 가져올 수 있어요.");
 };
 
 type Area = {
@@ -121,10 +121,10 @@ export const buildExport = (local: Rec, sync: Rec): Rec => {
     const dc = onlyDcKeys(local);
     for (const k of Object.keys(dc)) if (k.startsWith("refresher:database:")) delete dc[k];
     return {
-        type: BONGCHROME_FILE_TYPE,
+        type: BONGEXTEND_FILE_TYPE,
         version: 1,
         exportedAt: new Date().toISOString(),
-        app: "BongChrome",
+        app: "BongExtend",
         chzzk: {sync: pick(sync, "chzzk."), local: pick(local, "chzzk.")},
         trans: {settings: local[TRANS_KEY] ?? null},
         dc,

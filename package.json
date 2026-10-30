@@ -1,15 +1,15 @@
 {
-    "displayName": "BongChrome",
-    "name": "bongchrome",
-    "version": "1.0.0",
+    "displayName": "BongExtend",
+    "name": "bongextend",
+    "version": "1.0.1",
     "description": "치지직·디시인사이드 개선과 Gemini 페이지 번역을 하나로 합친 크롬 확장 프로그램",
-    "homepage": "https://github.com/Baegovda/BongChrome",
+    "homepage": "https://github.com/Baegovda/BongExtend",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Baegovda/BongChrome.git"
+        "url": "https://github.com/Baegovda/BongExtend.git"
     },
     "bugs": {
-        "url": "https://github.com/Baegovda/BongChrome/issues"
+        "url": "https://github.com/Baegovda/BongExtend/issues"
     },
     "license": "GPL-3.0-only",
     "author": "Baegovda (디시 모듈 원작: green1052)",

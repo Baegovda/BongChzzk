@@ -1,7 +1,7 @@
 import {compareVersions} from "@/core/semver";
 
-export const GITHUB_RELEASE_REPO = "Baegovda/BongChrome";
-export const EXTENSION_NAME = "BongChrome";
+export const GITHUB_RELEASE_REPO = "Baegovda/BongExtend";
+export const EXTENSION_NAME = "BongExtend";
 export const RELEASES_LATEST = `https://api.github.com/repos/${GITHUB_RELEASE_REPO}/releases/latest`;
 export const RELEASES_PAGE = `https://github.com/${GITHUB_RELEASE_REPO}/releases`;
 
@@ -45,7 +45,7 @@ export const pickReleaseZip = (
     ) ?? null;
 };
 
-export const isBongChromeManifest = (text: string): boolean => {
+export const isBongExtendManifest = (text: string): boolean => {
     try {
         return JSON.parse(text)?.name === EXTENSION_NAME;
     } catch {
@@ -68,7 +68,7 @@ export const checkLatestRelease = async (
     const response = await fetchImpl(deps.url ?? RELEASES_LATEST, {
         headers: {
             Accept: "application/vnd.github+json",
-            "User-Agent": "BongChrome",
+            "User-Agent": "BongExtend",
             "X-GitHub-Api-Version": "2022-11-28"
         }
     });

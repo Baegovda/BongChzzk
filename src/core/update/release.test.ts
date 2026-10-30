@@ -6,7 +6,7 @@ import {
     canApplyVersion,
     checkLatestRelease,
     describeUpdate,
-    isBongChromeManifest,
+    isBongExtendManifest,
     pickReleaseZip
 } from "@/core/update/release";
 
@@ -29,9 +29,9 @@ describe("describeUpdate", () => {
 describe("pickReleaseZip", () => {
     test("picks the browser zip and ignores the other one", () => {
         const assets = [
-            {name: "bongchrome-5.2.21-firefox.zip", browser_download_url: "ff"},
-            {name: "bongchrome-5.2.21-chrome.zip", browser_download_url: "cr"},
-            {name: "bongchrome-5.2.21-sources.zip", browser_download_url: "src"}
+            {name: "bongextend-5.2.21-firefox.zip", browser_download_url: "ff"},
+            {name: "bongextend-5.2.21-chrome.zip", browser_download_url: "cr"},
+            {name: "bongextend-5.2.21-sources.zip", browser_download_url: "src"}
         ];
         expect(pickReleaseZip(assets, "chrome")?.browser_download_url).toBe("cr");
         expect(pickReleaseZip(assets, "firefox")?.browser_download_url).toBe("ff");
@@ -50,15 +50,15 @@ describe("checkLatestRelease", () => {
                     status: 200,
                     json: async () => ({
                         tag_name: "v5.2.21",
-                        html_url: "https://github.com/Baegovda/BongChrome/releases/tag/5.2.21",
-                        assets: [{name: "bongchrome-5.2.21-chrome.zip", browser_download_url: "https://example.invalid/chrome.zip"}]
+                        html_url: "https://github.com/Baegovda/BongExtend/releases/tag/5.2.21",
+                        assets: [{name: "bongextend-5.2.21-chrome.zip", browser_download_url: "https://example.invalid/chrome.zip"}]
                     })
                 };
             }
         });
 
         expect(headers?.Authorization).toBeUndefined();
-        expect(headers?.["User-Agent"]).toBe("BongChrome");
+        expect(headers?.["User-Agent"]).toBe("BongExtend");
         expect(result.upToDate).toBe(false);
         expect(result.latest).toBe("5.2.21");
         expect(result.assetUrl).toBe("https://example.invalid/chrome.zip");
@@ -72,12 +72,12 @@ describe("checkLatestRelease", () => {
     });
 });
 
-describe("isBongChromeManifest", () => {
-    test("accepts only the BongChrome manifest name", () => {
-        expect(isBongChromeManifest('{"name":"BongChrome"}')).toBe(true);
-        expect(isBongChromeManifest('{"name":"BongDC"}')).toBe(false);
-        expect(isBongChromeManifest('{"name":"Other"}')).toBe(false);
-        expect(isBongChromeManifest("nope")).toBe(false);
+describe("isBongExtendManifest", () => {
+    test("accepts only the BongExtend manifest name", () => {
+        expect(isBongExtendManifest('{"name":"BongExtend"}')).toBe(true);
+        expect(isBongExtendManifest('{"name":"BongDC"}')).toBe(false);
+        expect(isBongExtendManifest('{"name":"Other"}')).toBe(false);
+        expect(isBongExtendManifest("nope")).toBe(false);
     });
 });
 

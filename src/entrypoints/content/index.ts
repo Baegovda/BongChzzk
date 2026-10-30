@@ -24,7 +24,7 @@ export default defineContentScript({
     ],
     runAt: "document_start",
     async main() {
-        // BongChrome: 디시 모듈 스위치가 꺼져 있으면 아무것도 하지 않는다.
+        // BongExtend: 디시 모듈 스위치가 꺼져 있으면 아무것도 하지 않는다.
         try {
             const stored = await browser.storage.local.get("core.modules");
             if ((stored["core.modules"] as Record<string, boolean> | undefined)?.dc === false) return;
