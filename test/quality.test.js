@@ -32,3 +32,8 @@ test('isSatisfied', () => {
   assert.equal(Q.isSatisfied('720p', ['720p', '480p'], 1080), true);
   assert.equal(Q.isSatisfied('480p', ['자동'], 1080), true);
 });
+test('real pzp labels (no 자동, 60fps suffix)', () => {
+  assert.equal(Q.pickQualityIndex(['1080p', '720p', '480p', '360p'], 1080), 0);
+  assert.equal(Q.isSatisfied('360p', ['1080p', '720p', '480p', '360p'], 1080), false);
+  assert.equal(Q.parseHeight('1080p 60fps'), 1080);
+});

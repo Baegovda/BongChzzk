@@ -5,6 +5,22 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-10-30
+
+### Added
+
+- 팔로잉 채널 자동 새로고침: 탭이 보이는 동안 사이드바 "팔로잉 채널"(또는 /following 페이지)을 페이지 새로고침 없이 기본 5초마다 갱신합니다(간격 5/10/30/60초, 실패 시 최대 5분까지 백오프).
+- 선명한 화면 항상 켜기: 플레이어의 "선명한 화면"이 꺼져 있으면 켭니다(10초에 한 번까지 확인, 방송/광고 후 재초기화 시 재적용).
+- 채팅 헤더 시청자 수: 채팅 제목 옆에 "👁 1,234명" 형식으로 동시 시청자 수를 1초마다 표시합니다.
+- 플레이어 시청자 수 오버레이: 플레이어 왼쪽 위에 시청자 수 배지를 표시합니다(전체화면 포함).
+- 주간 랭킹 가리기: 채팅창 위 주간/파워 랭킹 위젯을 숨깁니다.
+- 채팅 글씨 크기: 채팅 글씨 크기를 12~28px로 바꿀 수 있습니다(기본은 변경 안 함).
+- 방향키 이동: ← / → 로 5초 뒤로/앞으로 이동합니다(5/10/15/30초 선택, 채팅 입력 중에는 동작 안 함, 라이브는 되감기 가능 범위와 라이브 끝 사이로 제한).
+
+### Fixed
+
+- 화질 고정이 동작하지 않던 문제를 고쳤습니다. 실제 플레이어 구조(`.pzp-pc-setting-button`, `.pzp-pc-setting-intro-quality`, `li.pzp-ui-setting-quality-item`)에 맞추고, 항목 선택을 Enter 키 입력으로 바꿨습니다. 새 방송, 광고 종료 후 플레이어 재초기화, 페이지 이동 때마다 다시 적용합니다.
+
 ## [1.2.0] - 2026-10-30
 
 ### Added

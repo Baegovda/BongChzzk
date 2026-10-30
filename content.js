@@ -42,6 +42,9 @@
     v.addEventListener('playing', () => { s.stallSince = 0; });
     log('비디오 감시 시작');
     v.addEventListener('loadedmetadata', () => scheduleQuality(1500));
+    v.addEventListener('playing', () => scheduleQuality(1200));
+    v.addEventListener('emptied', () => scheduleQuality(2500));
+    new MutationObserver(() => scheduleQuality(2500)).observe(v, { attributes: true, attributeFilter: ['src'] });
   }
 
   function scan(root) {
@@ -129,13 +132,17 @@
     }
   }, 1000);
 
-  // ───── 화질 고정 (치지직 pzp 플레이어 설정 메뉴 조작) ─────
-  // 선택자는 공개 유저스크립트들이 쓰는 치지직 pzp 클래스명을 기준으로 함(사이트 변경 시 깨질 수 있음).
+  // ───── 화질 고정 (치지직 pzp 플레이어, 실제 DOM 확인된 선택자) ─────
+  // li 항목은 합성 click으로 선택되지 않고 Enter keydown/keyup으로 선택됨(실사이트 확인).
   const Q = globalThis.BongQuality;
   const SEL = {
-    settingBtn: '.pzp-pc-setting-button, button[class*="setting-button"], .pzp-pc-setting-button__icon',
-    qualityIntro: '.pzp-pc-setting-intro-quality, [class*="setting-intro-quality"]',
-    items: 'li.pzp-pc-ui-setting-quality-item, .pzp-pc-setting-quality-pane__list-container > li, [class*="setting-quality-item"]'
+    root: 'div.pzp.pzp-pc',
+    settingBtn: '.pzp-pc-setting-button',
+    menu: '.pzp-pc-settings',
+    qualityIntro: '.pzp-pc-setting-intro-quality',
+    items: 'li.pzp-ui-setting-quality-item',
+    prefix: '.pzp-ui-setting-quality-item__prefix',
+    checked: 'pzp-ui-setting-pane-item--checked'
   };
   const HIDE_CLASS = 'bongchzzk-qhide';
   const q = { busy: false, nextAt: 0, fails: 0, userUntil: 0, timer: 0, lastPath: location.pathname };
@@ -145,60 +152,67 @@
     if (document.getElementById('bongchzzk-qstyle')) return;
     const st = document.createElement('style');
     st.id = 'bongchzzk-qstyle';
-    st.textContent = `html.${HIDE_CLASS} [class*="pzp-pc-setting"][class*="pane"],html.${HIDE_CLASS} [class*="pzp-pc-setting-intro"],html.${HIDE_CLASS} [class*="pzp-pc-ui-setting"]{opacity:0!important;transition:none!important}`;
+    st.textContent = `html.${HIDE_CLASS} .pzp-pc-settings,html.${HIDE_CLASS} [class*="pzp-pc-setting-"]:not(.pzp-pc-setting-button){opacity:0!important;transition:none!important}`;
     (document.head || document.documentElement).appendChild(st);
   }
-  const uniq = els => [...new Set(els)];
-  const getItems = () => uniq([...document.querySelectorAll(SEL.items)].map(e => e.closest('li') || e));
-  const labelOf = li => ((li.querySelector('[class*="quality-item__prefix"]') || li).textContent || '').trim();
-  const isChecked = li => /checked|selected|active/i.test(li.className) || li.getAttribute('aria-checked') === 'true' || li.getAttribute('aria-selected') === 'true';
-
-  // 메뉴가 이미 DOM에 있으면 바로 판단/클릭. 반환: 'ok' | 'clicked' | 'none'
-  function applyFromItems(items) {
-    if (!items.length) return 'none';
-    const labels = items.map(labelOf);
-    const cur = items.find(isChecked);
-    if (cur && Q.isSatisfied(labelOf(cur), labels, cfg.targetQuality)) return 'ok';
-    const i = Q.pickQualityIndex(labels, cfg.targetQuality);
-    if (i < 0) return 'ok';
-    items[i].click();
-    log('화질 선택:', labels[i]);
-    return 'clicked';
+  const getItems = () => [...document.querySelectorAll(SEL.items)];
+  const labelOf = li => ((li.querySelector(SEL.prefix) || li).textContent || '').trim();
+  const isChecked = li => li.classList.contains(SEL.checked);
+  function currentQuality() {
+    const intro = document.querySelector(SEL.qualityIntro);
+    const v = intro && (intro.getAttribute('value') || intro.querySelector('.pzp-ui-setting-home-item__value')?.textContent);
+    if (v) return v.trim();
+    const c = getItems().find(isChecked);
+    return c ? labelOf(c) : '';
   }
+  function pressEnter(el) {
+    try { el.focus({ preventScroll: true }); } catch (e) {}
+    const o = { key: 'Enter', code: 'Enter', keyCode: 13, which: 13, bubbles: true, cancelable: true };
+    el.dispatchEvent(new KeyboardEvent('keydown', o));
+    el.dispatchEvent(new KeyboardEvent('keyup', o));
+  }
+  const menuOpen = () => document.querySelector(SEL.settingBtn)?.getAttribute('aria-expanded') === 'true';
 
   async function ensureQuality() {
     if (q.busy || !cfg.lockQuality || Date.now() < q.userUntil || Date.now() < q.nextAt) return;
     const v = [...tracked].find(x => x.isConnected && x.readyState > 0);
     if (!v || !/^\/(live|video)\//.test(location.pathname)) return;
+    const btn = document.querySelector(SEL.settingBtn);
+    if (!btn) return;
+    let labels = getItems().map(labelOf);
+    if (labels.length && Q.isSatisfied(currentQuality(), labels, cfg.targetQuality)) { q.fails = 0; return; }
+    if (menuOpen()) return; // 사용자가 메뉴를 열어둔 상태면 건드리지 않음
     q.busy = true;
     let opened = false;
     try {
-      let r = applyFromItems(getItems());
-      if (r === 'none') {
-        const btn = document.querySelector(SEL.settingBtn);
-        if (!btn) throw new Error('설정 버튼 없음');
-        injectHideStyle();
-        document.documentElement.classList.add(HIDE_CLASS);
-        (btn.closest('button') || btn).click(); opened = true;
-        await sleep(250);
-        const intro = document.querySelector(SEL.qualityIntro);
-        if (intro) { intro.click(); await sleep(250); }
-        r = applyFromItems(getItems());
-        if (r === 'none') throw new Error('화질 목록 없음');
-      }
+      injectHideStyle();
+      document.documentElement.classList.add(HIDE_CLASS);
+      btn.click(); opened = true;
+      await sleep(200);
+      const intro = document.querySelector(SEL.qualityIntro);
+      if (!intro) throw new Error('화질 메뉴 없음');
+      intro.click();
+      await sleep(300);
+      const items = getItems();
+      labels = items.map(labelOf);
+      const i = Q.pickQualityIndex(labels, cfg.targetQuality);
+      if (i < 0) throw new Error('화질 목록 없음');
+      if (!isChecked(items[i])) { pressEnter(items[i]); log('화질 선택:', labels[i]); }
+      await sleep(300);
+      if (!Q.isSatisfied(currentQuality(), getItems().map(labelOf), cfg.targetQuality)) throw new Error('적용 확인 실패(현재 ' + currentQuality() + ')');
       q.fails = 0;
-      q.nextAt = Date.now() + (r === 'clicked' ? 3000 : 5000);
-      if (r === 'clicked') toast(`화질 ${cfg.targetQuality}p 고정 적용`);
+      q.nextAt = Date.now() + 3000;
+      toast(`화질 ${labels[i]} 고정 적용`);
     } catch (e) {
       q.fails++;
       q.nextAt = Date.now() + Math.min(60000, 3000 * Math.pow(2, q.fails)); // 실패 시 백오프
       if (q.fails <= 3) log('화질 고정 실패:', e.message);
     } finally {
-      if (opened) {
+      if (opened && menuOpen()) {
+        const b = document.querySelector(SEL.settingBtn);
+        if (b) b.click();
         await sleep(50);
-        const btn = document.querySelector(SEL.settingBtn);
-        if (btn && document.querySelector('[class*="pzp-pc-setting"][class*="pane"], [class*="pzp-pc-setting-intro"]')) (btn.closest('button') || btn).click();
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+        if (menuOpen()) document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, bubbles: true }));
       }
       setTimeout(() => document.documentElement.classList.remove(HIDE_CLASS), opened ? 150 : 0);
       q.busy = false;
@@ -206,17 +220,20 @@
   }
   function scheduleQuality(delay) {
     clearTimeout(q.timer);
-    q.timer = setTimeout(() => { q.nextAt = 0; ensureQuality(); }, delay);
+    q.timer = setTimeout(() => { q.nextAt = 0; q.fails = 0; ensureQuality(); }, delay);
   }
-  // 사용자가 직접 화질을 바꾸면 10분간은 간섭하지 않음
-  document.addEventListener('click', e => {
-    if (e.isTrusted && e.target.closest && e.target.closest(SEL.items)) {
+  // 사용자가 직접 화질을 바꾸면 10분간은 간섭하지 않음 (신뢰된 클릭/Enter만)
+  const manual = e => {
+    if (e.isTrusted && !q.busy && e.target.closest && e.target.closest(SEL.items)) {
+      if (e.type === 'keydown' && e.key !== 'Enter') return;
       q.userUntil = Date.now() + 10 * 60 * 1000;
       log('수동 화질 변경 감지 → 10분간 화질 고정 일시 중지');
     }
-  }, true);
+  };
+  document.addEventListener('click', manual, true);
+  document.addEventListener('keydown', manual, true);
   setInterval(() => {
-    if (location.pathname !== q.lastPath) { q.lastPath = location.pathname; q.userUntil = 0; q.fails = 0; scheduleQuality(1500); }
+    if (location.pathname !== q.lastPath) { q.lastPath = location.pathname; q.userUntil = 0; scheduleQuality(1500); }
     ensureQuality();
   }, 3000);
   chrome.storage.onChanged.addListener((c, area) => {

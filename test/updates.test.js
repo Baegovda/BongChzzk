@@ -23,5 +23,5 @@ test('404 error', async () => {
 });
 test('manifest version has changelog', () => {
   const v = JSON.parse(readFileSync('manifest.json', 'utf8')).version;
-  assert.match(extractChangelog(readFileSync('CHANGELOG.md', 'utf8'), v), /화질 1080p 고정/);
+  assert.match(extractChangelog(readFileSync('CHANGELOG.md', 'utf8'), v), /화질 고정/);
 });
