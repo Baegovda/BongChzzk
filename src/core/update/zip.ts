@@ -23,7 +23,7 @@ const viewOf = (bytes: Uint8Array): DataView =>
 
 const need = (bytes: Uint8Array, offset: number, size: number) => {
     if (offset < 0 || size < 0 || offset + size > bytes.length) {
-        throw new Error("zip이 잘렸습니다.");
+        throw new Error("zip이 잘렸어요.");
     }
 };
 
@@ -53,12 +53,12 @@ export const listEntries = (buf: Uint8Array | ArrayBuffer): ZipEntry[] => {
         }
     }
 
-    if (eocd < 0) throw new Error("zip 형식이 아닙니다.");
+    if (eocd < 0) throw new Error("zip 형식이 아니에요.");
 
     const count = view.getUint16(eocd + 10, true);
     let cursor = view.getUint32(eocd + 16, true);
     if (view.getUint32(eocd + 12, true) === ZIP64_MAGIC || cursor === ZIP64_MAGIC) {
-        throw new Error("zip64는 지원하지 않습니다.");
+        throw new Error("zip64는 지원하지 않아요.");
     }
 
     const decoder = new TextDecoder();
@@ -67,7 +67,7 @@ export const listEntries = (buf: Uint8Array | ArrayBuffer): ZipEntry[] => {
     for (let index = 0; index < count; index++) {
         need(bytes, cursor, 46);
         if (view.getUint32(cursor, true) !== SIG_CEN) {
-            throw new Error("zip 중앙 디렉터리가 손상되었습니다.");
+            throw new Error("zip 중앙 디렉터리가 손상됐어요.");
         }
 
         const method = view.getUint16(cursor + 10, true);
@@ -78,7 +78,7 @@ export const listEntries = (buf: Uint8Array | ArrayBuffer): ZipEntry[] => {
         const commentLength = view.getUint16(cursor + 32, true);
         const offset = view.getUint32(cursor + 42, true);
         if (compSize === ZIP64_MAGIC || size === ZIP64_MAGIC || offset === ZIP64_MAGIC) {
-            throw new Error("zip64는 지원하지 않습니다.");
+            throw new Error("zip64는 지원하지 않아요.");
         }
 
         need(bytes, cursor + 46, nameLength);
@@ -117,7 +117,7 @@ export const extractAll = async (buf: Uint8Array | ArrayBuffer): Promise<ZipFile
 
     for (const entry of listEntries(bytes)) {
         const parts = safePath(entry.name);
-        if (!parts) throw new Error(`안전하지 않은 경로가 zip에 있습니다: ${entry.name}`);
+        if (!parts) throw new Error(`안전하지 않은 경로가 zip에 있어요: ${entry.name}`);
         if (entry.isDir) continue;
 
         need(bytes, entry.offset, 30);
@@ -140,7 +140,7 @@ export const extractAll = async (buf: Uint8Array | ArrayBuffer): Promise<ZipFile
         files.push({path: parts, data});
     }
 
-    if (!files.length) throw new Error("zip이 비어 있습니다.");
+    if (!files.length) throw new Error("zip이 비어 있어요.");
 
     const root = files[0].path[0];
     const hasRootManifest = files.some((file) => file.path.length === 1 && file.path[0] === "manifest.json");
@@ -151,7 +151,7 @@ export const extractAll = async (buf: Uint8Array | ArrayBuffer): Promise<ZipFile
     }
 
     if (!files.some((file) => file.path.join("/") === "manifest.json")) {
-        throw new Error("zip에 manifest.json이 없습니다.");
+        throw new Error("zip에 manifest.json이 없어요.");
     }
 
     return files;

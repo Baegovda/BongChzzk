@@ -28,53 +28,52 @@ select{min-width:76px}
 #updateStatus.error{color:var(--be-error)}
 </style>
 </head><body class="be-page">
-<div class="be-title"><h3>치지직</h3><span class="be-sub">라이브 시청 도우미</span></div>
+<div class="be-title"><h3>치지직</h3><span class="be-sub">라이브 시청 편의 기능</span></div>
 <div class="grid be-grid">
 <div class="col">
 <section class="be-card">
 <h4>버퍼링 복구</h4>
 <label>자동 복구 사용<input type="checkbox" id="enabled"></label>
-<label>버퍼링 판정(초)<input type="number" id="threshold" min="2" max="60"></label>
-<label>복구 간격(초)<input type="number" id="cooldown" min="3" max="120"></label>
-<label>화면 알림 표시<input type="checkbox" id="toast"></label>
-<div class="c">복구 횟수 <b id="count">0</b> <button id="reset">초기화</button><div id="last"></div></div>
+<label>버퍼링으로 볼 시간(초)<input type="number" id="threshold" min="2" max="60"></label>
+<label>복구 사이 간격(초)<input type="number" id="cooldown" min="3" max="120"></label>
+<label>복구할 때 화면에 알림<input type="checkbox" id="toast"></label>
+<div class="c">지금까지 복구 <b id="count">0</b>회 <button id="reset" type="button" title="복구 횟수와 마지막 복구 시각만 지워요. 설정은 그대로예요.">횟수 초기화</button><div id="last"></div></div>
 </section>
 <section class="be-card">
 <h4>화면</h4>
-<label>화질 고정<input type="checkbox" id="lockQuality"></label>
-<label class="sub">고정할 화질<select id="targetQuality"><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="360">360p</option></select></label>
-<label>방송 진입 시 넓은 화면 자동<input type="checkbox" id="autoWide"></label>
-<label>새로고침·진입 시 자동 재생<input type="checkbox" id="autoPlay"></label>
+<label>화질 고정 <span class="inline"><select id="targetQuality" aria-label="고정할 화질"><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="360">360p</option></select><input type="checkbox" id="lockQuality" aria-label="화질 고정"></span></label>
+<label>방송에 들어가면 넓은 화면으로<input type="checkbox" id="autoWide"></label>
+<label>들어가거나 새로고침하면 자동 재생<input type="checkbox" id="autoPlay"></label>
 <label>선명한 화면 항상 켜기<input type="checkbox" id="vivid"></label>
-<label>타임머신 안내창 숨김<input type="checkbox" id="hideTimeGuide"></label>
-<label>광고 방지(실험적)<input type="checkbox" id="adSkip"></label>
-<label>플레이어 시청자 수 표시<input type="checkbox" id="viewerOverlay"></label>
+<label>타임머신 안내창 숨기기<input type="checkbox" id="hideTimeGuide"></label>
+<label title="광고에 건너뛰기 버튼이 나오면 대신 눌러요">광고 자동 건너뛰기<input type="checkbox" id="adSkip"></label>
+<label>영상 위에 시청자 수 표시<input type="checkbox" id="viewerOverlay"></label>
 </section>
 <section class="be-card">
 <h4>조작</h4>
-<label>방향키로 영상 이동 (← →)<input type="checkbox" id="arrowSeek"></label>
+<label>방향키(← →)로 앞뒤 이동<input type="checkbox" id="arrowSeek"></label>
 <label class="sub">이동 간격<select id="seekSeconds"><option value="5">5초</option><option value="10">10초</option><option value="15">15초</option><option value="30">30초</option></select></label>
 </section>
 </div>
 <div class="col">
 <section class="be-card">
 <h4>채팅</h4>
-<label>채팅 헤더 시청자 수<input type="checkbox" id="viewerChat"></label>
+<label>채팅창 제목 옆에 시청자 수 표시<input type="checkbox" id="viewerChat"></label>
 <label>주간 랭킹 가리기<input type="checkbox" id="hideRanking"></label>
-<label>후원 랭킹 닉네임 가리기<input type="checkbox" id="blurRankNames"></label>
-<p class="hint" id="blurRankHint" hidden>주간 랭킹을 가리는 중이라 적용되지 않아요. 주간 랭킹 가리기를 끄면 사용할 수 있어요.</p>
-<label>채팅 글씨 크기 <span class="inline"><input type="range" id="chatFontSize" min="12" max="28" step="1" style="width:90px"> <b id="chatFontLabel">기본</b> <button id="chatFontReset" type="button">기본</button></span></label>
+<label>후원 랭킹 닉네임 흐리게<input type="checkbox" id="blurRankNames"></label>
+<p class="hint" id="blurRankHint" hidden>주간 랭킹을 가리는 중이라 쓸 수 없어요. 주간 랭킹 가리기를 끄면 켤 수 있어요.</p>
+<label>채팅 글씨 크기 <span class="inline"><input type="range" id="chatFontSize" min="12" max="28" step="1" style="width:90px"> <b id="chatFontLabel">기본</b> <button id="chatFontReset" type="button" title="채팅 글씨 크기를 원래대로">되돌리기</button></span></label>
 </section>
 <section class="be-card">
 <h4>팔로잉</h4>
-<label>팔로잉 채널 자동 새로고침<input type="checkbox" id="followRefresh"></label>
-<label>새로고침 간격<select id="followInterval"><option value="5">5초</option><option value="10">10초</option><option value="30">30초</option><option value="60">60초</option></select></label>
+<label>팔로잉 목록 자동 새로고침<input type="checkbox" id="followRefresh"></label>
+<label class="sub">새로고침 간격<select id="followInterval"><option value="5">5초</option><option value="10">10초</option><option value="30">30초</option><option value="60">60초</option></select></label>
 </section>
 <section class="be-card">
 <h4>관심 스트리머 자동 이동</h4>
-<label>방송 시작 시 자동 이동<input type="checkbox" id="watchEnabled"></label>
-<div class="watch-row"><input id="watchInput" placeholder="채널 URL 또는 ID"><button id="watchAdd" type="button" class="primary">추가</button></div>
-<div class="watch-row"><button id="watchCurrent" type="button">현재 보는 채널 추가</button><button id="watchGoNow" type="button">지금 방송 중이면 이동</button></div>
+<label>방송을 켜면 바로 이동<input type="checkbox" id="watchEnabled"></label>
+<div class="watch-row"><input id="watchInput" placeholder="채널 주소 또는 ID"><button id="watchAdd" type="button" class="primary">추가</button></div>
+<div class="watch-row"><button id="watchCurrent" type="button">보고 있는 채널 추가</button><button id="watchGoNow" type="button">방송 중인 채널로 이동</button></div>
 <p id="watchMsg"></p>
 <ul id="watchListEl"></ul>
 </section>

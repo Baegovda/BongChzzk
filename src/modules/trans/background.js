@@ -59,12 +59,12 @@ async function requireTab(tabId) {
     tab = active || null;
   }
   if (!tab?.id) {
-    const error = new Error('현재 탭을 찾지 못했습니다.');
+    const error = new Error('현재 탭을 찾지 못했어요.');
     error.code = 'NO_TAB';
     throw error;
   }
   if (!(await isModuleEnabled('trans'))) {
-    const error = new Error('번역 모듈이 꺼져 있습니다. BongExtend 팝업의 번역 탭에서 켜 주세요.');
+    const error = new Error('번역 모듈이 꺼져 있어요. BongExtend 팝업의 번역 탭에서 켜 주세요.');
     error.code = 'MODULE_OFF';
     throw error;
   }
@@ -275,7 +275,7 @@ function publicError(error) {
   return {
     ok: false,
     code: error?.code || 'API_ERROR',
-    message: error?.message || '번역에 실패했습니다.',
+    message: error?.message || '번역에 실패했어요.',
   };
 }
 
@@ -316,7 +316,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message.type === 'CHECK_KEY') {
     if (!fromExtensionPage(sender)) {
-      sendResponse({ ok: false, code: 'FORBIDDEN', message: '설정 페이지에서만 키를 확인합니다.' });
+      sendResponse({ ok: false, code: 'FORBIDDEN', message: '설정 페이지에서만 키를 확인해요.' });
       return;
     }
     checkKeyMessage(message).then(
@@ -327,7 +327,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message.type === 'GET_CACHE_STATS' || message.type === 'RESET_CACHE_STATS' || message.type === 'CLEAR_CACHE') {
     if (!fromExtensionPage(sender)) {
-      sendResponse({ ok: false, code: 'FORBIDDEN', message: '설정 페이지에서만 캐시를 다룹니다.' });
+      sendResponse({ ok: false, code: 'FORBIDDEN', message: '설정 페이지에서만 캐시를 다뤄요.' });
       return;
     }
     const run = message.type === 'CLEAR_CACHE'

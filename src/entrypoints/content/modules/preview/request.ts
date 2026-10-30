@@ -95,7 +95,7 @@ export const previewRequest = {
     },
 
     async comments(args: GalleryHTTPRequestArguments, signal: AbortSignal) {
-        if (!args.link) throw new Error("link 값이 주어지지 않았습니다. (확장 프로그램 오류)");
+        if (!args.link) throw new Error("link 값이 주어지지 않았어요. (확장 프로그램 오류)");
 
         const params = createParams(args.link);
         params.set("id", args.gallery);
@@ -111,7 +111,7 @@ export const previewRequest = {
     },
 
     async delete(args: GalleryHTTPRequestArguments, password?: string) {
-        if (!args.link) throw new Error("link 값이 주어지지 않았습니다. (확장 프로그램 오류)");
+        if (!args.link) throw new Error("link 값이 주어지지 않았어요. (확장 프로그램 오류)");
 
         const galleryType = http.galleryType(args.link, "/");
 
@@ -134,7 +134,7 @@ export const previewRequest = {
         delChk: number,
         userType: number
     ) {
-        if (!args.link) throw new Error("link 값이 주어지지 않았습니다. (확장 프로그램 오류)");
+        if (!args.link) throw new Error("link 값이 주어지지 않았어요. (확장 프로그램 오류)");
 
         const galleryType = http.galleryType(args.link, "/");
 
@@ -159,7 +159,7 @@ export const previewRequest = {
         args: GalleryHTTPRequestArguments,
         set: boolean
     ): Promise<string | { msg: string; result: "success" | "fail" }> {
-        if (!args.link) throw new Error("link 값이 주어지지 않았습니다. (확장 프로그램 오류)");
+        if (!args.link) throw new Error("link 값이 주어지지 않았어요. (확장 프로그램 오류)");
 
         const galleryType = http.galleryType(args.link, "/");
 
@@ -180,7 +180,7 @@ export const previewRequest = {
         args: GalleryHTTPRequestArguments,
         set: boolean
     ): Promise<string | { msg: string; result: "success" | "fail" }> {
-        if (!args.link) throw new Error("link 값이 주어지지 않았습니다. (확장 프로그램 오류)");
+        if (!args.link) throw new Error("link 값이 주어지지 않았어요. (확장 프로그램 오류)");
 
         const galleryType = http.galleryType(args.link, "/");
 
@@ -198,7 +198,7 @@ export const previewRequest = {
     },
 
     async captcha(args: GalleryHTTPRequestArguments, kcaptchaType: "comment" | "recommend") {
-        if (!args.link) throw new Error("link 값이 주어지지 않았습니다. (확장 프로그램 오류)");
+        if (!args.link) throw new Error("link 값이 주어지지 않았어요. (확장 프로그램 오류)");
 
         const galleryTypeName = http.galleryTypeName(args.link);
 

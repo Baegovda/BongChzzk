@@ -74,7 +74,7 @@
     log('복구 시도 단계', lvl + 1);
     try {
       if (lvl === 0) {
-        toast('버퍼링 감지 → 재생 재개 시도');
+        toast('버퍼링 감지: 다시 재생하는 중');
         if (isLive(v) && v.buffered.length) {
           const end = v.buffered.end(v.buffered.length - 1);
           if (end - v.currentTime > 0.6) v.currentTime = end - 0.5;
@@ -83,13 +83,13 @@
         }
         await v.play().catch(() => {});
       } else if (lvl === 1) {
-        toast('버퍼링 지속 → 플레이어 재시작');
+        toast('버퍼링이 계속돼서 플레이어를 다시 시작해요');
         v.pause();
         await new Promise(r => setTimeout(r, 300));
         if (isLive(v) && v.buffered.length) v.currentTime = v.buffered.end(v.buffered.length - 1) - 0.5;
         await v.play().catch(() => {});
       } else if (lvl === 2) {
-        toast('버퍼링 지속 → 스트림 다시 불러오기');
+        toast('버퍼링이 계속돼서 방송을 다시 불러와요');
         if (clickPlayerButton()) return;
         if (!isBlob(v) && (v.currentSrc || v.src)) {
           const t = v.currentTime; v.load();
@@ -102,7 +102,7 @@
           await v.play().catch(() => {});
         }
       } else {
-        toast('버퍼링 지속 → 플레이어 재마운트(페이지 새로고침 아님)');
+        toast('버퍼링이 계속돼서 플레이어를 새로 띄워요 (페이지는 그대로)');
         if (!clickPlayerButton()) softRemount();
       }
     } catch (e) { log('복구 오류', e); }
@@ -203,7 +203,7 @@
       if (!Q.isSatisfied(currentQuality(), getItems().map(labelOf), cfg.targetQuality)) throw new Error('적용 확인 실패(현재 ' + currentQuality() + ')');
       q.fails = 0;
       q.nextAt = Date.now() + 3000;
-      toast(`화질 ${labels[i]} 고정 적용`);
+      toast(`화질을 ${labels[i]}로 고정했어요`);
     } catch (e) {
       q.fails++;
       q.nextAt = Date.now() + Math.min(60000, 3000 * Math.pow(2, q.fails)); // 실패 시 백오프

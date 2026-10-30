@@ -14,7 +14,7 @@
         <p>{{ blockKeyNames[currentBlockType] }}</p>
         <refresher-input
             v-model:value="formData.content"
-            :placeholder="`${blockKeyNames[currentBlockType]} 값을 입력하세요`"
+            :placeholder="`${blockKeyNames[currentBlockType]} 값을 입력해 주세요`"
             @keyup.enter="$emit('confirm')"
         />
       </div>
@@ -27,7 +27,7 @@
       </div>
 
       <div class="memo-row">
-        <p>특정 갤러리 차단 (선택)</p>
+        <p>특정 갤러리에서만 차단 (선택)</p>
         <refresher-input
             v-model:value="formData.gallery"
             placeholder="갤러리 ID"
@@ -35,7 +35,7 @@
       </div>
 
       <div class="memo-row">
-        <p>차단 모드</p>
+        <p>차단 방식</p>
         <refresher-options
             v-model:value="formData.mode"
             :options="{ NONE: '기본값', ...blockDetectModeTypeNames }"

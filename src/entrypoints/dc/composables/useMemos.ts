@@ -49,7 +49,7 @@ export function useMemos() {
     };
 
     const addMemoUser = async (type: RefresherMemoType) => {
-        const user = prompt("메모 대상을 입력하세요.");
+        const user = prompt("메모 대상을 입력해 주세요.");
 
         if (!user) return;
 
@@ -74,7 +74,7 @@ export function useMemos() {
             const importedMemos = normalizeMemoImportMap(value);
 
             for (const [id, memo] of Object.entries(importedMemos)) {
-                if (target[id] && !confirm(`${id}에 대한 메모가 이미 존재합니다. 덮어쓰시겠습니까?`)) {
+                if (target[id] && !confirm(`${id}에 대한 메모가 이미 존재해요. 덮어쓸까요?`)) {
                     continue;
                 }
 
@@ -84,7 +84,7 @@ export function useMemos() {
             await memoStorage[type].setValue({...target});
         }
 
-        alert("가져오기에 성공했습니다.");
+        alert("가져오기에 성공했어요.");
     };
 
     return {

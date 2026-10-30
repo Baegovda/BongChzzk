@@ -83,8 +83,8 @@ export function makeBodyFrame(ctx: BodyFrameContext): void {
     const renderPostContent = (postInfo: IPostInfo): void => {
         if (postInfo.isAdult) {
             frame.error = {
-                title: "성인 인증이 필요한 게시글입니다.",
-                detail: "성인 인증을 하신 후 다시 시도해주세요."
+                title: "성인 인증이 필요한 게시글이에요.",
+                detail: "성인 인증을 하신 후 다시 시도해 주세요."
             };
             return;
         }
@@ -107,7 +107,7 @@ export function makeBodyFrame(ctx: BodyFrameContext): void {
         }
 
         frame.contents = block.check("TEXT", dom.body.innerHTML, gallery)
-            ? "게시글 내용이 차단됐습니다."
+            ? "게시글 내용이 차단됐어요."
             : dom.body.innerHTML;
 
         frame.upvotes = postInfo.upvotes;
@@ -133,12 +133,12 @@ export function makeBodyFrame(ctx: BodyFrameContext): void {
 
     frame.functions.vote = async (type: number) => {
         if (frame.collapse) {
-            toast.show("댓글 보기를 클릭하여 댓글만 표시합니다.");
+            toast.show("댓글 보기를 클릭하여 댓글만 표시해요.");
             return false;
         }
 
         if (!postFetchedDataRef.value) {
-            toast.show("게시글이 로딩될 때까지 잠시 기다려주세요.");
+            toast.show("게시글이 로딩될 때까지 잠시 기다려 주세요.");
             return false;
         }
 
@@ -173,8 +173,8 @@ export function makeBodyFrame(ctx: BodyFrameContext): void {
 
     frame.functions.share = async () => {
         await navigator.clipboard.writeText(`https://gall.dcinside.com/${http.galleryType(preData.link!, "/")}board/view/?id=${preData.gallery || http.queryString("id")}&no=${preData.id}`)
-            .then(() => toast.show("클립보드에 복사되었습니다."))
-            .catch(() => toast.show("클립보드에 복사하는데 실패했습니다.", "error"));
+            .then(() => toast.show("클립보드에 복사됐어요."))
+            .catch(() => toast.show("클립보드에 복사하는 데 실패했어요.", "error"));
 
         return true;
     };

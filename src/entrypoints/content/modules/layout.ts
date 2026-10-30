@@ -27,7 +27,7 @@ const updateWindowSize = (forceActive: boolean, active: number | string, width: 
 
 export default {
     name: "레이아웃 수정",
-    description: "디시 레이아웃을 변경할 수 있도록 도와줍니다.",
+    description: "디시 레이아웃을 변경할 수 있도록 도와줘요.",
     status: {},
     memory: {
         resize: null
@@ -37,7 +37,7 @@ export default {
     settings: {
         activePixel: {
             name: "컴팩트 모드 활성화 조건",
-            desc: "브라우저 가로가 이 값 보다 작을 경우 컴팩트 모드를 활성화합니다.",
+            desc: "브라우저 가로가 이 값보다 좁으면 컴팩트 모드를 활성화해요.",
             type: "range",
             default: 900,
             min: 100,
@@ -48,68 +48,68 @@ export default {
         },
         forceCompact: {
             name: "컴팩트 모드 강제 사용",
-            desc: "항상 컴팩트 모드를 사용하도록 설정합니다.",
+            desc: "항상 컴팩트 모드를 사용하도록 설정해요.",
             type: "check",
             default: false
         },
         useCompactModeOnView: {
             name: "컴팩트 모드 강제 사용",
-            desc: "게시글 보기에서도 컴팩트 모드를 사용하도록 설정합니다.",
+            desc: "게시글 보기에서도 컴팩트 모드를 사용하도록 설정해요.",
             type: "check",
             default: true
         },
         hideGalleryView: {
             name: "갤러리 뷰 숨기기",
-            desc: "갤러리 정보, 최근 방문 갤러리 영역을 숨깁니다.",
+            desc: "갤러리 정보, 최근 방문 갤러리 영역을 숨겨요.",
             type: "check",
             default: false,
             advanced: true
         },
         hideUselessView: {
             name: "잡다 링크 숨기기",
-            desc: "이슈줌, 타갤 개념글, 뉴스, 힛갤등의 컨텐츠를 오른쪽 영역에서 숨깁니다.",
+            desc: "이슈줌, 타갤 개념글, 뉴스, 힛갤 등의 콘텐츠를 오른쪽 영역에서 숨겨요.",
             type: "check",
             default: false,
             advanced: true
         },
         hideNft: {
             name: "NFT 숨기기",
-            desc: "NFT 관련 내용을 숨깁니다.",
+            desc: "NFT 관련 내용을 숨겨요.",
             type: "check",
             default: false,
             advanced: true
         },
         hideGalleryImage: {
             name: "갤러리 대문 숨기기",
-            desc: "갤러리 대문을 숨깁니다.",
+            desc: "갤러리 대문을 숨겨요.",
             type: "check",
             default: false,
             advanced: true
         },
         pushToRight: {
             name: "본문 영역 전체로 확장",
-            desc: `"잡다 링크 숨기기" 옵션이 켜진 경우 본문 영역을 확장합니다.`,
+            desc: `"잡다 링크 숨기기" 옵션이 켜진 경우 본문 영역을 확장해요.`,
             type: "check",
             default: false,
             advanced: true
         },
         removeNotice: {
             name: "갤러리 공지 숨기기",
-            desc: "글 목록에서 공지사항을 숨깁니다.",
+            desc: "글 목록에서 공지사항을 숨겨요.",
             type: "check",
             default: false,
             advanced: true
         },
         removeDCNotice: {
             name: "디시 공지 숨기기",
-            desc: "글 목록에서 운영자의 게시글을 숨깁니다.",
+            desc: "글 목록에서 운영자의 게시글을 숨겨요.",
             type: "check",
             default: false,
             advanced: true
         },
         removeGamemeca: {
             name: "게임메카 숨기기",
-            desc: "글 목록에서 게임메카 게시글을 숨깁니다.",
+            desc: "글 목록에서 게임메카 게시글을 숨겨요.",
             type: "check",
             default: false,
             advanced: true

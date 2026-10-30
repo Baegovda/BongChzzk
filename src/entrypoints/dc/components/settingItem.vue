@@ -6,7 +6,7 @@
     <div class="info">
       <h4>{{ setting.name }}</h4>
       <p>{{ setting.desc }}</p>
-      <p class="mute">(기본 값 : {{ typeWrap(setting.default) }})</p>
+      <p class="mute">(기본값: {{ typeWrap(setting.default) }})</p>
     </div>
 
     <setting-control

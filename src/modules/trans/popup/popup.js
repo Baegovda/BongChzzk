@@ -1,4 +1,4 @@
-import { canTranslateUrl, languageLabel, normalizeSettings, resolveModel, STORAGE_KEY } from '../lib/settings.js';
+import { canTranslateUrl, LANGUAGES, normalizeSettings, resolveModel, STORAGE_KEY } from '../lib/settings.js';
 import { MESSAGES } from '../lib/messages.js';
 import { blockedToggle, refreshToggle, settleToggle, startToggle } from '../lib/toggle-state.js';
 
@@ -18,16 +18,16 @@ function describe(status) {
   let text;
   if (status?.error && status.enabled) text = status.error;
   else if (status?.enabled && (status.pending > 0 || status.pumping)) text = `번역 중… ${status.done}개 완료, ${status.pending}개 대기`;
-  else if (status?.enabled && status.done > 0) text = `${status.done}개 문장을 번역했습니다.`;
-  else if (status?.enabled) text = '번역할 문장을 찾지 못했습니다.';
-  else if (status?.started) text = `번역을 껐습니다. 원문으로 되돌렸고 ${status.done}개를 보관 중입니다.`;
-  else text = '켜면 보이는 문장부터 번역하고, 스크롤하면 이어집니다.';
+  else if (status?.enabled && status.done > 0) text = `${status.done}개 문장을 번역했어요.`;
+  else if (status?.enabled) text = '번역할 문장을 찾지 못했어요.';
+  else if (status?.started) text = `번역을 껐어요. 원문으로 되돌렸고 ${status.done}개를 보관 중이에요.`;
+  else text = '켜면 보이는 문장부터 번역하고, 스크롤하면 이어져요.';
   return `${text}${modelLine}`;
 }
 
 function showSwitch(on) {
   enabledBox.checked = Boolean(on);
-  switchState.textContent = on ? 'ON' : 'OFF';
+  switchState.textContent = on ? '켜짐' : '꺼짐';
 }
 
 async function activeTab() {
@@ -79,7 +79,7 @@ async function refresh() {
   const status = response?.status;
   toggleState = { ...refreshToggle(toggleState, status), tabId: tab.id };
   if (document.activeElement !== enabledBox) showSwitch(toggleState.on);
-  else switchState.textContent = enabledBox.checked ? 'ON' : 'OFF';
+  else switchState.textContent = enabledBox.checked ? '켜짐' : '꺼짐';
   if (toggleState.error) {
     setStatus(toggleState.error, true);
     return;
@@ -100,7 +100,7 @@ async function init() {
   } catch {
     model = '모델 이름을 확인해 주세요';
   }
-  metaEl.textContent = `${languageLabel(settings.targetLanguage)} · ${model}`;
+  metaEl.textContent = `${(LANGUAGES.find((l) => l.code === settings.targetLanguage) || { native: settings.targetLanguage }).native} · ${model}`;
   hasKey = Boolean(settings.apiKey);
   if (!hasKey) setStatus(MESSAGES.NO_API_KEY, true);
   optionsButton.addEventListener('click', () => chrome.tabs.create({ url: chrome.runtime.getURL('trans/options/options.html') }));
@@ -126,7 +126,7 @@ async function applyToggle(turnOn, generation) {
   const tab = await activeTab();
   if (generation !== toggleGeneration) return;
   if (!tab?.id) {
-    toggleState = { ...blockedToggle('현재 탭을 찾지 못했습니다.'), generation };
+    toggleState = { ...blockedToggle('현재 탭을 찾지 못했어요.'), generation };
     enabledBox.disabled = false;
     applyToggleView();
     return;
@@ -147,7 +147,7 @@ async function applyToggle(turnOn, generation) {
       enabled: turnOn,
     });
   } catch (error) {
-    response = { ok: false, message: error?.message || '번역 상태를 바꾸지 못했습니다.' };
+    response = { ok: false, message: error?.message || '번역 상태를 바꾸지 못했어요.' };
   }
   if (generation !== toggleGeneration) return;
   toggleState = {

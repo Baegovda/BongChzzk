@@ -25,7 +25,7 @@
                 <textarea
                     id="comment_main"
                     :disabled="disabled || getDccon().length > 0"
-                    :placeholder="!getDccon().length ? '댓글 입력...' : '디시콘이 선택됐습니다.'"
+                    :placeholder="!getDccon().length ? '댓글 입력...' : '디시콘이 선택됐어요.'"
                     autocomplete="new-password"
                     @blur="blur"
                     @focus="focus"
@@ -72,7 +72,7 @@
           class="whoami"
       >
                 <span @click="toggleEditUser">
-                    클릭하면 작성자 정보 수정 모드를 {{ editUser ? "비활성화" : "활성화" }}시킵니다.
+                    클릭하면 작성자 정보 수정 모드를 {{ editUser ? "꺼요" : "켜요" }}.
                 </span>
       </div>
     </div>
@@ -172,7 +172,7 @@ const updateText = (ev: InputEvent) => {
 
 const validCheck = (type: string, value: string): void => {
   if (type === "id" && value.length < 1) {
-    toast.show(`아이디는 최소 1자리 이상이어야 합니다. 자동으로 "ㅇㅇ"로 설정합니다.`);
+    toast.show(`아이디는 최소 1자리 이상이어야 해요. 자동으로 "ㅇㅇ"로 설정해요.`);
     unsignedUserID.value = "ㅇㅇ";
 
     return;
@@ -181,7 +181,7 @@ const validCheck = (type: string, value: string): void => {
   if (type === "pw" && value.length < 2) {
     const random = Math.random().toString(36).substring(5);
 
-    toast.show(`비밀번호는 최소 2자리 이상이어야 합니다. 자동으로 "${random}"로 설정합니다.`);
+    toast.show(`비밀번호는 최소 2자리 이상이어야 해요. 자동으로 "${random}"로 설정해요.`);
     unsignedUserPW.value = random;
   }
 };
@@ -200,7 +200,7 @@ const write = async (): Promise<boolean> => {
   disabled.value = true;
 
   if (!fixedUser.value && (!unsignedUserID.value || !unsignedUserPW.value)) {
-    toast.show("아이디 혹은 비밀번호를 입력하지 않았습니다.", "error");
+    toast.show("아이디 혹은 비밀번호를 입력하지 않았어요.", "error");
     disabled.value = false;
     return false;
   }

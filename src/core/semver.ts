@@ -1,4 +1,4 @@
-// GitHub 릴리즈 태그(예: 5.2.10, v 접두사 없음)와 manifest 버전을 semver로 비교한다.
+// GitHub 릴리스 태그(예: 5.2.10, v 접두사 없음)와 manifest 버전을 semver로 비교한다.
 
 export type SemVer = {
     major: number;

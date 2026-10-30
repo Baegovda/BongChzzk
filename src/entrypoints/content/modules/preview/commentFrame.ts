@@ -99,7 +99,7 @@ export function makeCommentFrame(ctx: CommentFrameContext): void {
             bigDccon: boolean
         ) => {
             if (!postFetchedDataRef.value) {
-                toast.show("게시글이 로딩될 때까지 잠시 기다려주세요.", "error");
+                toast.show("게시글이 로딩될 때까지 잠시 기다려 주세요.", "error");
                 return false;
             }
 
@@ -189,7 +189,7 @@ export function makeCommentFrame(ctx: CommentFrameContext): void {
             }
 
             if (!deletePressCount[commentId]) {
-                toast.show("한번 더 누르면 댓글을 삭제합니다.", "warning", 1000);
+                toast.show("한 번 더 누르면 댓글을 삭제해요.", "warning", 1000);
 
                 deletePressCount[commentId] = Date.now();
 
@@ -230,12 +230,12 @@ export function makeCommentFrame(ctx: CommentFrameContext): void {
                         return false;
                     }
 
-                    toast.show("댓글을 삭제하였습니다.");
+                    toast.show("댓글을 삭제했어요.");
                 } else {
                     const parsed = JSON.parse(v);
 
                     if (parsed.result !== "fail") {
-                        toast.show("댓글을 삭제하였습니다.");
+                        toast.show("댓글을 삭제했어요.");
                     } else {
                         toast.show(parsed.msg, "error");
                     }
@@ -341,7 +341,7 @@ export function makeCommentFrame(ctx: CommentFrameContext): void {
                 comments.comments = comments.comments.filter((comment: DcinsideCommentObject) => {
                     if (replyConfig && comment.c_no === parentComment?.no) {
                         if (blurConfig) {
-                            comment.memo = "댓글 내용이 차단됐습니다.";
+                            comment.memo = "댓글 내용이 차단됐어요.";
                             comment.is_delete = "1";
                         } else {
                             return false;
@@ -380,7 +380,7 @@ export function makeCommentFrame(ctx: CommentFrameContext): void {
                         }
 
                         if (blurConfig) {
-                            comment.memo = "댓글 내용이 차단됐습니다.";
+                            comment.memo = "댓글 내용이 차단됐어요.";
                             comment.is_delete = "1";
                         } else {
                             return false;

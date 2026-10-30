@@ -14,8 +14,8 @@ export function settleToggle(pendingOn, response, fallbackMessage) {
       pending: false,
       on: false,
       error: response?.message || fallbackMessage || (wanted
-        ? '이 페이지에서 번역을 켜지 못했습니다.'
-        : '번역 상태를 바꾸지 못했습니다.'),
+        ? '이 페이지에서 번역을 켜지 못했어요.'
+        : '번역 상태를 바꾸지 못했어요.'),
     };
   }
   return { pending: false, on: wanted, error: '' };

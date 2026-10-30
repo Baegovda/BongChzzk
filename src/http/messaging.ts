@@ -47,7 +47,7 @@ interface ProtocolMap {
     // Popup → Content(활성 탭): 메모 입력 요청
     refresherRequestMemoAsk(data: { type: RefresherMemoType; user: string }): void;
 
-    // Popup/Background: GitHub 릴리즈 업데이트
+    // Popup/Background: GitHub 릴리스 업데이트
     getUpdateStatus(): ExtensionUpdateStatus;
     checkForUpdate(data?: { force?: boolean }): ExtensionUpdateStatus;
     applyUpdate(): UpdateApplyResult;

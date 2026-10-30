@@ -39,7 +39,7 @@ export function memoAsk(
   </div>
   <div class="refresher-memo-field">
     <label for="refresher_memo">메모</label>
-    <input id="refresher_memo" type="text" maxlength="160" placeholder="메모를 입력해주세요 (160자 제한)">
+    <input id="refresher_memo" type="text" maxlength="160" placeholder="메모를 입력해 주세요 (160자 제한)">
   </div>
   <div class="refresher-memo-field refresher-memo-color-field">
     <label for="refresher_memo_color">색상</label>
@@ -145,7 +145,7 @@ export function memoAsk(
         dialog.querySelector<HTMLButtonElement>(".refresher-memo-btn[data-update=true]")!.addEventListener("click", () => {
             onDismiss = null;
             if (memoInput.value.length > 160) {
-                alert("160자를 초과할 수 없습니다.");
+                alert("160자를 초과할 수 없어요.");
                 return;
             }
 

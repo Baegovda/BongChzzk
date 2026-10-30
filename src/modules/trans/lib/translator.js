@@ -136,7 +136,7 @@ async function fulfill(claimed, settings, memoryTexts = []) {
           const usedModel = unpacked.model;
           settings.servedModel = usedModel;
           if (!Array.isArray(translated) || translated.length !== items.length) {
-            const error = new Error('번역 결과 개수가 맞지 않습니다. (Unexpected response)');
+            const error = new Error('번역 결과 개수가 맞지 않아요.');
             error.code = 'BAD_RESPONSE';
             throw error;
           }
@@ -173,12 +173,12 @@ async function fulfill(claimed, settings, memoryTexts = []) {
   return {
     async translateMany(texts) {
       if (!Array.isArray(texts) || texts.some((text) => typeof text !== 'string')) {
-        const error = new Error('번역할 텍스트 형식이 올바르지 않습니다.');
+        const error = new Error('번역할 텍스트 형식이 올바르지 않아요.');
         error.code = 'BAD_REQUEST';
         throw error;
       }
       if (texts.length > 200) {
-        const error = new Error('한 번에 너무 많은 문장을 보냈습니다.');
+        const error = new Error('한 번에 너무 많은 문장을 보냈어요.');
         error.code = 'BAD_REQUEST';
         throw error;
       }
@@ -215,7 +215,7 @@ async function fulfill(claimed, settings, memoryTexts = []) {
     async clearCache() {
       memory.clear();
       for (const deferred of inflight.values()) {
-        const error = new Error('번역 캐시를 지우는 중입니다.');
+        const error = new Error('번역 캐시를 지우는 중이에요.');
         error.code = 'CACHE_CLEARED';
         deferred.reject(error);
       }

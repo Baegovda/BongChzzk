@@ -95,7 +95,7 @@
       >
         <div class="refresher-collapse-text">
           <h3 @click="expandCollapse">
-            댓글 보기를 클릭하여 댓글만 표시합니다. 여기를 눌러 글을 볼 수 있습니다.
+            댓글 보기를 클릭하여 댓글만 표시해요. 여기를 눌러 글을 볼 수 있어요.
           </h3>
         </div>
       </div>
@@ -118,7 +118,7 @@
         <div v-else>
           <div v-if="!hasComments">
             <div class="refresher-nocomment-wrap">
-              <h3>댓글이 없습니다.</h3>
+              <h3>댓글이 없어요.</h3>
             </div>
           </div>
           <div

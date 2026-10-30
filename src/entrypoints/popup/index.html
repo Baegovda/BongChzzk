@@ -8,7 +8,7 @@
 </head>
 <body class="be-page">
 <nav class="tabs order-pending" role="tablist">
-    <strong class="brand" title="더블클릭하면 탭 순서를 기본으로 되돌립니다"><img alt="" height="18" src="/icons/32.png" width="18">BongExtend</strong>
+    <strong class="brand" title="더블클릭하면 탭 순서가 처음대로 돌아가요"><img alt="" height="18" src="/icons/32.png" width="18">BongExtend</strong>
     <button data-tab="chzzk" role="tab" title="끌어서 순서 바꾸기 (Alt+←/→)" type="button">치지직</button>
     <button data-tab="trans" role="tab" title="끌어서 순서 바꾸기 (Alt+←/→)" type="button">번역</button>
     <button data-tab="dc" role="tab" title="끌어서 순서 바꾸기 (Alt+←/→)" type="button">디시</button>
@@ -23,7 +23,7 @@
     <iframe data-frame="trans" title="번역"></iframe>
     <iframe data-frame="dc" title="디시 설정"></iframe>
     <section class="panel be-shell" data-frame="update" hidden>
-        <div class="be-title"><h3>업데이트·설정</h3><span class="be-sub">업데이트, 모든 모듈 설정 백업·복원, 정보</span></div>
+        <div class="be-title"><h3>업데이트·설정</h3><span class="be-sub">업데이트 확인, 설정 백업, 정보</span></div>
         <div class="be-grid">
             <section class="be-card be-sec">
                 <h4>업데이트</h4>
@@ -31,7 +31,7 @@
                 <div class="be-row"><span>상태</span><span id="updateStatus" role="status">확인 전</span></div>
                 <div class="be-row"><span>마지막 확인</span><span id="lastChecked">아직 확인하지 않음</span></div>
                 <label class="be-row">
-                    <span class="be-row-text"><span>하루에 한 번 자동 확인</span><small>새 버전이 있으면 아이콘과 알림으로 알려 줍니다</small></span>
+                    <span class="be-row-text"><span>하루에 한 번 자동 확인</span><small>새 버전이 나오면 아이콘과 알림으로 알려 줘요</small></span>
                     <input id="autoCheck" type="checkbox" role="switch" aria-label="하루에 한 번 자동 확인">
                 </label>
                 <div class="be-notes" hidden id="releaseNotesBox">
@@ -41,30 +41,30 @@
                 <div class="be-actions">
                     <button id="checkUpdate" type="button">업데이트 확인</button>
                     <button class="primary" hidden id="doUpdate" type="button">지금 업데이트</button>
-                    <button hidden id="downloadZip" type="button">zip 받기</button>
+                    <button hidden id="downloadZip" type="button">zip 내려받기</button>
                     <button hidden id="openRelease" type="button">릴리스 페이지</button>
                     <button id="manage" type="button">확장 프로그램 관리</button>
                 </div>
-                <p class="be-hint" hidden id="updateHint">지금 업데이트는 새 탭에서 진행됩니다. 처음 한 번만 압축을 푼 BongExtend 폴더(manifest.json이 있는 곳)를 고르면, 그다음부터는 바뀐 파일만 넣고 확장을 다시 켭니다.</p>
+                <p class="be-hint" hidden id="updateHint">“지금 업데이트”는 새 탭에서 진행돼요. 처음 한 번만 확장 프로그램 폴더(manifest.json이 있는 폴더)를 고르면, 다음부터는 바뀐 파일만 덮어쓰고 자동으로 다시 켜요.</p>
             </section>
             <div class="be-col">
                 <section class="be-card be-sec">
-                    <h4>백업·복원 (모든 모듈)</h4>
-                    <p class="be-hint">치지직·번역·디시 설정을 파일 하나로 저장하고 되돌립니다.</p>
+                    <h4>설정 백업·복원</h4>
+                    <p class="be-hint">치지직·번역·디시 설정을 파일 하나로 저장하고 불러와요.</p>
                     <div class="be-actions">
-                        <button id="exportAll" type="button">파일로 내보내기</button>
-                        <button id="importAll" type="button">파일에서 가져오기</button>
-                        <button id="importPaste" type="button">붙여넣어 가져오기</button>
+                        <button id="exportAll" type="button">파일로 저장</button>
+                        <button id="importAll" type="button">파일 불러오기</button>
+                        <button id="importPaste" type="button">붙여넣어 불러오기</button>
                         <input accept="application/json,.json,.txt" hidden id="importFile" type="file">
                     </div>
                     <p id="ioStatus" role="status"></p>
-                    <p class="be-hint">내보낸 파일에는 Gemini API 키가 들어 있으니 남에게 주지 마세요.</p>
+                    <p class="be-hint">파일에 Gemini API 키도 들어 있으니 남에게 보내지 마세요.</p>
                 </section>
                 <section class="be-card be-sec">
                     <h4>정보</h4>
                     <div class="be-row"><span>라이선스</span><span>GPL-3.0</span></div>
                     <div class="be-row"><span>링크</span><span class="be-links"><a href="https://github.com/Baegovda/BongExtend" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/Baegovda/BongExtend/releases" target="_blank" rel="noopener">릴리스</a><a href="https://dcrefresher.green1052.com" target="_blank" rel="noopener">디시 도움말</a></span></div>
-                    <p class="be-hint">디시 모듈은 green1052의 DCRefresher-Reborn을 바탕으로 합니다.</p>
+                    <p class="be-hint">디시 기능은 green1052님의 DCRefresher-Reborn 기반이에요.</p>
                 </section>
             </div>
         </div>

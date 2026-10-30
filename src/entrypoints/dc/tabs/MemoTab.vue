@@ -1,7 +1,7 @@
 <template>
   <div class="tab tab3">
     <div class="section-header">
-      <h2>메모 목록 내보내기·가져오기</h2>
+      <h2>메모 내보내기·가져오기</h2>
       <div class="section-actions">
         <button @click="exportMemo">내보내기</button>
         <button @click="importMemo">가져오기</button>
@@ -32,7 +32,7 @@
       </h3>
 
       <div class="lists">
-        <p v-if="!Object.keys(memos[key]).length">{{ memoKeyNames[key] }} 메모 없음</p>
+        <p v-if="!Object.keys(memos[key]).length">{{ memoKeyNames[key] }} 메모가 없어요</p>
         <refresher-bubble
             v-for="[user, memo] in Object.entries(memos[key])"
             v-else

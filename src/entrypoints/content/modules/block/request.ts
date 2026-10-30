@@ -31,7 +31,7 @@ export const handleBlockRequest = async (
     lastSelectAge: number
 ): Promise<void> => {
     if (lastSelectAge > 10000) {
-        toast.show("차단할 대상을 다시 오른쪽 클릭해주세요.", "error");
+        toast.show("차단할 대상을 다시 오른쪽 클릭해 주세요.", "error");
         return;
     }
 
@@ -39,7 +39,7 @@ export const handleBlockRequest = async (
 
     if (args.target === "dccon") {
         if (!code) {
-            toast.show("차단할 디시콘을 다시 오른쪽 클릭해주세요.", "error");
+            toast.show("차단할 디시콘을 다시 오른쪽 클릭해 주세요.", "error");
             return;
         }
 
@@ -58,7 +58,7 @@ export const handleBlockRequest = async (
                 .json<DcconDetailResponse>();
 
             if (!json?.info) {
-                throw new Error("디시콘 상세 정보가 없습니다.");
+                throw new Error("디시콘 상세 정보가 없어요.");
             }
 
             const title = json.info.title;
@@ -66,7 +66,7 @@ export const handleBlockRequest = async (
 
             if (args.blockAllDccon) {
                 const blockBundle = confirm(
-                    "디시콘을 묶어서 차단하시겠습니까? (차단 목록에서는 한개로 표시됩니다.)"
+                    "디시콘을 묶어서 차단할까요? (차단 목록에서는 한 개로 표시돼요.)"
                 );
 
                 if (blockBundle) {
@@ -92,15 +92,15 @@ export const handleBlockRequest = async (
                     }
                 }
 
-                toast.show(`${title} ${block.TYPE_NAMES.DCCON} 묶음을 차단했습니다.`);
+                toast.show(`${title} ${block.TYPE_NAMES.DCCON} 묶음을 차단했어요.`);
                 return;
             }
 
             await block.add("DCCON", code, false, false, undefined, `${title} [${packageIdx}]`);
-            toast.show(`${title} ${block.TYPE_NAMES.DCCON}을 차단했습니다.`);
+            toast.show(`${title} ${block.TYPE_NAMES.DCCON}을 차단했어요.`);
         } catch (error) {
             console.error("Failed to block dccon:", error);
-            toast.show("디시콘 정보를 가져오거나 저장하는데 실패했습니다.", "error");
+            toast.show("디시콘 정보를 가져오거나 저장하는 데 실패했어요.", "error");
         }
 
         return;
@@ -118,15 +118,15 @@ export const handleBlockRequest = async (
     }
 
     if (!value) {
-        toast.show("차단할 유저를 다시 오른쪽 클릭해주세요.", "error");
+        toast.show("차단할 유저를 다시 오른쪽 클릭해 주세요.", "error");
         return;
     }
 
     try {
         await block.add(type, value, false, false, undefined, selected.nick ?? value);
-        toast.show(`${block.TYPE_NAMES[type]} ${value}을(를) 차단했습니다.`);
+        toast.show(`${block.TYPE_NAMES[type]} ${value}을(를) 차단했어요.`);
     } catch (error) {
         console.error("Failed to save blocked user:", error);
-        toast.show("차단 목록을 저장하는데 실패했습니다.", "error");
+        toast.show("차단 목록을 저장하는 데 실패했어요.", "error");
     }
 };

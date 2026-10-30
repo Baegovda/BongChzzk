@@ -26,11 +26,11 @@ export type LatestRelease = {
 };
 
 export const describeUpdate = (currentVersion: string, latest: string | null | undefined): string => {
-    if (!latest) return "최신 릴리스 버전을 읽지 못했습니다.";
+    if (!latest) return "최신 릴리스 버전을 읽지 못했어요.";
 
     const compared = compareVersions(latest, currentVersion);
-    if (compared === null) return "최신 릴리스 버전을 읽지 못했습니다.";
-    if (compared <= 0) return `최신 버전입니다. (${currentVersion})`;
+    if (compared === null) return "최신 릴리스 버전을 읽지 못했어요.";
+    if (compared <= 0) return `최신 버전이에요. (${currentVersion})`;
     return `${currentVersion} → ${latest} 업데이트 가능`;
 };
 
@@ -76,7 +76,7 @@ export const checkLatestRelease = async (
     });
 
     if (!response.ok) {
-        const error = new Error(`업데이트 정보를 가져오지 못했습니다. (HTTP ${response.status})`);
+        const error = new Error(`업데이트 정보를 가져오지 못했어요. (HTTP ${response.status})`);
         throw error;
     }
 

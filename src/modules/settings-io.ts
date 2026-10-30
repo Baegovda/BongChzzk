@@ -62,7 +62,7 @@ export const planImport = (text: string): ImportPlan => {
             plan.labels.push("디시");
         }
         if (isObj(parsed.core)) Object.assign(plan.local, prefixed("core.", parsed.core));
-        if (!plan.labels.length) throw new Error("BongExtend 설정 파일에 가져올 내용이 없어요.");
+        if (!plan.labels.length) throw new Error("설정 파일에 불러올 내용이 없어요.");
         return plan;
     }
 
@@ -79,7 +79,7 @@ export const planImport = (text: string): ImportPlan => {
     const chzzkHits = keys.filter((k) => CHZZK_KEYS.includes(k));
     if (chzzkHits.length && chzzkHits.length === keys.length) {
         Object.assign(plan.sync, prefixed("chzzk.", parsed));
-        plan.labels.push("치지직(옛 BongChzzk)");
+        plan.labels.push("치지직(이전 버전)");
         return plan;
     }
 
@@ -90,7 +90,7 @@ export const planImport = (text: string): ImportPlan => {
         return plan;
     }
 
-    throw new Error("어느 확장의 설정인지 알 수 없어요. 올바른 설정 파일인지 확인해 주세요.");
+    throw new Error("어떤 설정 파일인지 알 수 없어요. 올바른 파일인지 확인해 주세요.");
 };
 
 type Area = {

@@ -1,7 +1,7 @@
 <template>
   <div class="refresher-setting-category">
     <h3 @click="moveToModuleTab(moduleName)">
-      {{ moduleName }} {{ !moduleEnabled ? "(비활성화)" : "" }}
+      {{ moduleName }} {{ !moduleEnabled ? "(꺼짐)" : "" }}
       <svg
           fill="currentColor"
           height="18px"

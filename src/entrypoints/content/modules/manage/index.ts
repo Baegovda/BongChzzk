@@ -6,7 +6,7 @@ import {getBanReverseIndex} from "@/utils/ban";
 
 export default {
     name: "관리",
-    description: "무급 노예들을 위한 여러 편의 기능을 제공합니다.",
+    description: "갤러리 관리에 쓰는 여러 편의 기능을 제공해요.",
     url: /\/board\/(view|lists)/,
     status: {},
     data: {
@@ -24,35 +24,35 @@ export default {
     settings: {
         checkAllTargetUser: {
             name: "선택한 유저 전부 체크",
-            desc: "Shift키를 누른 상태로 체크박스를 눌러 대상 유저 전부를 체크합니다. (아이디, IP, 이름 순서)",
+            desc: "Shift키를 누른 상태로 체크박스를 눌러 대상 유저 전부를 체크해요. (아이디, IP, 이름 순서)",
             type: "check",
             default: false,
             advanced: true
         },
         checkViaShift: {
             name: "Shift 다중 체크",
-            desc: "Shift키를 누른 상태로 드래그해 여러 항목을 체크합니다.",
+            desc: "Shift키를 누른 상태로 드래그해 여러 항목을 체크해요.",
             type: "check",
             default: false,
             advanced: true
         },
         checkCommentViaCtrl: {
             name: "Ctrl 대댓글 체크",
-            desc: "Ctrl키를 누른 상태로 댓글을 클릭하면 대댓글도 체크합니다.",
+            desc: "Ctrl키를 누른 상태로 댓글을 클릭하면 대댓글도 체크해요.",
             type: "check",
             default: false,
             advanced: true
         },
         checkRatio: {
             name: "글댓비 표시",
-            desc: "글댓비를 표시합니다. (1시간 마다 갱신, 새 글 작성시에만 조회)",
+            desc: "글댓비를 표시해요. (1시간마다 갱신, 새 글을 쓸 때만 조회)",
             type: "check",
             default: false,
             advanced: true
         },
         alarmRatio: {
             name: "깡계 알림",
-            desc: "글댓합이 설정한 값 이하일 때 강조 표시합니다. (0이면 비활성화)",
+            desc: "글댓합이 설정한 값 이하일 때 강조 표시해요. (0이면 비활성화)",
             type: "range",
             default: 0,
             min: 0,
@@ -62,21 +62,21 @@ export default {
         },
         deleteViaCtrl: {
             name: "Ctrl로 삭제",
-            desc: "Ctrl키를 누른 상태로 게시글을 클릭해 삭제합니다.",
+            desc: "Ctrl키를 누른 상태로 게시글을 클릭해 삭제해요.",
             type: "check",
             default: false,
             advanced: true
         },
         checkPermBan: {
             name: "갱차 조회",
-            desc: "갱신 차단 여부를 조회합니다.",
+            desc: "갱신 차단 여부를 조회해요.",
             type: "check",
             default: false,
             advanced: true
         },
         enableGifControl: {
-            name: "GIF 조작 기능 활성화",
-            desc: "GIF를 제어할 수 있는 기능을 활성화합니다.",
+            name: "GIF 조작 기능",
+            desc: "GIF를 제어할 수 있는 기능을 활성화해요.",
             type: "check",
             default: false,
             advanced: true

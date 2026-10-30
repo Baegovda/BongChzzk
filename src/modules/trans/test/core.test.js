@@ -455,7 +455,7 @@ test('404 and exhausted overload are not reported as a bad API key', async () =>
     }),
     (error) => {
       assert.equal(error.code, 'OVERLOADED');
-      assert.match(error.message, /API 키 문제가 아닙니다/);
+      assert.match(error.message, /API 키 문제가 아니에요/);
       assert.doesNotMatch(error.message, /Invalid API key|키가 거부/);
       return true;
     },
@@ -504,8 +504,8 @@ test('key check lists preset models and separates overload from a bad key', asyn
     },
   });
   assert.equal(overloaded.code, 'OVERLOADED');
-  assert.match(overloaded.message, /API 키는 유효합니다/);
-  assert.match(overloaded.message, /키 문제가 아닙니다/);
+  assert.match(overloaded.message, /API 키는 유효해요/);
+  assert.match(overloaded.message, /키 문제가 아니에요/);
   assert.equal(overloaded.presetAvailability['gemini-3.5-flash-lite'], true);
   assert.equal(overloaded.presetAvailability['gemini-3.1-flash-lite'], true);
   assert.equal(listed, 2);

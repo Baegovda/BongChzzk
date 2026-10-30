@@ -149,7 +149,7 @@ const safeDelete = (): void => {
   let password: string = "";
 
   if (!isAdmin.value && props.comment.my_cmt === "N") {
-    password = prompt("비밀번호를 입력하세요.") ?? "";
+    password = prompt("비밀번호를 입력해 주세요.") ?? "";
 
     if (!password) return;
   }

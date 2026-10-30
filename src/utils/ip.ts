@@ -33,7 +33,7 @@ const initIpData = (): Promise<void> => {
                     ipDatabase = stored;
                 }
             } catch (error) {
-                console.error("IP 데이터베이스를 읽지 못했습니다.", error);
+                console.error("IP 데이터베이스를 읽지 못했어요.", error);
             }
         })();
     }

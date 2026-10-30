@@ -4,16 +4,16 @@
         v-if="loadState === 'loading'"
         class="refresher-no-modules"
     >
-      <h3>모듈 불러오는 중…</h3>
-      <p>디시 페이지와 연결하고 있습니다.</p>
+      <h3>모듈을 불러오는 중…</h3>
+      <p>디시 페이지와 연결하고 있어요.</p>
     </div>
 
     <div
         v-else-if="loadState === 'no-tab'"
         class="refresher-no-modules"
     >
-      <h3>디시 탭을 찾을 수 없음</h3>
-      <p>갤러리·마이너 갤러리·게시글 페이지를 연 뒤 다시 열어주세요.</p>
+      <h3>디시 탭을 찾지 못했어요</h3>
+      <p>갤러리·마이너 갤러리·게시글 페이지를 연 뒤 다시 열어 주세요.</p>
       <button
           type="button"
           @click="reload"
@@ -26,7 +26,7 @@
         v-else-if="loadState === 'no-response'"
         class="refresher-no-modules"
     >
-      <h3>모듈에 연결하지 못함</h3>
+      <h3>모듈에 연결하지 못했어요</h3>
       <p>디시 페이지를 새로고침(F5)한 뒤 다시 시도해 주세요.</p>
       <button
           type="button"

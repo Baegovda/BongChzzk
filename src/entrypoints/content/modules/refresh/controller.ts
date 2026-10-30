@@ -123,7 +123,7 @@ export class RefreshController {
 
     refreshLists(): void {
         if (this.memory.lastRefresh + MINIMUM_REFRESH_INTERVAL > Date.now()) {
-            toast.show("너무 자주 새로고칠 수 없습니다.", "error", 1000);
+            toast.show("너무 자주 새로고칠 수 없어요.", "error", 1000);
             return;
         }
 
@@ -135,8 +135,8 @@ export class RefreshController {
 
         toast.show(
             this.memory.paused
-                ? "이번 페이지에서는 새로고침을 사용하지 않습니다."
-                : "이번 페이지에서 새로고침을 사용합니다.",
+                ? "이번 페이지에서는 새로고침을 사용하지 않아요."
+                : "이번 페이지에서 새로고침을 사용해요.",
             "info",
             1000
         );

@@ -129,14 +129,14 @@ const onKeyPress = (ev: KeyboardEvent): void => {
       doDelete();
       KEY_COUNTS[ev.code][1] = 0;
     } else {
-      toast.show("한번 더 D키를 누르면 게시글을 삭제합니다.", "warning", 1000);
+      toast.show("한 번 더 D키를 누르면 게시글을 삭제해요.", "warning", 1000);
     }
   } else if (ev.code === "KeyB") {
     if (KEY_COUNTS[ev.code][1] >= 2) {
       doBlockWithPreset();
       KEY_COUNTS[ev.code][1] = 0;
     } else {
-      toast.show("한번 더 B키를 누르면 차단합니다.", "warning", 1000);
+      toast.show("한 번 더 B키를 누르면 차단해요.", "warning", 1000);
     }
   }
 };

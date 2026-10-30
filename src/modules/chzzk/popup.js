@@ -12,7 +12,6 @@ BCStore.sync.get(DEF, v => {
 function syncQuality() {
   const off = !$('lockQuality').checked;
   $('targetQuality').disabled = off;
-  $('targetQuality').closest('label').classList.toggle('is-disabled', off);
 }
 $('lockQuality').addEventListener('change', syncQuality);
 // 방향키 이동이 꺼져 있으면 이동 간격은 잠금
@@ -44,7 +43,7 @@ for (const k in DEF) if (k !== 'chatFontSize') $(k).addEventListener('change', e
 function showCount() {
   BCStore.local.get({ recoverCount: 0, lastRecover: 0 }, v => {
     $('count').textContent = v.recoverCount;
-    $('last').textContent = v.lastRecover ? '마지막: ' + new Date(v.lastRecover).toLocaleString('ko-KR') : '';
+    $('last').textContent = v.lastRecover ? '마지막 복구: ' + new Date(v.lastRecover).toLocaleString('ko-KR') : '';
   });
 }
 $('reset').onclick = () => BCStore.local.set({ recoverCount: 0, lastRecover: 0 }, showCount);
@@ -58,7 +57,7 @@ const getList = () => new Promise(r => BCStore.sync.get({ watchList: [] }, v => 
 const setList = l => new Promise(r => BCStore.sync.set({ watchList: l }, r));
 function renderList(list) {
   const ul = $('watchListEl'); ul.textContent = '';
-  if (!list.length) { const li = document.createElement('li'); li.style.color = 'var(--be-muted)'; li.textContent = '등록된 스트리머 없음'; ul.appendChild(li); }
+  if (!list.length) { const li = document.createElement('li'); li.style.color = 'var(--be-muted)'; li.textContent = '아직 등록한 스트리머가 없어요'; ul.appendChild(li); }
   for (const w of list) {
     const li = document.createElement('li'); li.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--be-border)';
     const s = document.createElement('span'); s.textContent = w.name || w.id.slice(0, 8) + '…'; s.title = w.id;
@@ -72,25 +71,25 @@ async function channelName(id) {
 }
 async function addWatch(input) {
   const id = WB.parseChannelInput(input);
-  if (!id) { watchMsg('치지직 채널 주소나 32자리 채널 ID를 입력하세요.'); return; }
+  if (!id) { watchMsg('치지직 채널 주소나 32자리 채널 ID를 넣어 주세요.'); return; }
   const list = await getList();
-  if (list.some(x => x.id === id)) { watchMsg('이미 등록된 채널입니다.'); return; }
-  watchMsg('채널 확인 중…');
+  if (list.some(x => x.id === id)) { watchMsg('이미 등록한 채널이에요.'); return; }
+  watchMsg('채널을 확인하는 중…');
   const name = await channelName(id);
   list.push({ id, name }); await setList(list); renderList(list);
-  watchMsg(`${name || id} 추가됨`); $('watchInput').value = '';
+  watchMsg(`${name || id} 채널을 추가했어요`); $('watchInput').value = '';
 }
 $('watchAdd').onclick = () => addWatch($('watchInput').value);
 $('watchInput').addEventListener('keydown', e => { if (e.key === 'Enter') addWatch(e.target.value); });
 $('watchCurrent').onclick = async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (!tab || !tab.url || !WB.parseChannelInput(tab.url)) { watchMsg('지금 탭이 치지직 채널/방송 페이지가 아닙니다.'); return; }
+  if (!tab || !tab.url || !WB.parseChannelInput(tab.url)) { watchMsg('지금 탭이 치지직 채널이나 방송 페이지가 아니에요.'); return; }
   addWatch(tab.url);
 };
 $('watchGoNow').onclick = async () => {
   const list = await getList();
-  if (!list.length) { watchMsg('등록된 스트리머가 없습니다.'); return; }
-  watchMsg('방송 확인 중…');
+  if (!list.length) { watchMsg('아직 등록한 스트리머가 없어요.'); return; }
+  watchMsg('방송 중인지 확인하는 중…');
   for (const w of list) {
     try {
       const r = await fetch(`${API}/polling/v3.1/channels/${w.id}/live-status`, { credentials: 'include', cache: 'no-store' });
@@ -98,10 +97,10 @@ $('watchGoNow').onclick = async () => {
         const url = 'https://chzzk.naver.com/live/' + w.id;
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
         if (tab && tab.url && /^https:\/\/chzzk\.naver\.com\//.test(tab.url)) chrome.tabs.update(tab.id, { url }); else chrome.tabs.create({ url });
-        watchMsg(`${w.name || w.id} 방송 중 → 이동`); return;
+        watchMsg(`${w.name || w.id} 방송으로 이동해요`); return;
       }
     } catch { /* 다음 채널 */ }
   }
-  watchMsg('지금 방송 중인 관심 스트리머가 없습니다.');
+  watchMsg('지금 방송 중인 관심 스트리머가 없어요.');
 };
 getList().then(renderList);

@@ -95,7 +95,7 @@ test('session translates visible text, skips hidden controls, and restores origi
     sendBatch: async (texts) => {
       sent.push(texts);
       if (texts.includes('颜色分类') && !sent.some((batch, index) => index < sent.length - 1 && batch.includes('颜色分类'))) {
-        return { ok: false, message: 'Gemini API 속도 제한(429)입니다.' };
+        return { ok: false, message: 'Gemini API 속도 제한(429)이에요.' };
       }
       return {
         ok: true,
@@ -139,7 +139,7 @@ test('session translates visible text, skips hidden controls, and restores origi
 
   observer.callback([{ target: far, isIntersecting: true }]);
   await session.whenIdle();
-  assert.equal(session.getStatus().error, 'Gemini API 속도 제한(429)입니다.');
+  assert.equal(session.getStatus().error, 'Gemini API 속도 제한(429)이에요.');
   assert.equal(far.childNodes[0].nodeValue, '颜色分类');
 
   session.start();
@@ -196,7 +196,7 @@ test('the page shows an error toast only, not a success banner', async () => {
       disconnect() {}
     },
     MutationObserver: class { observe() {} disconnect() {} },
-    sendBatch: async () => ({ ok: false, message: '모델이 혼잡합니다. API 키 문제가 아닙니다.' }),
+    sendBatch: async () => ({ ok: false, message: '모델이 혼잡해요. API 키 문제가 아니에요.' }),
   });
   session.start();
   await session.whenIdle();
@@ -205,8 +205,8 @@ test('the page shows an error toast only, not a success banner', async () => {
   assert.equal(host.style.bottom, '16px');
   assert.equal(host.style.top, undefined);
   const message = host.shadow.children[1].children[0];
-  assert.equal(message.textContent, '모델이 혼잡합니다. API 키 문제가 아닙니다.');
-  assert.equal(JSON.stringify(host).includes('문장을 번역했습니다'), false);
+  assert.equal(message.textContent, '모델이 혼잡해요. API 키 문제가 아니에요.');
+  assert.equal(JSON.stringify(host).includes('문장을 번역했어요'), false);
 
   host.shadow.children[1].children[1].onclick();
   assert.equal(host.hidden, true);

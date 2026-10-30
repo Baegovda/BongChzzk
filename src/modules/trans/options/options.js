@@ -130,7 +130,7 @@ function fill(settings) {
 }
 
 function formatKeyCheck(result) {
-  const lines = [result.message || '키를 확인하지 못했습니다.'];
+  const lines = [result.message || '키를 확인하지 못했어요.'];
   const availability = result.presetAvailability || {};
   const showList = result.code === 'VALID' || result.code === 'OVERLOADED' || result.code === 'MODEL_NOT_FOUND';
   if (showList) {
@@ -172,7 +172,7 @@ form.addEventListener('submit', async (event) => {
   await saveSettings(next);
   fill(next);
   await refreshCacheStats();
-  setStatus(next.apiKey ? '저장했습니다.' : `저장했습니다. ${MESSAGES.NO_API_KEY}`, next.apiKey ? 'ok' : 'error');
+  setStatus(next.apiKey ? '저장했어요.' : `저장했어요. ${MESSAGES.NO_API_KEY}`, next.apiKey ? 'ok' : 'error');
 });
 
 checkKeyButton.addEventListener('click', async () => {
@@ -191,39 +191,39 @@ checkKeyButton.addEventListener('click', async () => {
   try {
     const response = await chrome.runtime.sendMessage({ type: 'CHECK_KEY', settings: next });
     if (!response?.ok) {
-      setStatus(response?.message || '키를 확인하지 못했습니다.', 'error');
+      setStatus(response?.message || '키를 확인하지 못했어요.', 'error');
       return;
     }
     setStatus(formatKeyCheck(response), keyCheckKind(response.code));
   } catch (error) {
-    setStatus(error?.message || '키를 확인하지 못했습니다.', 'error');
+    setStatus(error?.message || '키를 확인하지 못했어요.', 'error');
   } finally {
     checkKeyButton.disabled = false;
   }
 });
 
 clearButton.addEventListener('click', async () => {
-  const confirmed = confirm('저장된 번역 캐시를 지울까요? 같은 문장도 다시 API로 번역합니다. 누적 통계는 남습니다.');
+  const confirmed = confirm('저장된 번역 캐시를 지울까요? 같은 문장도 다시 API로 번역해요. 누적 통계는 남아요.');
   if (!confirmed) return;
   const response = await chrome.runtime.sendMessage({ type: 'CLEAR_CACHE' });
   if (!response?.ok) {
-    setStatus(response?.message || '캐시를 지우지 못했습니다.', 'error');
+    setStatus(response?.message || '캐시를 지우지 못했어요.', 'error');
     return;
   }
   renderCacheStats(response);
-  setStatus('번역 캐시를 지웠습니다.', 'ok');
+  setStatus('번역 캐시를 지웠어요.', 'ok');
 });
 
 resetStatsButton.addEventListener('click', async () => {
-  const confirmed = confirm('누적 통계를 0으로 되돌릴까요? 저장된 번역은 지우지 않습니다.');
+  const confirmed = confirm('누적 통계를 0으로 되돌릴까요? 저장된 번역은 지우지 않아요.');
   if (!confirmed) return;
   const response = await chrome.runtime.sendMessage({ type: 'RESET_CACHE_STATS' });
   if (!response?.ok) {
-    setStatus(response?.message || '통계를 초기화하지 못했습니다.', 'error');
+    setStatus(response?.message || '통계를 초기화하지 못했어요.', 'error');
     return;
   }
   renderCacheStats(response);
-  setStatus('캐시 통계를 초기화했습니다.', 'ok');
+  setStatus('캐시 통계를 초기화했어요.', 'ok');
 });
 
 versionLine.textContent = `설치된 버전 ${chrome.runtime.getManifest().version}`;

@@ -47,7 +47,7 @@ export const syncChzzkScripts = (getModules: ModulesGetter): Promise<void> => {
             if (existing.length) await chrome.scripting.updateContentScripts([script]);
             else await chrome.scripting.registerContentScripts([script]);
         } catch (error) {
-            console.error("치지직 스크립트를 등록하지 못했습니다.", error);
+            console.error("치지직 스크립트를 등록하지 못했어요.", error);
         }
     });
     return running;

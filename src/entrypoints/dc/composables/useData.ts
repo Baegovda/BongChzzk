@@ -24,7 +24,7 @@ const replaceLocalStorage = async (data: Record<string, unknown>): Promise<void>
 const parseStorageImport = (input: string): Record<string, unknown> => {
     const parsed = JSON.parse(input) as unknown;
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-        throw new Error("가져오기 데이터는 JSON 객체여야 합니다.");
+        throw new Error("가져오기 데이터는 JSON 객체여야 해요.");
     }
 
     return parsed as Record<string, unknown>;
@@ -54,10 +54,10 @@ export function useData() {
             const now = Date.now();
             lastUpdate.value = now;
             await databaseStorage.lastUpdate.setValue(now);
-            alert("데이터를 클라우드에 백업했습니다.");
+            alert("데이터를 클라우드에 백업했어요.");
         } catch (error) {
             console.error("Cloud backup failed:", error);
-            alert("데이터를 클라우드에 백업하는데 실패했습니다.");
+            alert("데이터를 클라우드에 백업하는 데 실패했어요.");
         } finally {
             loading.value = false;
         }
@@ -77,9 +77,9 @@ export function useData() {
             if (preservedBan) preserved["refresher:database:ban"] = preservedBan;
 
             await replaceLocalStorage(normalizeStorageData({...data, ...preserved}));
-            alert("데이터를 복원했습니다. 새탭에서 디시인사이드를 열어주세요.");
+            alert("데이터를 복원했어요. 새 탭에서 디시인사이드를 열어 주세요.");
         } catch {
-            alert("데이터를 복원하는데 실패했습니다.");
+            alert("데이터를 복원하는 데 실패했어요.");
         } finally {
             loading.value = false;
         }
@@ -95,16 +95,16 @@ export function useData() {
             }
 
             await navigator.clipboard.writeText(JSON.stringify(data));
-            alert("데이터를 클립보드로 내보냈습니다.");
+            alert("데이터를 클립보드로 내보냈어요.");
         } catch {
-            alert("데이터를 클립보드로 내보내는데 실패했습니다.");
+            alert("데이터를 클립보드로 내보내는 데 실패했어요.");
         } finally {
             loading.value = false;
         }
     };
 
     const importData = async (): Promise<void> => {
-        const input = prompt("데이터를 입력해주세요.");
+        const input = prompt("데이터를 입력해 주세요.");
 
         if (!input) return;
 
@@ -112,23 +112,23 @@ export function useData() {
         try {
             const data = normalizeStorageData(parseStorageImport(input));
             await replaceLocalStorage(data);
-            alert("데이터를 가져왔습니다. 새탭에서 디시인사이드를 열어주세요.");
+            alert("데이터를 가져왔어요. 새 탭에서 디시인사이드를 열어 주세요.");
         } catch {
-            alert("데이터를 가져오는데 실패했습니다.");
+            alert("데이터를 가져오는 데 실패했어요.");
         } finally {
             loading.value = false;
         }
     };
 
     const clearData = async (): Promise<void> => {
-        if (!confirm("디시 설정·차단·메모를 초기화할까요? 다른 모듈 설정은 그대로입니다.")) return;
+        if (!confirm("디시 설정·차단·메모를 초기화할까요? 다른 모듈 설정은 그대로예요.")) return;
 
         loading.value = true;
         try {
             await browser.storage.local.remove(await dcLocalKeys());
-            alert("데이터를 초기화했습니다. 새탭에서 디시인사이드를 열어주세요.");
+            alert("데이터를 초기화했어요. 새 탭에서 디시인사이드를 열어 주세요.");
         } catch {
-            alert("데이터를 초기화하는데 실패했습니다.");
+            alert("데이터를 초기화하는 데 실패했어요.");
         } finally {
             loading.value = false;
         }

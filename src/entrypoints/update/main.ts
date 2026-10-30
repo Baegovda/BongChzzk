@@ -47,7 +47,7 @@ const setError = (text: string) => {
 
 const showFirefox = () => {
     if (versionEl) versionEl.textContent = browser.runtime.getManifest().version;
-    setStatus("파이어폭스는 폴더에 바로 쓰는 업데이트를 지원하지 않습니다. 설정에서 zip을 받아 기존 폴더에 덮어쓰세요.");
+    setStatus("파이어폭스는 폴더에 바로 쓰는 업데이트를 지원하지 않아요. 설정에서 zip을 받아 기존 폴더에 덮어써 주세요.");
     if (startButton) startButton.hidden = true;
     if (resumeButton) resumeButton.hidden = true;
 };
@@ -107,7 +107,7 @@ if (import.meta.env.FIREFOX) {
 
     const verifyDir = async (dir: FileSystemDirectoryHandle) => {
         if (!isBongExtendManifest(await manifestText(dir))) {
-            throw new Error("선택한 폴더는 BongExtend 확장 프로그램 폴더가 아닙니다. chrome://extensions 에서 불러온 압축을 푼 BongExtend 폴더(manifest.json이 있는 곳)를 선택하세요. 다운로드나 바탕화면 폴더 자체는 크롬이 고르지 못하게 막습니다.");
+            throw new Error("선택한 폴더는 BongExtend 확장 프로그램 폴더가 아니에요. chrome://extensions 에서 불러온 압축을 푼 BongExtend 폴더(manifest.json이 있는 곳)를 선택해 주세요. 다운로드나 바탕화면 폴더 자체는 크롬이 고르지 못하게 막아요.");
         }
     };
 
@@ -130,20 +130,20 @@ if (import.meta.env.FIREFOX) {
         }
 
         if (!allowPick) {
-            throw new Error("저장된 설치 폴더에 접근할 수 없습니다. 폴더 선택/업데이트 시작으로 다시 진행하세요.");
+            throw new Error("저장된 설치 폴더에 접근할 수 없어요. “폴더 고르고 업데이트 시작”을 다시 눌러 주세요.");
         }
 
         if (!window.showDirectoryPicker) {
-            throw new Error("이 브라우저는 폴더 선택을 지원하지 않습니다.");
+            throw new Error("이 브라우저는 폴더 선택을 지원하지 않아요.");
         }
 
-        setStatus("확장 프로그램 설치 폴더(압축을 푼 BongExtend 폴더)를 선택하세요…");
+        setStatus("확장 프로그램 설치 폴더(압축을 푼 BongExtend 폴더)를 선택해 주세요…");
         let dir: FileSystemDirectoryHandle;
         try {
             dir = await window.showDirectoryPicker({mode: "readwrite", id: "bongextend-install"});
         } catch (error) {
             if (error instanceof DOMException && error.name === "AbortError") {
-                const cancel = new Error("폴더 선택이 취소되었습니다.");
+                const cancel = new Error("폴더 선택이 취소됐어요.");
                 cancel.name = "AbortError";
                 throw cancel;
             }
@@ -218,7 +218,7 @@ if (import.meta.env.FIREFOX) {
         if (result.aborted) return;
 
         showProgress("done");
-        setStatus(`${versionLine(running, to)} 업데이트 완료, 다시 로드합니다`);
+        setStatus(`${versionLine(running, to)} 업데이트 완료, 다시 로드해요`);
         setTimeout(() => browser.runtime.reload(), 800);
     };
 
@@ -239,7 +239,7 @@ if (import.meta.env.FIREFOX) {
         if (decision === "clear") await clearPending();
         if (decision === "resume" && pending && resumeButton && versionEl) {
             versionEl.textContent = versionLine(running, pending.version);
-            setStatus("이전 업데이트가 중간에 멈췄습니다. 아래 버튼을 눌러 마저 설치하세요.");
+            setStatus("이전 업데이트가 중간에 멈췄어요. 아래 버튼을 눌러 마저 설치해 주세요.");
             resumeButton.hidden = false;
         }
 
@@ -253,14 +253,14 @@ if (import.meta.env.FIREFOX) {
             }
             if (!release.assetUrl) {
                 setStatus(release.message);
-                setError("릴리스에 Chrome용 zip(*-chrome.zip)이 없습니다.");
+                setError("릴리스에 Chrome용 zip(*-chrome.zip)이 없어요.");
                 return;
             }
-            setStatus("아래 버튼을 눌러 업데이트하세요.");
+            setStatus("아래 버튼을 눌러 업데이트해 주세요.");
             if (startButton) startButton.disabled = false;
         } catch (error) {
             if (decision !== "resume") {
-                setStatus("업데이트 정보를 가져오지 못했습니다.");
+                setStatus("업데이트 정보를 가져오지 못했어요.");
                 setError(error instanceof Error ? error.message : "");
             }
         }
@@ -269,7 +269,7 @@ if (import.meta.env.FIREFOX) {
     const showFail = (error: unknown) => {
         const cancel = error instanceof Error && error.name === "AbortError";
         if (progressWrap) progressWrap.classList.remove("indeterminate");
-        setStatus(cancel ? "폴더 선택이 취소되었습니다." : "업데이트하지 못했습니다.");
+        setStatus(cancel ? "폴더 선택이 취소됐어요." : "업데이트하지 못했어요.");
         if (!cancel) {
             setError(error instanceof Error ? error.message : String(error));
         }
@@ -309,11 +309,11 @@ if (import.meta.env.FIREFOX) {
 
             const manifest = files.find((file) => fileKey(file) === "manifest.json");
             const text = manifest ? new TextDecoder().decode(manifest.data) : "";
-            if (!isBongExtendManifest(text)) throw new Error("다운로드한 zip이 BongExtend가 아닙니다.");
+            if (!isBongExtendManifest(text)) throw new Error("다운로드한 zip이 BongExtend가 아니에요.");
 
             const to = manifestVersionOf(files) || release.latest;
             if (!canApplyVersion(running, to)) {
-                throw new Error("다운로드한 버전이 지금 버전보다 높지 않습니다.");
+                throw new Error("다운로드한 버전이 지금 버전보다 높지 않아요.");
             }
 
             await installFiles(dir, files, to);
@@ -331,7 +331,7 @@ if (import.meta.env.FIREFOX) {
         try {
             const pending = normalizePending(await loadPending());
             if (pendingDecision(pending, running) !== "resume" || !pending) {
-                setStatus("이어서 할 업데이트가 없습니다.");
+                setStatus("이어서 할 업데이트가 없어요.");
                 await clearPending();
                 return;
             }

@@ -13,10 +13,10 @@ import {
 describe("describeUpdate", () => {
     test("shows the current version, the latest version, and that an update is available", () => {
         expect(describeUpdate("5.2.20", "5.2.21")).toBe("5.2.20 → 5.2.21 업데이트 가능");
-        expect(describeUpdate("5.2.20", "5.2.20")).toBe("최신 버전입니다. (5.2.20)");
-        expect(describeUpdate("5.2.20", "v5.2.19")).toBe("최신 버전입니다. (5.2.20)");
-        expect(describeUpdate("5.2.20", "")).toBe("최신 릴리스 버전을 읽지 못했습니다.");
-        expect(describeUpdate("5.2.20", "nope")).toBe("최신 릴리스 버전을 읽지 못했습니다.");
+        expect(describeUpdate("5.2.20", "5.2.20")).toBe("최신 버전이에요. (5.2.20)");
+        expect(describeUpdate("5.2.20", "v5.2.19")).toBe("최신 버전이에요. (5.2.20)");
+        expect(describeUpdate("5.2.20", "")).toBe("최신 릴리스 버전을 읽지 못했어요.");
+        expect(describeUpdate("5.2.20", "nope")).toBe("최신 릴리스 버전을 읽지 못했어요.");
     });
 
     test("canApplyVersion only allows a newer semver", () => {

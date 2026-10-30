@@ -3,7 +3,7 @@ import {compareVersions, parseSemver} from "@/core/semver";
 import {GITHUB_RELEASE_REPO, pickReleaseZip} from "@/core/update/release";
 import {deriveUpdateAvailable} from "@/core/update/availability";
 
-// 하루 한 번 최신 릴리즈를 확인한다.
+// 하루 한 번 최신 릴리스를 확인한다.
 // 크롬 압축 해제 설치는 업데이트 탭에서 폴더에 바로 넣고, 그 외에는 zip을 받아 덮어쓴다.
 
 export {GITHUB_RELEASE_REPO};
@@ -101,13 +101,13 @@ const fetchLatestRelease = async () => {
             }
         });
     } catch {
-        throw new UpdateCheckError("네트워크에 연결할 수 없습니다. 인터넷 연결을 확인해 주세요.");
+        throw new UpdateCheckError("네트워크에 연결할 수 없어요. 인터넷 연결을 확인해 주세요.");
     }
 
     const payload = await readReleasePayload(response);
 
     if (response.status === 404) {
-        throw new UpdateCheckError("공개된 릴리즈가 없습니다.");
+        throw new UpdateCheckError("공개된 릴리스가 없어요.");
     }
 
     if (!response.ok) {
@@ -118,17 +118,17 @@ const fetchLatestRelease = async () => {
             || /rate limit/i.test(message);
 
         if (rateLimited) {
-            throw new UpdateCheckError("GitHub API 요청 한도에 도달했습니다. 잠시 후 다시 시도해 주세요.");
+            throw new UpdateCheckError("GitHub API 요청 한도에 도달했어요. 잠시 후 다시 시도해 주세요.");
         }
 
-        throw new UpdateCheckError(`GitHub 릴리즈 조회에 실패했습니다 (${response.status}).`);
+        throw new UpdateCheckError(`GitHub 릴리스 조회에 실패했어요 (${response.status}).`);
     }
 
     const version = normalizeVersion(payload?.tag_name ?? "");
     if (!parseSemver(version)) {
         throw new UpdateCheckError(payload?.tag_name
-            ? "릴리즈 버전 형식을 읽을 수 없습니다."
-            : "릴리즈 정보를 읽지 못했습니다.");
+            ? "릴리스 버전 형식을 읽을 수 없어요."
+            : "릴리스 정보를 읽지 못했어요.");
     }
 
     const assets = payload?.assets ?? [];
@@ -184,7 +184,7 @@ const publishAvailability = async (updateAvailable: boolean, notify: boolean, ve
             type: "basic",
             iconUrl: browser.runtime.getURL("/icons/128.png"),
             title: "BongExtend 업데이트",
-            message: `새 버전 ${version}이 있습니다. 설정에서 받을 수 있습니다.`
+            message: `새 버전 ${version}이 있어요. 설정에서 받을 수 있어요.`
         });
     } catch (error) {
         console.error("업데이트 알림 표시 실패:", error);
@@ -259,8 +259,8 @@ export const getExtensionUpdateStatus = async (): Promise<ExtensionUpdateStatus>
 
 const missingAssetMessage = (browserName: UpdateBrowser): string =>
     browserName === "firefox"
-        ? "Firefox용 설치 파일(*-firefox.zip)을 찾지 못했습니다."
-        : "Chrome용 설치 파일(*-chrome.zip)을 찾지 못했습니다.";
+        ? "Firefox용 설치 파일(*-firefox.zip)을 찾지 못했어요."
+        : "Chrome용 설치 파일(*-chrome.zip)을 찾지 못했어요.";
 
 export const checkExtensionUpdate = async (force = false): Promise<ExtensionUpdateStatus> => {
     const currentVersion = getCurrentExtensionVersion();
@@ -284,7 +284,7 @@ export const checkExtensionUpdate = async (force = false): Promise<ExtensionUpda
         const compared = compareVersions(latest.version, normalizeVersion(currentVersion));
 
         if (compared === null) {
-            throw new UpdateCheckError("릴리즈 버전 형식을 읽을 수 없습니다.");
+            throw new UpdateCheckError("릴리스 버전 형식을 읽을 수 없어요.");
         }
 
         const updateAvailable = compared > 0;
@@ -308,7 +308,7 @@ export const checkExtensionUpdate = async (force = false): Promise<ExtensionUpda
     } catch (error) {
         const message = error instanceof UpdateCheckError
             ? error.message
-            : "업데이트 확인에 실패했습니다. 잠시 후 다시 시도해 주세요.";
+            : "업데이트 확인에 실패했어요. 잠시 후 다시 시도해 주세요.";
 
         await Promise.all([
             updateStorage.lastCheck.setValue(Date.now()),
@@ -325,7 +325,7 @@ export const applyExtensionUpdate = async (): Promise<UpdateApplyResult> => {
     const status = await buildStatus();
 
     if (!status.updateAvailable) {
-        return {ok: false, error: "설치할 새 버전이 없습니다."};
+        return {ok: false, error: "설치할 새 버전이 없어요."};
     }
 
     if (!status.downloadUrl) {
@@ -334,7 +334,7 @@ export const applyExtensionUpdate = async (): Promise<UpdateApplyResult> => {
             return {ok: true, via: "tab"};
         }
 
-        return {ok: false, error: "다운로드 주소를 찾을 수 없습니다."};
+        return {ok: false, error: "다운로드 주소를 찾을 수 없어요."};
     }
 
     try {
@@ -353,7 +353,7 @@ export const applyExtensionUpdate = async (): Promise<UpdateApplyResult> => {
         return {ok: true, via: "tab"};
     } catch (error) {
         console.error("업데이트 zip 페이지 열기 실패:", error);
-        return {ok: false, error: "zip 다운로드에 실패했습니다. 릴리즈 페이지에서 직접 받아 주세요."};
+        return {ok: false, error: "zip 다운로드에 실패했어요. 릴리스 페이지에서 직접 받아 주세요."};
     }
 };
 

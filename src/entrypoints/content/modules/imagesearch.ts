@@ -2,7 +2,7 @@ import {onMessage} from "@/http/messaging";
 
 export default {
     name: "이미지 검색",
-    description: "이미지를 검색합니다.",
+    description: "이미지를 검색해요.",
     memory: {
         sauceNao: null as (() => void) | null,
         currentImage: null,

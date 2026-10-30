@@ -1,6 +1,6 @@
 export default {
     name: "폰트 교체",
-    description: "페이지에 전반적으로 표시되는 폰트를 교체합니다.",
+    description: "페이지에 전반적으로 표시되는 폰트를 교체해요.",
     status: {},
     memory: {
         uuid: null
@@ -9,21 +9,21 @@ export default {
     default_enable: true,
     settings: {
         customFonts: {
-            name: "font-family 이름",
-            desc: "페이지 폰트를 입력된 폰트로 교체합니다. (빈칸으로 둘 시 확장 프로그램 기본 폰트로 설정)",
+            name: "글꼴 이름 (font-family)",
+            desc: "페이지 폰트를 입력된 폰트로 교체해요. (비워 두면 확장 프로그램 기본 폰트로 설정)",
             type: "text",
             default: "Noto Sans CJK KR, NanumGothic"
         },
         changeDCFont: {
             name: "디시인사이드 폰트 교체",
-            desc: "미리보기 창 같은 BongDC의 폰트 뿐만 아니라 디시인사이드의 폰트까지 교체합니다.",
+            desc: "미리보기 창 같은 확장 프로그램 화면뿐만 아니라 디시인사이드의 폰트까지 교체해요.",
             type: "check",
             default: true,
             advanced: true
         },
         bodyFontSize: {
             name: "본문 폰트 크기 지정",
-            desc: "본문의 기본 폰트 크기를 조정합니다. (미리보기 창은 + 2pt)",
+            desc: "본문의 기본 폰트 크기를 조정해요. (미리보기 창은 + 2pt)",
             type: "range",
             default: 13,
             min: 5,

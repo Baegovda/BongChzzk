@@ -120,7 +120,7 @@ export function classifyHttpError(status, body, retryAfter) {
   }
   return new GeminiError(
     'API_ERROR',
-    withDetail('Gemini API 요청이 거부되었습니다.', message || `HTTP ${status}`),
+    withDetail('Gemini API 요청이 거부됐어요.', message || `HTTP ${status}`),
     { status, retryAfterMs: retryAfter },
   );
 }
@@ -415,7 +415,7 @@ export async function checkApiKey(apiKey, model, deps = {}) {
   if (probe.code === 'OK' || probe.code === 'BAD_RESPONSE') {
     return {
       code: 'VALID',
-      message: 'API 키가 유효합니다. 선택한 모델도 응답합니다.',
+      message: 'API 키가 유효해요. 선택한 모델도 응답해요.',
       models,
       presetAvailability: availability,
       probe,
@@ -424,7 +424,7 @@ export async function checkApiKey(apiKey, model, deps = {}) {
   if (probe.code === 'OVERLOADED' || probe.code === 'UNAVAILABLE') {
     return {
       code: 'OVERLOADED',
-      message: `API 키는 유효합니다. 선택한 모델(${model})이 지금 혼잡합니다. 키 문제가 아닙니다.`,
+      message: `API 키는 유효해요. 선택한 모델(${model})이 지금 혼잡해요. 키 문제가 아니에요.`,
       models,
       presetAvailability: availability,
       probe,
@@ -433,7 +433,7 @@ export async function checkApiKey(apiKey, model, deps = {}) {
   if (probe.code === 'MODEL_NOT_FOUND') {
     return {
       code: 'MODEL_NOT_FOUND',
-      message: `API 키는 유효합니다. 선택한 모델(${model})은 이 키로 사용할 수 없습니다.`,
+      message: `API 키는 유효해요. 선택한 모델(${model})은 이 키로 사용할 수 없어요.`,
       models,
       presetAvailability: availability,
       probe,

@@ -35,7 +35,7 @@ import {presentEntry} from "../src/utils/ipIsp";
 const APNIC_URL = "https://ftp.apnic.net/stats/apnic/delegated-apnic-latest";
 const IPTOASN_URL = "https://iptoasn.com/data/ip2asn-v4.tsv.gz";
 const SLASH16 = 65536;
-const USER_AGENT = "DCRefresher-ip-isp-generator/1.0 (+https://github.com/Baegovda/BongDC)";
+const USER_AGENT = "BongExtend-ip-isp-generator/1.0 (+https://github.com/Baegovda/BongExtend)";
 
 const NOTICE =
     "Derived from APNIC delegated stats (ftp.apnic.net/stats/apnic/README.TXT; not a guarantee of current use) " +

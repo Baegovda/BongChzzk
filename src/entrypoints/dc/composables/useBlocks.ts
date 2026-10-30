@@ -65,7 +65,7 @@ export function useBlocks() {
 
     const confirmAddBlock = async () => {
         if (!blockFormData.content.trim()) {
-            alert(`${blockKeyNames[currentBlockType.value]} 값을 입력해주세요.`);
+            alert(`${blockKeyNames[currentBlockType.value]} 값을 입력해 주세요.`);
             return;
         }
 
@@ -109,11 +109,11 @@ export function useBlocks() {
 
     const editBlockedUser = async (key: RefresherBlockType, index: number) => {
         if (key === "DCCON") {
-            alert("디시콘 수정은 아직 지원하지 않습니다, 우클릭 메뉴를 이용해주세요.");
+            alert("디시콘 수정은 아직 지원하지 않아요, 우클릭 메뉴를 이용해 주세요.");
             return;
         }
 
-        const result = prompt(`바꿀 ${blockKeyNames[key]} 값을 입력하세요.`);
+        const result = prompt(`바꿀 ${blockKeyNames[key]} 값을 입력해 주세요.`);
 
         if (!result) return;
 
@@ -153,7 +153,7 @@ export function useBlocks() {
             for (const block of normalizeBlockImportList(value)) {
                 if (
                     target.some((v) => v.content === block.content) &&
-                    !confirm(`${block.content}가 이미 존재합니다. 추가하시겠습니까?`)
+                    !confirm(`${block.content}가 이미 존재해요. 추가할까요?`)
                 ) {
                     continue;
                 }
@@ -164,7 +164,7 @@ export function useBlocks() {
             await blockStorage[type].setValue(target);
         }
 
-        alert("가져오기에 성공했습니다.");
+        alert("가져오기에 성공했어요.");
     };
 
     return {

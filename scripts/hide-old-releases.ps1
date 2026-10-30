@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-$repo = if ($env:GITHUB_REPOSITORY) { $env:GITHUB_REPOSITORY } else { "Baegovda/BongDC" }
+$repo = if ($env:GITHUB_REPOSITORY) { $env:GITHUB_REPOSITORY } else { "Baegovda/BongExtend" }
 
 $releases = gh release list --repo $repo --limit 100 --json tagName,isDraft,isLatest |
     ConvertFrom-Json

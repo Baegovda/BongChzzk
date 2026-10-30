@@ -56,7 +56,7 @@
         const name = (list.find(x => x.id === target) || {}).name || '관심 스트리머';
         navigating = true;
         log('관심 스트리머 방송 시작 → 이동', target);
-        toast(`${name} 방송 시작! 이동합니다`);
+        toast(`${name} 방송이 시작돼서 이동해요`);
         setTimeout(() => location.assign('https://chzzk.naver.com/live/' + target), 1000);
       }
     } finally { busy = false; }

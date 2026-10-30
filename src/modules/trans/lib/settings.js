@@ -9,12 +9,12 @@ export const BUILTIN_MODELS = [
   {
     id: 'gemini-3.5-flash-lite',
     label: 'Gemini 3.5 Flash-Lite',
-    hint: '기본값. 새 계정에서 권장하는 저비용 모델입니다.',
+    hint: '기본값. 새 계정에서 권장하는 저비용 모델이에요.',
   },
   {
     id: 'gemini-3.1-flash-lite',
     label: 'Gemini 3.1 Flash-Lite',
-    hint: '이전 기본 모델입니다. 혼잡하면 3.5로 넘어갑니다.',
+    hint: '이전 기본 모델이에요. 혼잡하면 3.5로 넘어가요.',
   },
 ];
 
@@ -85,23 +85,23 @@ export function parseSettingsImport(text) {
   try {
     parsed = JSON.parse(String(text || ''));
   } catch {
-    const error = new Error('설정 파일을 읽지 못했습니다. JSON 형식인지 확인하세요.');
+    const error = new Error('설정 파일을 읽지 못했어요. JSON 형식인지 확인해 주세요.');
     error.code = 'BAD_SETTINGS_FILE';
     throw error;
   }
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-    const error = new Error('설정 파일에 설정이 없습니다.');
+    const error = new Error('설정 파일에 설정이 없어요.');
     error.code = 'BAD_SETTINGS_FILE';
     throw error;
   }
   if (parsed.type != null && parsed.type !== SETTINGS_FILE_TYPE) {
-    const error = new Error('이 확장 프로그램의 설정 파일이 아닙니다.');
+    const error = new Error('이 확장 프로그램의 설정 파일이 아니에요.');
     error.code = 'BAD_SETTINGS_FILE';
     throw error;
   }
   const source = parsed.type === SETTINGS_FILE_TYPE ? parsed.settings : parsed;
   if (!source || typeof source !== 'object' || Array.isArray(source)) {
-    const error = new Error('설정 파일에 설정이 없습니다.');
+    const error = new Error('설정 파일에 설정이 없어요.');
     error.code = 'BAD_SETTINGS_FILE';
     throw error;
   }
@@ -147,7 +147,7 @@ function resolveChoice(choice, customValue) {
   if (choice === 'custom') {
     const custom = stripModelPrefix(customValue);
     if (!isValidModelId(custom)) {
-      const error = new Error('사용자 지정 모델 이름이 비어 있거나 올바르지 않습니다. (Invalid model)');
+      const error = new Error('사용자 지정 모델 이름이 비어 있거나 올바르지 않아요.');
       error.code = 'NO_MODEL';
       throw error;
     }

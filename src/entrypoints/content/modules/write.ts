@@ -2,7 +2,7 @@ import filter from "@/core/filtering";
 
 export default {
     name: "글쓰기",
-    description: "글쓰기 페이지를 변경합니다.",
+    description: "글쓰기 페이지를 변경해요.",
     url: /\/board\/(write|modify)/,
     status: {},
     memory: {
@@ -14,25 +14,25 @@ export default {
     settings: {
         bypassTitleLimit: {
             name: "제목 글자수 제한 우회",
-            desc: "제목 글자수 제한을 우회합니다.",
+            desc: "제목 글자수 제한을 우회해요.",
             type: "check",
             default: false
         },
         header: {
             name: "머리말",
-            desc: "머리말을 설정합니다. (HTML)",
+            desc: "머리말을 설정해요. (HTML)",
             type: "text",
             default: ""
         },
         footer: {
             name: "꼬리말",
-            desc: "꼬리말을 설정합니다. (HTML)",
+            desc: "꼬리말을 설정해요. (HTML)",
             type: "text",
             default: ""
         },
         preventExit: {
             name: "나가기 방지",
-            desc: "글 작성 중 나가기를 방지합니다.",
+            desc: "글 작성 중 나가기를 방지해요.",
             type: "check",
             default: false
         }

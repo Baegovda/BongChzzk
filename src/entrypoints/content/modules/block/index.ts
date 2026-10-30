@@ -32,8 +32,8 @@ const resolveBlockedTarget = (writer: HTMLElement, parent: HTMLElement): HTMLEle
 };
 
 export default {
-    name: "컨텐츠 차단",
-    description: "유저, 컨텐츠 등의 보고 싶지 않은 컨텐츠들을 삭제합니다.",
+    name: "콘텐츠 차단",
+    description: "유저, 콘텐츠 등의 보고 싶지 않은 콘텐츠들을 삭제해요.",
     url: /\/board\/(view|lists)/,
     status: {},
     memory: {
@@ -63,14 +63,14 @@ export default {
     settings: {
         replyRemove: {
             name: "대댓글 삭제",
-            desc: "차단된 댓글의 대댓글을 함께 삭제합니다.",
+            desc: "차단된 댓글의 대댓글을 함께 삭제해요.",
             type: "check",
             default: false,
             advanced: true
         },
         blur: {
-            name: "블러 처리",
-            desc: "차단된 내용을 블러 처리합니다.",
+            name: "흐리게 처리",
+            desc: "차단된 내용을 흐리게 가려요.",
             type: "check",
             default: false,
             advanced: true
@@ -152,7 +152,7 @@ export default {
                 hideElement(hideTarget, this.status.blur);
             } else if (text && block.check("TEXT", text, gallery) && viewWrap) {
                 const writeDiv = viewWrap.querySelector<HTMLElement>(".write_div");
-                if (writeDiv) writeDiv.textContent = "게시글 내용이 차단됐습니다.";
+                if (writeDiv) writeDiv.textContent = "게시글 내용이 차단됐어요.";
             }
         };
 

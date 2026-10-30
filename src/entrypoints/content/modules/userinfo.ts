@@ -11,7 +11,7 @@ import {insertAfterNicknameWhenIpNested, insertIntoWriterArea} from "@/utils/use
 
 export default {
     name: "유저 정보",
-    description: "사용자의 IP, 아이디 정보, 메모를 표시합니다.",
+    description: "사용자의 IP, 아이디 정보, 메모를 표시해요.",
     url: /\/board\/(view|lists)/,
     status: {},
     memory: {
@@ -31,20 +31,20 @@ export default {
     settings: {
         showFixedNickUID: {
             name: "고정닉 UID 표시",
-            desc: "고정닉 유저의 UID를 표시합니다.",
+            desc: "고정닉 유저의 UID를 표시해요.",
             type: "check",
             default: true
         },
         showHalfFixedNickUID: {
             name: "반고정닉 UID 표시",
-            desc: "반고정닉 유저의 UID를 표시합니다.",
+            desc: "반고정닉 유저의 UID를 표시해요.",
             type: "check",
             default: true,
             advanced: true
         },
         showIpInfo: {
             name: "IP 정보 표시",
-            desc: "IP 앞 두 자리로 추정한 통신사를 표시합니다. 비중이 낮으면 ?, 여러 기관이 섞이면 혼합으로 보입니다.",
+            desc: "IP 앞 두 자리로 추정한 통신사를 표시해요. 비중이 낮으면 ?, 여러 기관이 섞이면 혼합으로 보여요.",
             type: "check",
             default: true
         }
@@ -217,12 +217,12 @@ export default {
                         return;
                     }
 
-                    toast.show(`해당하는 ${memo.TYPE_NAMES[obj.type]}을(를) 가진 사용자 메모가 없습니다.`, "error");
+                    toast.show(`해당하는 ${memo.TYPE_NAMES[obj.type]}을(를) 가진 사용자 메모가 없어요.`, "error");
 
                     return;
                 }
 
-                toast.show(`${memo.TYPE_NAMES[obj.type]} ${obj.value}에 메모를 변경했습니다.`);
+                toast.show(`${memo.TYPE_NAMES[obj.type]} ${obj.value}에 메모를 변경했어요.`);
 
                 memo.add(obj.type, obj.value, obj.text, obj.color);
             }
@@ -256,14 +256,14 @@ export default {
                     return;
                 }
 
-                toast.show(`해당하는 ${memo.TYPE_NAMES[obj.type]}을(를) 가진 사용자 메모가 없습니다.`, "error");
+                toast.show(`해당하는 ${memo.TYPE_NAMES[obj.type]}을(를) 가진 사용자 메모가 없어요.`, "error");
 
                 return;
             }
 
             memo.add(obj.type, obj.value, obj.text, obj.color);
 
-            toast.show(`${memo.TYPE_NAMES[obj.type]} ${obj.value}에 메모를 추가했습니다.`);
+            toast.show(`${memo.TYPE_NAMES[obj.type]} ${obj.value}에 메모를 추가했어요.`);
         });
     },
     revoke() {

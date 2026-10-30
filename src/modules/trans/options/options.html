@@ -13,7 +13,7 @@
         <img src="../icons/icon48.png" width="48" height="48" alt="">
         <div>
           <h1>BongExtend 번역</h1>
-          <p>현재 페이지의 보이는 글을 Gemini로 번역합니다. 키는 이 브라우저에만 저장됩니다.</p>
+          <p>현재 페이지의 보이는 글을 Gemini로 번역해요. 키는 이 브라우저에만 저장돼요.</p>
         </div>
       </header>
 
@@ -27,7 +27,7 @@
           <span>키 표시</span>
         </label>
         <p class="hint">
-          무료 키는 <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer">Google AI Studio</a>에서 만듭니다.
+          무료 키는 <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer">Google AI Studio</a>에서 만들어요.
           키 페이지: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/apikey</a>
         </p>
 
@@ -43,7 +43,7 @@
           </label>
           <label class="choice">
             <input type="radio" name="modelChoice" value="custom">
-            <span><strong>직접 입력</strong><small>models/ 접두사는 없어도 됩니다</small></span>
+            <span><strong>직접 입력</strong><small>models/ 접두사는 없어도 돼요</small></span>
           </label>
           <label class="field" for="customModel">
             <span>사용자 지정 모델</span>
@@ -69,26 +69,26 @@
             <span>대체 모델</span>
             <input id="customFallback" name="customFallback" type="text" autocomplete="off" spellcheck="false" placeholder="gemini-3.1-flash-lite" disabled>
           </label>
-          <p class="hint">기본 모델이 혼잡(503)하거나 없으면(404) 대체 모델로 넘어갑니다. 그래도 안 되면 나머지 기본 제공 모델을 한 번 더 시도합니다. 키 오류와 할당량 초과는 넘어가지 않습니다.</p>
+          <p class="hint">기본 모델이 혼잡(503)하거나 없으면(404) 대체 모델로 넘어가요. 그래도 안 되면 나머지 기본 제공 모델을 한 번 더 시도해요. 키 오류와 할당량 초과는 넘어가지 않아요.</p>
         </fieldset>
 
         <label class="field" for="targetLanguage">
           <span>번역할 언어</span>
           <select id="targetLanguage" name="targetLanguage"></select>
         </label>
-        <p class="hint">기본값은 한국어입니다. 원문 언어는 문장마다 자동으로 감지합니다.</p>
+        <p class="hint">기본값은 한국어예요. 원문 언어는 문장마다 자동으로 감지해요.</p>
 
         <label class="check" for="prioritizeCursor">
           <input id="prioritizeCursor" name="prioritizeCursor" type="checkbox">
           <span>마우스 커서 근처 글을 우선</span>
         </label>
-        <p class="hint">기본값은 꺼짐입니다. 켜면 화면에 들어온 문장 중 커서에 가까운 것부터 다음 묶음으로 보냅니다. 이미 보낸 요청은 취소하지 않습니다.</p>
+        <p class="hint">기본값은 꺼짐이에요. 켜면 화면에 들어온 문장 중 커서에 가까운 것부터 다음 묶음으로 보내요. 이미 보낸 요청은 취소하지 않아요.</p>
 
         <label class="check" for="revealAnimation">
           <input id="revealAnimation" name="revealAnimation" type="checkbox" checked>
           <span>번역 등장 애니메이션</span>
         </label>
-        <p class="hint">기본값은 켜짐입니다. 번역을 기다리는 동안 은은한 프리즘 빛이 돌고, 번역이 도착하면 무지개 스캔이 글을 지나가며 원문이 번역문으로 바뀝니다. 끄면 바로 바꿉니다. 시스템에서 움직임 줄이기를 켠 경우에는 짧은 페이드만 사용합니다.</p>
+        <p class="hint">기본값은 켜짐이에요. 번역을 기다리는 동안 은은한 프리즘 빛이 돌고, 번역이 도착하면 무지개 스캔이 글을 지나가며 원문이 번역문으로 바뀌어요. 끄면 바로 바꿔요. 시스템에서 움직임 줄이기를 켠 경우에는 짧은 페이드만 사용해요.</p>
 
         <fieldset>
           <legend>번역 캐시</legend>
@@ -98,7 +98,7 @@
             <p><span>캐시로 아낀 문장</span><strong id="savedStrings">…</strong></p>
             <p><span>아낀 API 호출</span><strong id="savedCalls">…</strong></p>
           </div>
-          <p class="hint">아낀 문장과 API 호출은 누적입니다. 캐시를 지워도 이 숫자는 남고, 통계 초기화만 0으로 되돌립니다. 용량은 번역문과 키의 UTF-8 크기 근사치입니다.</p>
+          <p class="hint">아낀 문장과 API 호출은 누적이에요. 캐시를 지워도 이 숫자는 남고, 통계 초기화만 0으로 되돌려요. 용량은 번역문과 키의 UTF-8 크기 근사치예요.</p>
           <label class="field" for="cacheMaxAgeDays">
             <span>오래된 항목 삭제</span>
             <select id="cacheMaxAgeDays" name="cacheMaxAgeDays"></select>
@@ -107,7 +107,7 @@
             <span>최대 용량</span>
             <select id="cacheMaxBytes" name="cacheMaxBytes"></select>
           </label>
-          <p class="hint">기본 보관 기간은 90일입니다. 기간이 지난 항목을 지우고, 용량 한도를 넘으면 마지막 사용이 오래된 항목부터 지웁니다. 삭제 안 함과 제한 없음을 같이 고르면 자동으로 지우지 않습니다.</p>
+          <p class="hint">기본 보관 기간은 90일이에요. 기간이 지난 항목을 지우고, 용량 한도를 넘으면 마지막 사용이 오래된 항목부터 지워요. 삭제 안 함과 제한 없음을 같이 고르면 자동으로 지우지 않아요.</p>
           <div class="actions">
             <button id="resetCacheStats" type="button">통계 초기화</button>
             <button class="danger" id="clearCache" type="button">번역 캐시 지우기</button>
@@ -118,20 +118,20 @@
           <button class="primary" id="save" type="submit">저장</button>
           <button id="checkKey" type="button">키 확인</button>
         </div>
-        <p class="hint">설정 파일 내보내기·가져오기는 BongExtend 팝업의 <b>업데이트·설정</b> 탭(백업·복원)에서 모든 모듈을 한 번에 합니다. 그 파일에는 API 키가 들어 있으니 남에게 보내지 마세요.</p>
+        <p class="hint">설정 파일 내보내기·가져오기는 BongExtend 팝업의 <b>업데이트·설정</b> 탭(백업·복원)에서 모든 모듈을 한 번에 해요. 그 파일에는 API 키가 들어 있으니 남에게 보내지 마세요.</p>
         <p id="status" role="status"></p>
       </form>
 
       <section class="note be-card">
         <h2>버전</h2>
         <p id="versionLine"></p>
-        <p class="hint">업데이트 확인은 BongExtend 팝업의 <b>업데이트·설정</b> 탭에서 합니다.</p>
+        <p class="hint">업데이트 확인은 BongExtend 팝업의 <b>업데이트·설정</b> 탭에서 해요.</p>
       </section>
 
       <section class="note be-card">
         <h2>개인정보</h2>
-        <p>번역하는 문장은 사용자의 API 키로 Google Gemini API에 전송됩니다. 이 확장 프로그램의 서버는 없습니다. 키와 번역 캐시는 이 기기의 <code>chrome.storage.local</code>과 IndexedDB에만 있습니다.</p>
-        <p>무료 등급에서는 입력한 글이 Google 모델 개선에 쓰일 수 있습니다. 유료 등급의 데이터 사용 여부는 모델마다 다르니 <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">요금 페이지</a>를 확인하세요.</p>
+        <p>번역하는 문장은 사용자의 API 키로 Google Gemini API에 전송돼요. 이 확장 프로그램의 서버는 없어요. 키와 번역 캐시는 이 기기의 <code>chrome.storage.local</code>과 IndexedDB에만 있어요.</p>
+        <p>무료 등급에서는 입력한 글이 Google 모델 개선에 쓰일 수 있어요. 유료 등급의 데이터 사용 여부는 모델마다 다르니 <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">요금 페이지</a>를 확인해 주세요.</p>
       </section>
     </main>
     <script type="module" src="options.js"></script>

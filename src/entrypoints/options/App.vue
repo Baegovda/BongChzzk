@@ -13,7 +13,7 @@
     <div class="refresher-title-zone">
       <div class="be-title">
         <h3>디시 설정</h3>
-        <span class="be-sub">BongExtend · 디시인사이드 리프레셔</span>
+        <span class="be-sub">디시인사이드 편의 기능</span>
       </div>
       <div class="be-subnav float-right">
         <p

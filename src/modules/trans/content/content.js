@@ -1135,7 +1135,7 @@
 
     function fail(message) {
       pausedForError = true;
-      error = message || '번역에 실패했습니다.';
+      error = message || '번역에 실패했어요.';
       notify();
     }
 
@@ -1166,13 +1166,13 @@
           } catch (sendError) {
             clearBatchMarks(batch);
             queue.unshift(...batch);
-            fail(sendError?.message || '확장 프로그램과 연결이 끊겼습니다. 페이지를 새로고침한 뒤 다시 시도하세요.');
+            fail(sendError?.message || '확장 프로그램과 연결이 끊겼어요. 페이지를 새로고침한 뒤 다시 시도해 주세요.');
             break;
           }
           if (!response?.ok || !Array.isArray(response.translations) || response.translations.length !== batch.length) {
             clearBatchMarks(batch);
             queue.unshift(...batch);
-            fail(response?.message || '번역 결과를 해석하지 못했습니다. (Unexpected response)');
+            fail(response?.message || '번역 결과를 해석하지 못했어요.');
             break;
           }
           if (response.model) model = response.model;

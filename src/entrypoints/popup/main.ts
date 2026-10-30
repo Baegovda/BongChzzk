@@ -47,7 +47,7 @@ const showTab = async (tab: TabId) => {
         const modules = await getModules();
         moduleSwitch.checked = modules[tab] !== false;
         moduleLabel.textContent = `${NAMES[tab]} 모듈 사용`;
-        moduleNote.textContent = moduleSwitch.checked ? "" : "꺼져 있어요. 켜면 새로 연 페이지(또는 새로고침한 페이지)부터 적용돼요.";
+        moduleNote.textContent = moduleSwitch.checked ? "" : "꺼져 있어요. 켜면 새로 열거나 새로고침한 페이지부터 적용돼요.";
     }
     void chrome.storage.local.set({[TAB_KEY]: tab});
 };
@@ -134,8 +134,8 @@ moduleSwitch.addEventListener("change", async () => {
     if (current === "update") return;
     await setModuleEnabled(current, moduleSwitch.checked);
     moduleNote.textContent = moduleSwitch.checked
-        ? "켰어요. 열려 있던 페이지는 새로고침(F5)하면 적용돼요."
-        : "껐어요. 열려 있던 페이지는 새로고침(F5)하면 빠져요.";
+        ? "켰어요. 열려 있는 페이지는 새로고침(F5)하면 적용돼요."
+        : "껐어요. 열려 있는 페이지는 새로고침(F5)하면 꺼져요.";
 });
 
 // ===== 업데이트 (BongExtend 전체에서 업데이트 UI는 이 탭 하나뿐) =====
@@ -165,8 +165,8 @@ const renderUpdate = (s: UpdateStatus | null | undefined) => {
     releaseUrl = s.releaseUrl || "";
     const available = Boolean(s.updateAvailable && s.latestVersion && isNewerVersion(s.latestVersion, cur));
     if (s.error) setStatus(s.error, "error");
-    else if (available) setStatus(`${cur} → ${s.latestVersion} 업데이트 가능`, "ok");
-    else if (s.latestVersion) setStatus("최신 버전입니다.");
+    else if (available) setStatus(`${cur} → ${s.latestVersion} 업데이트할 수 있어요`, "ok");
+    else if (s.latestVersion) setStatus("최신 버전이에요.");
     if (typeof s.autoCheck === "boolean") autoCheck.checked = s.autoCheck;
     lastChecked.textContent = s.lastCheckedAt ? new Date(s.lastCheckedAt).toLocaleString("ko-KR") : "아직 확인하지 않음";
     doUpdate.hidden = !available || !s.downloadUrl;
@@ -182,7 +182,7 @@ const check = async (force: boolean) => {
     try {
         renderUpdate(await sendMessage("checkForUpdate", {force}) as UpdateStatus);
     } catch (error) {
-        if (force) setStatus((error as Error)?.message || "업데이트 정보를 가져오지 못했습니다.", "error");
+        if (force) setStatus((error as Error)?.message || "업데이트 정보를 가져오지 못했어요.", "error");
     } finally {
         checkBtn.disabled = false;
     }
@@ -193,10 +193,10 @@ doUpdate.addEventListener("click", () => void chrome.tabs.create({url: chrome.ru
 downloadZip.addEventListener("click", async () => {
     try {
         const r = await sendMessage("applyUpdate", undefined) as {ok: boolean; error?: string};
-        if (!r?.ok) setStatus(r?.error || "zip을 받지 못했습니다.", "error");
-        else setStatus("zip 다운로드를 시작했어요. 압축을 기존 폴더에 덮어쓴 뒤 확장 프로그램을 새로고침하세요.", "ok");
+        if (!r?.ok) setStatus(r?.error || "zip 파일을 받지 못했어요.", "error");
+        else setStatus("zip 파일을 받기 시작했어요. 기존 폴더에 압축을 풀어 덮어쓴 뒤 확장 프로그램을 새로고침해 주세요.", "ok");
     } catch {
-        setStatus("zip을 받지 못했습니다.", "error");
+        setStatus("zip 파일을 받지 못했어요.", "error");
     }
 });
 openRelease.addEventListener("click", () => { if (releaseUrl) void chrome.tabs.create({url: releaseUrl}); });
@@ -207,7 +207,7 @@ autoCheck.addEventListener("change", async () => {
         renderUpdate(await sendMessage("setUpdateAutoCheck", {enabled: want}) as UpdateStatus);
     } catch {
         autoCheck.checked = !want;
-        setStatus("자동 확인 설정을 저장하지 못했습니다.", "error");
+        setStatus("자동 확인 설정을 저장하지 못했어요.", "error");
     }
 });
 sendMessage("getUpdateStatus", undefined).then((s) => {
@@ -231,17 +231,17 @@ $("exportAll").addEventListener("click", async () => {
         setTimeout(() => URL.revokeObjectURL(a.href), 5000);
         setIo("설정 파일을 저장했어요.", "ok");
     } catch (error) {
-        setIo(`내보내지 못했어요: ${(error as Error)?.message || error}`, "error");
+        setIo(`저장하지 못했어요: ${(error as Error)?.message || error}`, "error");
     }
 });
 
 const runImport = async (text: string) => {
     try {
         const result = await importSettingsText(text);
-        setIo(`${result.join(", ")} 설정을 가져왔어요. 열려 있던 페이지는 새로고침(F5)해 주세요.`, "ok");
+        setIo(`${result.join(", ")} 설정을 불러왔어요. 열려 있는 페이지는 새로고침(F5)해 주세요.`, "ok");
         document.querySelectorAll<HTMLIFrameElement>("iframe").forEach((f) => { if (f.src) f.src = f.src; });
     } catch (error) {
-        setIo((error as Error)?.message || "가져오지 못했어요.", "error");
+        setIo((error as Error)?.message || "불러오지 못했어요.", "error");
     }
 };
 
@@ -252,7 +252,7 @@ importFile.addEventListener("change", async () => {
     if (file) await runImport(await file.text());
 });
 $("importPaste").addEventListener("click", async () => {
-    const text = prompt("가져올 설정(JSON)을 붙여넣어 주세요.");
+    const text = prompt("불러올 설정(JSON)을 붙여넣어 주세요.");
     if (text) await runImport(text);
 });
 

@@ -17,7 +17,7 @@
     <div class="refresher-title-zone">
       <div class="be-title">
         <h3>디시</h3>
-        <span class="be-sub">디시인사이드 리프레셔</span>
+        <span class="be-sub">디시인사이드 편의 기능</span>
         <span class="be-spacer"></span>
         <button
             class="open-options-btn"

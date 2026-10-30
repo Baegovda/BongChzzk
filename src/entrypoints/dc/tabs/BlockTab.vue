@@ -17,7 +17,7 @@
             type="button"
             @click="exportBlock"
         >
-          보내기
+          내보내기
         </button>
       </div>
     </header>
@@ -69,7 +69,7 @@
 
         <div class="block-tab__controls">
           <label class="block-tab__mode">
-            <span>매칭 모드</span>
+            <span>일치 방식</span>
             <select
                 :value="blockModes[activeType] ?? DEFAULT_BLOCK_DETECT_MODE"
                 @change="onModeChange"
@@ -120,13 +120,13 @@
             class="block-tab__empty"
         >
           <p class="block-tab__empty-title">
-            {{ searchQuery ? "검색 결과가 없습니다" : `차단된 ${blockKeyNames[activeType]}이 없습니다` }}
+            {{ searchQuery ? "검색 결과가 없어요" : `차단된 ${blockKeyNames[activeType]}이 없어요` }}
           </p>
           <p class="block-tab__empty-desc">
             {{
               searchQuery
                   ? "다른 검색어를 입력하거나 검색을 초기화해 보세요."
-                  : "추가 버튼으로 새 차단 규칙을 등록할 수 있습니다."
+                  : "추가 버튼으로 새 차단 규칙을 등록할 수 있어요."
             }}
           </p>
           <button
@@ -186,14 +186,14 @@ const blockGroups = [
 ] satisfies Array<{ label: string; types: readonly RefresherBlockType[] }>;
 
 const blockHints: Record<RefresherBlockType, string> = {
-  NICK: "작성자 닉네임을 기준으로 차단합니다.",
-  ID: "유저 고유번호를 기준으로 차단합니다.",
-  IP: "작성자 IP를 기준으로 차단합니다.",
-  TITLE: "게시글 제목을 기준으로 차단합니다.",
-  TEXT: "게시글 본문을 기준으로 차단합니다.",
-  COMMENT: "댓글 내용을 기준으로 차단합니다.",
-  DCCON: "디시콘 코드를 기준으로 차단합니다.",
-  TAB: "말머리를 기준으로 차단합니다."
+  NICK: "작성자 닉네임을 기준으로 차단해요.",
+  ID: "유저 고유번호를 기준으로 차단해요.",
+  IP: "작성자 IP를 기준으로 차단해요.",
+  TITLE: "게시글 제목을 기준으로 차단해요.",
+  TEXT: "게시글 본문을 기준으로 차단해요.",
+  COMMENT: "댓글 내용을 기준으로 차단해요.",
+  DCCON: "디시콘 코드를 기준으로 차단해요.",
+  TAB: "말머리를 기준으로 차단해요."
 };
 
 const activeType = ref<RefresherBlockType>("COMMENT");

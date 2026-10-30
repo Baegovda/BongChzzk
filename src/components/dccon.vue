@@ -68,7 +68,7 @@
             v-if="firstLoad"
             class="dccon-placeholder"
         >
-          디시콘을 클릭해주세요.
+          디시콘을 클릭해 주세요.
         </h2>
         <ul
             v-else
@@ -154,7 +154,7 @@ const getDcconList = async (refresh = false) => {
         .json<DcinsideDcconDetail>();
 
     if (response.target === "shop") {
-      alert("사용 가능한 디시콘이 없습니다.");
+      alert("사용 가능한 디시콘이 없어요.");
       close();
       return;
     }
@@ -167,7 +167,7 @@ const getDcconList = async (refresh = false) => {
     maxPage.value = response.max_page;
     currentDccon.value = response.list[0].detail;
   } catch {
-    alert("디시콘을 불러오는데 실패했습니다.");
+    alert("디시콘을 불러오는 데 실패했어요.");
     close();
   }
 };

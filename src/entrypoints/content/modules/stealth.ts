@@ -35,7 +35,7 @@ const tempButtonCreate = (element: HTMLElement): void => {
 
 export default {
     name: "스텔스 모드",
-    description: "페이지내에서 표시되는 이미지를 비활성화합니다.",
+    description: "페이지에 표시되는 이미지를 비활성화해요.",
     memory: {
         contentViewUUID: null,
         loadHandler: null
@@ -51,8 +51,8 @@ export default {
             button.click();
 
             const content = document.documentElement.classList.contains(TEMPORARY_STEALTH)
-                ? "이미지를 보이게 했습니다."
-                : "이미지를 숨겼습니다.";
+                ? "이미지를 보이게 했어요."
+                : "이미지를 숨겼어요.";
 
             toast.show(content, "info");
         }

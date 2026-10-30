@@ -4,8 +4,8 @@
  * 비중 80% 미만이면 이름 뒤에 ?, 라벨이 "혼합"이면 그대로 둔다.
  */
 
-export const IP_ISP_REPO = "Baegovda/BongDC";
-export const IP_ISP_REF = "develop";
+export const IP_ISP_REPO = "Baegovda/BongExtend";
+export const IP_ISP_REF = "main";
 export const IP_ISP_PATH = "src/data/ip-isp.json";
 
 /** 이 퍼센트 이상이면 물음표 없이 통신사 이름만 보여 준다. */
@@ -93,7 +93,7 @@ export const fetchRemoteIpIsp = async (): Promise<IpIspDatabase | null> => {
     const response = await fetch(url, {
         headers: {
             Accept: "application/vnd.github.raw+json",
-            "User-Agent": "DCRefresher-ip-isp"
+            "User-Agent": "BongExtend-ip-isp"
         }
     });
     // 404·요청 한도 같은 HTTP 실패는 호출하는 쪽이 조용히 넘긴다.

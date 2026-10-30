@@ -33,18 +33,18 @@ test('turning translation on settles only when the tab reports enabled', () => {
   assert.equal(on.error, '');
   const missing = settleToggle(true, { ok: true, status: null });
   assert.equal(missing.on, false);
-  assert.match(missing.error, /켜지 못했습니다/);
-  const injected = settleToggle(true, { ok: false, message: '이 페이지에 번역기를 넣을 수 없습니다.' });
+  assert.match(missing.error, /켜지 못했어요/);
+  const injected = settleToggle(true, { ok: false, message: '이 페이지에 번역기를 넣을 수 없어요.' });
   assert.equal(injected.on, false);
-  assert.match(injected.error, /넣을 수 없습니다/);
+  assert.match(injected.error, /넣을 수 없어요/);
 });
 
 test('turning translation off stays off and a blocked page shows its reason', () => {
   const off = settleToggle(false, { ok: true, status: null });
   assert.equal(off.on, false);
   assert.equal(off.error, '');
-  const blocked = blockedToggle('이 페이지에서는 확장 프로그램을 실행할 수 없습니다.');
+  const blocked = blockedToggle('이 페이지에서는 확장 프로그램을 실행할 수 없어요.');
   const shown = refreshToggle(blocked, null);
   assert.equal(shown.on, false);
-  assert.match(shown.error, /실행할 수 없습니다/);
+  assert.match(shown.error, /실행할 수 없어요/);
 });

@@ -114,7 +114,7 @@ export default defineBackground(() => {
             try {
                 createTransMenus();
             } catch (error) {
-                console.warn("번역 메뉴를 만들지 못했습니다.", error);
+                console.warn("번역 메뉴를 만들지 못했어요.", error);
             }
         })();
 
@@ -162,18 +162,18 @@ export default defineBackground(() => {
             await browser.tabs.create({url});
             return {ok: true};
         } catch (error) {
-            console.error("확장 프로그램 관리 페이지를 열지 못했습니다.", error);
+            console.error("확장 프로그램 관리 페이지를 열지 못했어요.", error);
 
             if (import.meta.env.FIREFOX) {
-                return {ok: false, error: "확장 프로그램 관리 페이지를 열지 못했습니다."};
+                return {ok: false, error: "확장 프로그램 관리 페이지를 열지 못했어요."};
             }
 
             try {
                 await browser.tabs.create({url: "chrome://extensions"});
                 return {ok: true};
             } catch (fallbackError) {
-                console.error("확장 프로그램 관리 페이지를 열지 못했습니다.", fallbackError);
-                return {ok: false, error: "확장 프로그램 관리 페이지를 열지 못했습니다."};
+                console.error("확장 프로그램 관리 페이지를 열지 못했어요.", fallbackError);
+                return {ok: false, error: "확장 프로그램 관리 페이지를 열지 못했어요."};
             }
         }
     });

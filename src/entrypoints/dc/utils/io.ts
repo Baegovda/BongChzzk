@@ -1,25 +1,25 @@
 export const copyToClipboard = async (payload: unknown) => {
     try {
         await navigator.clipboard.writeText(JSON.stringify(payload));
-        alert("클립보드에 복사되었습니다.");
+        alert("클립보드에 복사됐어요.");
     } catch {
-        alert("클립보드에 복사하지 못했습니다.");
+        alert("클립보드에 복사하지 못했어요.");
     }
 };
 
 export const parseImportData = (example: string) => {
-    const result = prompt("가져올 데이터를 입력하세요.", example);
+    const result = prompt("가져올 데이터를 입력해 주세요.", example);
     if (!result) return null;
 
     try {
         const parsed = JSON.parse(result) as unknown;
         if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-            throw new Error("가져오기 데이터는 JSON 객체여야 합니다.");
+            throw new Error("가져오기 데이터는 JSON 객체여야 해요.");
         }
 
         return parsed as Record<string, unknown>;
     } catch {
-        alert("데이터가 잘못됐습니다.");
+        alert("데이터가 잘못됐어요.");
         return null;
     }
 };
