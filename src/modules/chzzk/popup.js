@@ -6,7 +6,15 @@ BCStore.sync.get(DEF, v => {
   showFont(Number(v.chatFontSize) || 0);
   syncBlurRank();
   syncSeek();
+  syncQuality();
 });
+// 화질 고정이 꺼져 있으면 고정할 화질은 잠금
+function syncQuality() {
+  const off = !$('lockQuality').checked;
+  $('targetQuality').disabled = off;
+  $('targetQuality').closest('label').classList.toggle('is-disabled', off);
+}
+$('lockQuality').addEventListener('change', syncQuality);
 // 방향키 이동이 꺼져 있으면 이동 간격은 잠금
 function syncSeek() {
   const off = !$('arrowSeek').checked;

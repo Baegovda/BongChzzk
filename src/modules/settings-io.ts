@@ -67,9 +67,9 @@ export const planImport = (text: string): ImportPlan => {
     }
 
     if (parsed.type === SETTINGS_FILE_TYPE) {
-        if (!isObj(parsed.settings)) throw new Error("BongTrans 설정 파일에 설정이 없어요.");
+        if (!isObj(parsed.settings)) throw new Error("번역 설정 파일에 설정이 없어요.");
         plan.local[TRANS_KEY] = normalizeSettings(parsed.settings);
-        plan.labels.push("번역(옛 BongTrans)");
+        plan.labels.push("번역");
         return plan;
     }
 
@@ -86,11 +86,11 @@ export const planImport = (text: string): ImportPlan => {
     const looksDc = keys.some((k) => k.startsWith("refresher") || k.startsWith("__REFRESHER") || k.endsWith(".enable"));
     if (looksDc) {
         plan.dcReplace = normalizeStorageData(onlyDcKeys(parsed));
-        plan.labels.push("디시(옛 BongDC)");
+        plan.labels.push("디시");
         return plan;
     }
 
-    throw new Error("어느 확장의 설정인지 알 수 없어요. BongExtend·BongTrans·BongDC 설정만 가져올 수 있어요.");
+    throw new Error("어느 확장의 설정인지 알 수 없어요. 올바른 설정 파일인지 확인해 주세요.");
 };
 
 type Area = {
