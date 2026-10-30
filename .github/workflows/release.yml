@@ -43,6 +43,8 @@ jobs:
             content.js \
             content-following.js \
             content-extras.js \
+            content-watch.js \
+            content-wide.js \
             popup.html \
             popup.js \
             update.html \
@@ -61,7 +63,7 @@ jobs:
           while read -r f; do
             grep -qx "$f" zip-files.txt || { echo "missing in zip: $f"; exit 1; }
           done < required-files.txt
-          for f in popup.js update.html update.js lib/updates.js lib/zip.js; do
+          for f in popup.js update.html update.js lib/updates.js lib/zip.js lib/watch.js lib/wide.js; do
             grep -qx "$f" zip-files.txt || { echo "missing in zip: $f"; exit 1; }
           done
           for f in content*.js; do

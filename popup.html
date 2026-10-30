@@ -10,6 +10,7 @@
 <h4>화면</h4>
 <label>화질 1080p 고정<input type="checkbox" id="lockQuality"></label>
 <label>고정 화질<select id="targetQuality"><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="360">360p</option></select></label>
+<label>방송 진입 시 넓은 화면 자동<input type="checkbox" id="autoWide"></label>
 <label>선명한 화면 항상 켜기<input type="checkbox" id="vivid"></label>
 <label>플레이어 시청자 수 표시<input type="checkbox" id="viewerOverlay"></label>
 <h4>조작</h4>
@@ -22,6 +23,12 @@
 <h4>팔로잉</h4>
 <label>팔로잉 채널 자동 새로고침<input type="checkbox" id="followRefresh"></label>
 <label>새로고침 간격<select id="followInterval"><option value="5">5초</option><option value="10">10초</option><option value="30">30초</option><option value="60">60초</option></select></label>
+<h4>관심 스트리머 자동 이동</h4>
+<label>방송 시작 시 자동 이동<input type="checkbox" id="watchEnabled"></label>
+<div style="display:flex;gap:4px"><input id="watchInput" placeholder="채널 URL 또는 ID" style="flex:1;min-width:0;font-size:11px"><button id="watchAdd" type="button">추가</button></div>
+<div style="display:flex;gap:4px;margin-top:4px"><button id="watchCurrent" type="button">현재 보는 채널 추가</button><button id="watchGoNow" type="button">지금 방송 중이면 이동</button></div>
+<p id="watchMsg" style="color:#aaa;margin:4px 0;font-size:11px"></p>
+<ul id="watchListEl" style="list-style:none;padding:0;margin:0;font-size:12px"></ul>
 <div class="c">복구 횟수: <b id="count">0</b> <button id="reset">초기화</button><div id="last"></div></div>
 <div class="tools">
   <button id="checkUpdate" type="button">업데이트 확인</button>
@@ -33,4 +40,5 @@
   <button id="openZip" type="button">zip 다운로드</button>
   <button id="doUpdate" type="button" hidden>지금 업데이트</button>
 </p>
+<script src="lib/watch.js"></script>
 <script type="module" src="popup.js"></script></body></html>

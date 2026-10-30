@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-10-30
+
+### Added
+- 관심 스트리머 자동 이동: 팝업에서 스트리머(채널 주소/ID 붙여넣기 또는 **현재 보는 채널 추가**)를 등록하면, 열린 치지직 탭이 5초마다 방송 상태를 확인해 방송이 꺼짐→켜짐으로 바뀌는 순간 해당 방송(`/live/<채널ID>`)으로 이동합니다. 이미 방송 중인 경우엔 자동 이동하지 않으며 **지금 방송 중이면 이동** 버튼으로 바로 갈 수 있습니다. 여러 탭이 열려 있어도 한 탭(보이는 탭 우선)만 확인합니다.
+- 방송 진입 시 넓은 화면 자동: 라이브/다시보기 페이지에 들어가면 플레이어의 넓은 화면 버튼을 한 번 누릅니다(페이지당 1회, 이미 넓은 화면이면 건너뜀).
+- 팝업에서 채널 이름 조회와 방송 확인을 위해 `api.chzzk.naver.com` 호스트 권한을 추가했습니다.
+
 ## [1.4.0] - 2026-10-30
 
 ### Added
