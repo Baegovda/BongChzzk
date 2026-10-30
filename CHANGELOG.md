@@ -7,6 +7,12 @@ BongExtend 변경 이력. GitHub **[Releases](https://github.com/Baegovda/BongEx
 
 ---
 
+## [1.0.5] - 2026-10-31
+
+### 수정
+
+- 업데이트 후에도 NEW 배지와 "업데이트 가능"이 남던 문제 수정
+
 ## [1.0.4] - 2026-10-31
 
 ### 변경

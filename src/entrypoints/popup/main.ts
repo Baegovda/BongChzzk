@@ -1,6 +1,7 @@
 // BongExtend 팝업: 탭 하나에 모듈 화면 하나. 각 모듈 화면은 옛 확장 팝업을 그대로 iframe으로 띄운다.
 import "@/modules/theme/theme.css";
 import {sendMessage} from "@/http/messaging";
+import {isNewerVersion} from "@/core/update/availability";
 // @ts-ignore 순수 JS
 import {getModules, setModuleEnabled} from "@/modules/core-modules.js";
 import {exportAllSettings, importSettingsText} from "@/modules/settings-io";
@@ -75,17 +76,18 @@ const renderUpdate = (s: UpdateStatus | null | undefined) => {
     const cur = chrome.runtime.getManifest().version;
     releaseUrl = s.releaseUrl || "";
     openRelease.hidden = !releaseUrl;
+    const available = Boolean(s.updateAvailable && s.latestVersion && isNewerVersion(s.latestVersion, cur));
     if (s.error) {
         updateStatus.textContent = s.error;
         updateStatus.className = "error";
-    } else if (s.updateAvailable && s.latestVersion) {
+    } else if (available) {
         updateStatus.textContent = `${cur} → ${s.latestVersion} 업데이트 가능`;
         updateStatus.className = "ok";
     } else if (s.latestVersion) {
         updateStatus.textContent = `최신 버전입니다. (${cur})`;
         updateStatus.className = "";
     }
-    doUpdate.hidden = !s.updateAvailable;
+    doUpdate.hidden = !available;
 };
 
 $("checkUpdate").addEventListener("click", async () => {

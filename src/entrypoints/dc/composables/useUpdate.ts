@@ -1,6 +1,7 @@
 import {onMounted, reactive, ref} from "vue";
 import {sendMessage} from "@/http/messaging";
 import type {ExtensionUpdateStatus} from "@/core/updateCheck";
+import {deriveUpdateAvailable} from "@/core/update/availability";
 
 const emptyStatus = (): ExtensionUpdateStatus => ({
     currentVersion: browser.runtime.getManifest().version,
@@ -25,6 +26,7 @@ export const useUpdate = () => {
     const syncStatus = async () => {
         const next = await sendMessage("getUpdateStatus");
         Object.assign(status, next);
+        status.updateAvailable = deriveUpdateAvailable(status.updateAvailable, status.latestVersion, browser.runtime.getManifest().version);
     };
 
     const checkUpdate = async (force = true) => {

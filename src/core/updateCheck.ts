@@ -1,6 +1,7 @@
 import {updateStorage} from "@/storage/wxtStorage";
 import {compareVersions, parseSemver} from "@/core/semver";
 import {GITHUB_RELEASE_REPO, pickReleaseZip} from "@/core/update/release";
+import {deriveUpdateAvailable} from "@/core/update/availability";
 
 // 하루 한 번 최신 릴리즈를 확인한다.
 // 크롬 압축 해제 설치는 업데이트 탭에서 폴더에 바로 넣고, 그 외에는 zip을 받아 덮어쓴다.
@@ -194,13 +195,13 @@ const buildStatus = async (currentVersion = getCurrentExtensionVersion()): Promi
     const browserName = getUpdateBrowser();
     const [
         latestVersion,
-        updateAvailable,
+        storedUpdateAvailable,
         chromeDownloadUrl,
         firefoxDownloadUrl,
         releaseNotes,
         releaseUrl,
         lastCheckedAt,
-        error,
+        storedError,
         autoCheck
     ] = await Promise.all([
         updateStorage.latestVersion.getValue(),
@@ -215,6 +216,21 @@ const buildStatus = async (currentVersion = getCurrentExtensionVersion()): Promi
     ]);
 
     const downloadUrl = browserName === "firefox" ? firefoxDownloadUrl : chromeDownloadUrl;
+    const updateAvailable = deriveUpdateAvailable(storedUpdateAvailable, latestVersion, currentVersion);
+    let error = storedError;
+
+    if (storedUpdateAvailable && !updateAvailable) {
+        // 예전 버전에서 저장된 "업데이트 가능" 표시를 바로잡는다.
+        error = "";
+        try {
+            await Promise.all([
+                updateStorage.updateAvailable.setValue(false),
+                updateStorage.checkError.setValue("")
+            ]);
+        } catch {
+            // 저장 실패는 다음 확인 때 다시 고친다.
+        }
+    }
 
     return {
         currentVersion: normalizeVersion(currentVersion),
@@ -299,8 +315,9 @@ export const checkExtensionUpdate = async (force = false): Promise<ExtensionUpda
             updateStorage.checkError.setValue(message)
         ]);
 
-        await syncUpdateBadge(await updateStorage.updateAvailable.getValue());
-        return buildStatus(currentVersion);
+        const status = await buildStatus(currentVersion);
+        await syncUpdateBadge(status.updateAvailable);
+        return status;
     }
 };
 
@@ -384,12 +401,29 @@ const bindUpdateListeners = () => {
     });
 };
 
+const LAST_SEEN_VERSION_KEY = "refresher:update:lastSeenVersion";
+
+// 확장 자체가 업데이트·재설치된 뒤에는 배지를 지우고 바로 다시 확인한다.
+export const refreshUpdateStateAfterInstall = async (force = false): Promise<void> => {
+    try {
+        const current = normalizeVersion(getCurrentExtensionVersion());
+        const stored = await browser.storage.local.get(LAST_SEEN_VERSION_KEY);
+        const lastSeen = stored?.[LAST_SEEN_VERSION_KEY];
+        if (!force && lastSeen === current) return;
+        await browser.storage.local.set({[LAST_SEEN_VERSION_KEY]: current});
+        await syncUpdateBadge(false);
+        await checkExtensionUpdate(true);
+    } catch (error) {
+        console.error("설치 후 업데이트 상태 갱신 실패:", error);
+    }
+};
+
 export const scheduleUpdateChecks = () => {
     bindUpdateListeners();
 
     void (async () => {
         const autoCheck = await updateStorage.autoCheck.getValue();
-        const updateAvailable = await updateStorage.updateAvailable.getValue();
+        const {updateAvailable} = await buildStatus();
         await syncUpdateBadge(updateAvailable);
 
         if (!autoCheck) {
@@ -398,6 +432,7 @@ export const scheduleUpdateChecks = () => {
         }
 
         await ensureUpdateAlarm();
+        await refreshUpdateStateAfterInstall(false);
         await checkExtensionUpdate(false);
     })();
 };

@@ -10,6 +10,7 @@ import {
     scheduleUpdateChecks,
     setUpdateAutoCheck
 } from "@/core/updateCheck";
+import {refreshUpdateStateAfterInstall} from "@/core/updateCheck";
 
 // @ts-ignore 번역 모듈은 기존 BongTrans 순수 JS를 그대로 쓴다.
 import {createTransMenus, startTransBackground} from "@/modules/trans/background.js";
@@ -204,7 +205,10 @@ export default defineBackground(() => {
     };
 
     // ===== Lifecycle =====
-    browser.runtime.onInstalled.addListener(async () => {
+    browser.runtime.onInstalled.addListener(async (details) => {
+        if (details?.reason === "install" || details?.reason === "update") {
+            void refreshUpdateStateAfterInstall(true);
+        }
         await createContextMenus();
         if (import.meta.env.PROD) {
             await refreshIpDatabase();
