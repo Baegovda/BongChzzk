@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const DEF = { enabled: true, threshold: 5, cooldown: 10, toast: true, lockQuality: true, targetQuality: 1080 };
+  const DEF = { enabled: true, threshold: 5, cooldown: 10, toast: true, retryTimer: true, lockQuality: true, targetQuality: 1080 };
   let cfg = { ...DEF };
   const TAG = '[BongChzzk]';
   const log = (...a) => console.log(TAG, ...a);
@@ -39,7 +39,8 @@
     const mark = () => { if (!s.stallSince && !v.paused) s.stallSince = Date.now(); };
     v.addEventListener('waiting', mark);
     v.addEventListener('stalled', mark);
-    v.addEventListener('playing', () => { s.stallSince = 0; });
+    v.addEventListener('playing', () => { s.stallSince = 0; if (rtV === v) rtHide(); });
+    v.addEventListener('pause', () => { if (rtV === v) rtHide(); });
     log('비디오 감시 시작');
     v.addEventListener('loadedmetadata', () => scheduleQuality(1500));
     v.addEventListener('playing', () => scheduleQuality(1200));
@@ -66,8 +67,78 @@
     window.dispatchEvent(new PopStateEvent('popstate', { state: history.state }));
   }
 
+  // ───── 버퍼링 복구 타이머 (영상 위 큰 카운트다운) ─────
+  const RT = globalThis.BongRetryTimer;
+  let rtEl = null, rtTimer = 0, rtV = null, rtBusyUntil = 0;
+  function rtHide() {
+    if (rtTimer) { clearInterval(rtTimer); rtTimer = 0; }
+    if (rtEl) { rtEl.remove(); rtEl = null; }
+    rtV = null; rtBusyUntil = 0;
+  }
+  // 광고 표시가 비정상적으로 오래 켜져 있으면(오탐 등) 복구를 영원히 막지 않도록 2분까지만 존중
+  let adSince = 0;
+  function adBlocking() {
+    if (!globalThis.__bongAdActive) { adSince = 0; return false; }
+    if (!adSince) adSince = Date.now();
+    return Date.now() - adSince < 120000;
+  }
+  function rtMount() {
+    const host = (rtV && rtV.closest && rtV.closest('div.pzp')) || document.querySelector('div.pzp.pzp-pc');
+    const parent = host || document.body;
+    if (!parent) return null;
+    if (rtEl && rtEl.parentNode === parent) return rtEl;
+    if (rtEl) rtEl.remove();
+    const el = document.createElement('div');
+    el.className = 'bong-retry-timer';
+    el.setAttribute('aria-live', 'off');
+    el.style.cssText = `position:${host ? 'absolute' : 'fixed'};left:50%;top:50%;transform:translate(-50%,-50%);z-index:2147483646;pointer-events:none;display:flex;align-items:center;gap:18px;padding:18px 26px 18px 20px;background:rgba(18,19,23,.82);color:#fff;border:1px solid rgba(0,255,163,.55);border-radius:20px;box-shadow:0 0 28px rgba(0,255,163,.22),0 10px 40px rgba(0,0,0,.45);font-family:"Pretendard","Malgun Gothic",system-ui,sans-serif;white-space:nowrap;user-select:none;backdrop-filter:blur(4px)`;
+    el.innerHTML = '<svg width="84" height="84" viewBox="0 0 84 84" style="flex:none"><circle cx="42" cy="42" r="36" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="7"/><circle class="rt-ring" cx="42" cy="42" r="36" fill="none" stroke="#00ffa3" stroke-width="7" stroke-linecap="round" transform="rotate(-90 42 42)" stroke-dasharray="226.2" stroke-dashoffset="0" style="filter:drop-shadow(0 0 6px rgba(0,255,163,.7))"/></svg>'
+      + '<div style="display:flex;flex-direction:column;gap:2px"><div class="rt-cap" style="font-size:15px;font-weight:600;color:#cfd3dc"></div>'
+      + '<div class="rt-num" style="font-size:60px;line-height:1.05;font-weight:800;color:#00ffa3;text-shadow:0 0 18px rgba(0,255,163,.45);font-variant-numeric:tabular-nums"></div>'
+      + '<div class="rt-step" style="font-size:14px;color:#9aa1ad"></div></div>';
+    parent.appendChild(el);
+    rtEl = el;
+    return el;
+  }
+  function rtPaint(cap, num, step, frac, busy) {
+    const el = rtMount(); if (!el) return;
+    el.querySelector('.rt-cap').textContent = cap;
+    const n = el.querySelector('.rt-num');
+    n.textContent = num; n.style.fontSize = busy ? '40px' : '60px';
+    el.querySelector('.rt-step').textContent = step;
+    el.querySelector('.rt-ring').setAttribute('stroke-dashoffset', String(226.2 * (1 - Math.max(0, Math.min(1, frac)))));
+  }
+  function rtRender() {
+    const now = Date.now();
+    if (!cfg.enabled || !cfg.retryTimer || adBlocking()) { rtHide(); return; }
+    // 시작 안 됨(무한 로딩) 감시 상태
+    if (wd.view && (!rtV || !states.get(rtV) || !states.get(rtV).stallSince)) {
+      const w = wd.view;
+      if (now < wd.busyUntil) { rtPaint('플레이어가 시작되지 않아요', '다시 시도하는 중…', w.label, 1, true); return; }
+      if (now - wd.since < RT.SHOW_AFTER_MS) { if (rtEl) rtEl.remove(), rtEl = null; return; }
+      const left = Math.max(0, w.at - now);
+      rtPaint('플레이어가 시작되지 않아요 · 다음 시도까지', `${Math.ceil(left / 1000)}초`, w.label, left / w.total, false);
+      return;
+    }
+    const v = rtV, s = v && states.get(v);
+    if (!v || !s || v.paused || !v.isConnected) { rtHide(); return; }
+    const busy = now < rtBusyUntil;
+    if (!busy && (!s.stallSince || now - s.stallSince < RT.SHOW_AFTER_MS)) { rtHide(); return; }
+    const left = RT.nextRecoverIn(now, s.stallSince, s.lastRecover, s.level, cfg.threshold, cfg.cooldown);
+    const total = RT.waitTotal(s.stallSince, s.lastRecover, s.level, cfg.threshold, cfg.cooldown);
+    if (busy) rtPaint('버퍼링 중', '복구하는 중…', RT.stepLabel(Math.max(0, s.level - 1)), 1, true);
+    else rtPaint('버퍼링 중 · 다음 복구까지', `${Math.ceil(left / 1000)}초`, RT.stepLabel(s.level), total > 0 ? left / total : 0, false);
+  }
+  function rtWatch(v) {
+    if (!cfg.retryTimer || !RT) return;
+    rtV = v;
+    if (!rtTimer) rtTimer = setInterval(rtRender, 250);
+    rtRender();
+  }
+
   async function recover(v, s) {
     s.lastRecover = Date.now();
+    if (cfg.retryTimer && RT) { rtV = v; rtBusyUntil = s.lastRecover + 1500; rtWatch(v); }
     const lvl = s.level;
     s.level = Math.min(s.level + 1, 3);
     bumpCounter();
@@ -109,10 +180,60 @@
     scheduleQuality(4000); // 복구/재마운트 후 화질이 자동으로 바뀌는 경우 대비
   }
 
+  // ───── 시작 안 됨(무한 로딩) 감시 ─────
+  // 영상이 아예 시작되지 않는 경우(로고만 도는 검은 화면)는 위 루프가 건너뛰므로 따로 지켜봄.
+  const wd = { since: 0, attempt: 0, lastAttempt: 0, busyUntil: 0, view: null, key: '' };
+  let userPausedAt = 0;
+  document.addEventListener('pause', e => { if (e.target && e.target.tagName === 'VIDEO' && document.hasFocus() && !globalThis.__bongAdActive) userPausedAt = Date.now(); }, true);
+  document.addEventListener('playing', () => { userPausedAt = 0; }, true);
+  function wdReset() { wd.since = 0; wd.attempt = 0; wd.lastAttempt = 0; wd.view = null; }
+  const RELOAD_KEY = 'bongchzzk.wdReloads';
+  function readReloads(now) { try { return RT.recentReloadTimes(JSON.parse(sessionStorage.getItem(RELOAD_KEY) || '[]'), now); } catch (e) { return []; } }
+  function isOfflineUi() {
+    const r = document.querySelector('div.pzp') || document.getElementById('live_player_layout');
+    const t = r ? (r.textContent || '').slice(0, 2000) : '';
+    return /방송이\s*종료|종료된\s*방송|오프라인|OFFLINE|방송\s*중이\s*아니|성인\s*인증|로그인\s*후/.test(t);
+  }
+  function watchdogTick(now) {
+    if (!RT) return;
+    const path = location.pathname;
+    if (path !== wd.key) { wd.key = path; wdReset(); }
+    const vids = [...document.querySelectorAll('video')].filter(v => v.isConnected && !v.closest('[data-role="adVideoContainerEl"]'));
+    const ok = vids.some(v => !v.paused && v.readyState >= 3 && (states.get(v)?.goodSince || 0) > 0);
+    const main = vids.find(v => v.classList.contains('webplayer-internal-video')) || vids[0];
+    const st = {
+      now, enabled: cfg.enabled, onVideoPage: /^\/(live|video)\//.test(path), visible: document.visibilityState === 'visible',
+      adActive: adBlocking(), userPaused: !!main && main.paused && main.readyState >= 2 && !!userPausedAt,
+      ended: !!main && main.ended, offline: isOfflineUi(), ok,
+      loopBusy: vids.some(v => states.get(v)?.stallSince > 0 && !v.paused), // 일반 버퍼링 복구가 처리 중
+      since: wd.since, attempt: wd.attempt, lastAttempt: wd.lastAttempt, thresholdSec: cfg.threshold, recentReloads: readReloads(now).length,
+    };
+    const d = RT.watchdogDecide(st);
+    if (d.action === 'reset') { if (wd.since) { wdReset(); if (rtEl && !rtV) rtHide(); } return; }
+    if (d.action === 'start') { wd.since = now; return; }
+    wd.view = { at: now + d.waitMs, total: d.totalMs, label: RT.wdStepLabel(d.next) };
+    if (cfg.retryTimer && !rtTimer) { rtTimer = setInterval(rtRender, 250); }
+    if (d.action === 'wait') return;
+    wd.attempt++; wd.lastAttempt = now; wd.busyUntil = now + 1500;
+    bumpCounter();
+    log('시작 안 됨 감시: 시도', d.action);
+    if (d.action === 'play') {
+      toast('방송이 시작되지 않아서 다시 재생해 볼게요');
+      if (!clickPlayerButton() && main) main.play().catch(() => {});
+    } else if (d.action === 'remount') {
+      toast('방송이 시작되지 않아서 플레이어를 새로 띄워요');
+      softRemount();
+    } else if (d.action === 'reload') {
+      toast('방송이 계속 시작되지 않아서 페이지를 새로고침해요');
+      try { sessionStorage.setItem(RELOAD_KEY, JSON.stringify([...readReloads(now), now])); } catch (e) {}
+      setTimeout(() => location.reload(), 800);
+    }
+  }
+
   setInterval(() => {
-    if (!cfg.enabled) return;
+    if (!cfg.enabled) { wdReset(); if (rtEl || rtTimer) rtHide(); return; }
     const now = Date.now();
-    if (globalThis.__bongAdActive) { for (const v of tracked) { const s = states.get(v); if (s) { s.stallSince = 0; s.lastTime = v.currentTime; } } return; } // 광고 중엔 복구 안 함
+    if (adBlocking()) { if (rtEl || rtTimer) rtHide(); wdReset(); for (const v of tracked) { const s = states.get(v); if (s) { s.stallSince = 0; s.lastTime = v.currentTime; } } return; } // 광고 중엔 복구 안 함
     for (const v of tracked) {
       if (!v.isConnected) { tracked.delete(v); continue; }
       const s = states.get(v);
@@ -123,14 +244,18 @@
       if (!stuck) {
         s.stallSince = 0;
         if (!s.goodSince) s.goodSince = now;
+        if (v.playbackRate > 2 && !v.closest('[data-role="adVideoContainerEl"]')) { try { v.playbackRate = 1; log('광고 배속이 남아 있어 1배속으로 되돌림'); } catch (e) {} }
         if (s.level && now - s.goodSince > 15000) { s.level = 0; log('정상 재생 확인, 단계 초기화'); }
         continue;
       }
       s.goodSince = 0;
       if (!s.stallSince) s.stallSince = now;
-      const backoff = cfg.cooldown * 1000 * Math.pow(1.5, Math.max(0, s.level - 1));
-      if (now - s.stallSince >= cfg.threshold * 1000 && now - s.lastRecover >= backoff) recover(v, s);
+      if (RT && cfg.retryTimer && !rtTimer) rtWatch(v);
+      const wait = RT ? RT.nextRecoverIn(now, s.stallSince, s.lastRecover, s.level, cfg.threshold, cfg.cooldown)
+        : Math.max(cfg.threshold * 1000 - (now - s.stallSince), cfg.cooldown * 1000 * Math.pow(1.5, Math.max(0, s.level - 1)) - (now - s.lastRecover));
+      if (wait <= 0) recover(v, s);
     }
+    watchdogTick(now);
   }, 1000);
 
   // ───── 화질 고정 (치지직 pzp 플레이어, 실제 DOM 확인된 선택자) ─────

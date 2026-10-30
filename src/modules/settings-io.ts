@@ -12,7 +12,7 @@ import {isOtherModuleKey, onlyDcKeys} from "@/storage/namespace";
 export const BONGEXTEND_FILE_TYPE = "bongextend-settings";
 
 export const CHZZK_KEYS = [
-    "enabled", "threshold", "cooldown", "toast", "lockQuality", "targetQuality", "followRefresh", "followInterval",
+    "enabled", "threshold", "cooldown", "toast", "retryTimer", "lockQuality", "targetQuality", "followRefresh", "followInterval",
     "vivid", "hideRanking", "chatFontSize", "viewerChat", "viewerOverlay", "arrowSeek", "seekSeconds", "autoWide", "autoPlay",
     "blurRankNames", "hideTimeGuide", "adSkip", "watchEnabled", "watchList"
 ];

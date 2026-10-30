@@ -37,6 +37,7 @@ select{min-width:76px}
 <label>버퍼링으로 볼 시간(초)<input type="number" id="threshold" min="2" max="60"></label>
 <label>복구 사이 간격(초)<input type="number" id="cooldown" min="3" max="120"></label>
 <label>복구할 때 화면에 알림<input type="checkbox" id="toast"></label>
+<label title="버퍼링이 걸리면 다음 복구까지 남은 시간을 영상 위에 크게 보여 줘요">버퍼링 때 복구 타이머 크게 표시<input type="checkbox" id="retryTimer"></label>
 <div class="c">지금까지 복구 <b id="count">0</b>회 <button id="reset" type="button" title="복구 횟수와 마지막 복구 시각만 지워요. 설정은 그대로예요.">횟수 초기화</button><div id="last"></div></div>
 </section>
 <section class="be-card">

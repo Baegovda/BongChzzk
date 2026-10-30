@@ -12,6 +12,7 @@ export const CHZZK_SCRIPT_FILES = [
     "chzzk/lib/wide.js",
     "chzzk/lib/player.js",
     "chzzk/lib/autoplay.js",
+    "chzzk/lib/retrytimer.js",
     "chzzk/content.js",
     "chzzk/content-following.js",
     "chzzk/content-extras.js",

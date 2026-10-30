@@ -334,7 +334,7 @@
       }
       if (root) {
         clickSkip(hits.filter(h => !h.el.closest('[data-role="countDownEl"], [data-role="adLink"]')));
-        for (const v of adVideos(root)) if (!v.closest(P.AD_CONTAINER_SEL) && !container) boostAdVideo(v);
+        for (const v of adVideos(root)) if (!v.closest(P.AD_CONTAINER_SEL) && !container && !(location.pathname.startsWith('/live/') && !P.isAdDuration(v.duration))) boostAdVideo(v); // 라이브 본방송 영상을 광고로 오인해 16배속·끝으로 이동시키지 않도록
       }
     } else if (adWasActive) {
       console.info('[BongChzzk] 광고 종료');
