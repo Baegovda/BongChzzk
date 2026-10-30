@@ -45,9 +45,11 @@ jobs:
             content-extras.js \
             popup.html \
             popup.js \
+            update.html \
+            update.js \
             README.md \
             CHANGELOG.md \
-            lib \
+            lib/*.js \
             icons
 
       - name: Verify zip contains every file the manifest references
@@ -59,6 +61,12 @@ jobs:
           while read -r f; do
             grep -qx "$f" zip-files.txt || { echo "missing in zip: $f"; exit 1; }
           done < required-files.txt
+          for f in popup.js update.html update.js lib/updates.js lib/zip.js; do
+            grep -qx "$f" zip-files.txt || { echo "missing in zip: $f"; exit 1; }
+          done
+          for f in content*.js; do
+            grep -qx "$f" zip-files.txt || { echo "missing in zip: $f"; exit 1; }
+          done
 
       - name: Extract changelog notes
         run: |

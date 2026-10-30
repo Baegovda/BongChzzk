@@ -37,6 +37,10 @@ test('normalizeFontSize / normalizeSeekSec', () => {
   assert.equal(X.normalizeFontSize(16), 16);
   assert.equal(X.normalizeFontSize(0), 0);
   assert.equal(X.normalizeFontSize(40), 0);
+  assert.equal(X.normalizeFontSize(13), 13);
+  assert.equal(X.normalizeFontSize('27'), 27);
+  assert.equal(X.normalizeFontSize(11), 0);
+  assert.equal(X.normalizeFontSize(29), 0);
   assert.equal(X.normalizeSeekSec('10'), 10);
   assert.equal(X.normalizeSeekSec(7), 5);
 });

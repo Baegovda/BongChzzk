@@ -5,6 +5,15 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-10-30
+
+### Added
+- 딸깍 업데이트: 팝업의 **업데이트 확인** 후 새 버전이 있으면 **지금 업데이트** 버튼이 나타나고, 누르면 업데이트 전용 탭이 열립니다(폴더 선택 창 때문에 팝업이 닫혀도 중단되지 않도록). 그 탭에서 처음 한 번 확장 프로그램 설치 폴더(압축을 푼 BongChzzk 폴더)를 선택하면, 이후에는 클릭 한 번으로 최신 릴리스 zip을 받아 폴더에 덮어쓰고 확장 프로그램을 다시 로드합니다. 모든 파일을 먼저 메모리에 푼 뒤에만 쓰며, 폴더 밖 경로(`..`, 절대 경로)가 든 zip은 거부합니다.
+- 릴리스 zip 다운로드를 위해 `github.com`, `objects.githubusercontent.com`, `release-assets.githubusercontent.com` 호스트 권한을 추가했습니다.
+
+### Changed
+- 채팅 글씨 크기를 슬라이더(12~28px)로 바꿨습니다. 움직이는 즉시 채팅에 적용되고, **기본** 버튼으로 원래 크기로 되돌릴 수 있습니다.
+
 ## [1.3.1] - 2026-10-30
 
 ### Fixed

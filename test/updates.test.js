@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { compareVersions, checkForUpdate, pickReleaseZip } from '../lib/updates.js';
+import { isBongManifest, compareVersions, checkForUpdate, pickReleaseZip } from '../lib/updates.js';
 import { extractChangelog } from '../scripts/extract-changelog.js';
 import { readFileSync } from 'node:fs';
 
@@ -17,11 +17,17 @@ test('headers and new version', async () => {
   assert.equal(headers.Authorization, undefined);
   assert.equal(r.upToDate, false);
   assert.equal(r.zipUrl, 'z');
+  assert.equal(r.assetUrl, 'z');
 });
 test('404 error', async () => {
   await assert.rejects(checkForUpdate('1.1.0', { fetchImpl: async () => ({ ok: false, status: 404 }) }), /HTTP 404/);
 });
 test('manifest version has changelog', () => {
   const v = JSON.parse(readFileSync('manifest.json', 'utf8')).version;
-  assert.match(extractChangelog(readFileSync('CHANGELOG.md', 'utf8'), v), /zip/);
+  assert.match(extractChangelog(readFileSync('CHANGELOG.md', 'utf8'), v), /업데이트/);
+});
+test('isBongManifest', () => {
+  assert.equal(isBongManifest('{"name":"BongChzzk"}'), true);
+  assert.equal(isBongManifest('{"name":"Other"}'), false);
+  assert.equal(isBongManifest('nope'), false);
 });
