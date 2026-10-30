@@ -28,7 +28,7 @@
   function toast(msg) {
     const el = document.createElement('div');
     el.textContent = msg;
-    el.style.cssText = 'position:fixed;left:50%;top:20px;transform:translateX(-50%);z-index:2147483647;background:rgba(0,0,0,.85);color:#00ffa3;padding:10px 16px;border-radius:10px;font:600 14px sans-serif;pointer-events:none';
+    el.style.cssText = 'position:fixed;left:50%;top:20px;transform:translateX(-50%);z-index:2147483647;background:rgba(18,19,23,.92);color:#e8eaf0;border:1px solid #2c3039;border-left:3px solid #3ec5dc;padding:10px 16px;border-radius:8px;font:600 14px "Pretendard","Malgun Gothic",system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.35);pointer-events:none';
     (document.body || document.documentElement).appendChild(el);
   }
 

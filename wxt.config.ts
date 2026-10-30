@@ -3,10 +3,11 @@ import {readdirSync, statSync} from "node:fs";
 import {join, relative, resolve} from "node:path";
 
 // BongExtend: 치지직(옛 BongChzzk)·번역(옛 BongTrans) 모듈은 빌드 없이 쓰는 순수 JS라서
-// src/modules/{chzzk,trans} 파일을 그대로 결과물 chzzk/, trans/ 폴더에 복사한다. (테스트·배경 스크립트 제외)
+// src/modules/{chzzk,trans,theme} 파일을 그대로 결과물 chzzk/, trans/, theme/ 폴더에 복사한다. theme/theme.css = 공통 테마. (테스트·배경 스크립트 제외)
 const MODULE_ROOT = resolve(__dirname, "src/modules");
 const STATIC_MODULES: Record<string, (rel: string) => boolean> = {
     chzzk: (rel) => !rel.startsWith("test/"),
+    theme: () => true,
     trans: (rel) => !rel.startsWith("test/") && rel !== "background.js"
 };
 const listFiles = (dir: string): string[] => readdirSync(dir).flatMap((name) => {

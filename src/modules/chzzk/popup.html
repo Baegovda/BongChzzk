@@ -1,12 +1,42 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
-<style>body{margin:0;font:13px sans-serif;padding:10px;background:#141517;color:#eee}h3{margin:0 0 6px;color:#00ffa3}h4{margin:10px 0 2px;font-size:11px;color:#888;border-bottom:1px solid #2a2a2a;padding-bottom:2px}label{margin:5px 0!important}label{display:flex;justify-content:space-between;align-items:center;margin:8px 0}input[type=number]{width:60px}.c{margin-top:12px;padding-top:8px;border-top:1px solid #333;color:#aaa}button{font-size:11px}.tools{margin-top:10px;display:flex;gap:6px}#updateStatus{color:#aaa;margin:6px 0;word-break:keep-all}#updateStatus.error{color:#ff6b6b}</style>
-</head><body>
-<h3>치지직</h3>
+<link rel="stylesheet" href="/theme/theme.css">
+<style>
+body{padding:14px 16px}
+.head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.head h3{margin:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+.col{display:flex;flex-direction:column;gap:10px}
+.be-card{padding:4px 14px 8px}
+.be-card h4{margin:8px 0 2px}
+label{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:30px;margin:0;color:var(--be-text-2)}
+label+label{border-top:1px solid rgba(255,255,255,.035)}
+input[type=number]{width:64px;text-align:right}
+select{min-width:76px}
+.inline{display:flex;align-items:center;gap:6px}
+.inline b{min-width:28px;text-align:right;color:var(--be-text);font-weight:600}
+.watch-row{display:flex;gap:6px;margin-top:6px}
+.watch-row input{flex:1;min-width:0}
+#watchMsg{color:var(--be-muted);margin:6px 0 0;font-size:12px;min-height:1em}
+#watchListEl{list-style:none;padding:0;margin:4px 0 0;font-size:12px}
+.c{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--be-muted)}
+.c b{color:var(--be-text)}
+#last{flex-basis:100%;font-size:12px}
+#updateStatus{color:var(--be-muted);margin:6px 0;word-break:keep-all}
+#updateStatus.error{color:var(--be-error)}
+</style>
+</head><body class="be-page">
+<div class="head"><h3>치지직</h3></div>
+<div class="grid">
+<div class="col">
+<section class="be-card">
 <h4>버퍼링 복구</h4>
 <label>자동 복구 사용<input type="checkbox" id="enabled"></label>
 <label>버퍼링 판정(초)<input type="number" id="threshold" min="2" max="60"></label>
 <label>복구 간격(초)<input type="number" id="cooldown" min="3" max="120"></label>
 <label>화면 알림 표시<input type="checkbox" id="toast"></label>
+<div class="c">복구 횟수 <b id="count">0</b> <button id="reset">초기화</button><div id="last"></div></div>
+</section>
+<section class="be-card">
 <h4>화면</h4>
 <label>화질 1080p 고정<input type="checkbox" id="lockQuality"></label>
 <label>고정 화질<select id="targetQuality"><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="360">360p</option></select></label>
@@ -16,24 +46,36 @@
 <label>타임머신 안내창 숨김<input type="checkbox" id="hideTimeGuide"></label>
 <label>광고 방지(실험적)<input type="checkbox" id="adSkip"></label>
 <label>플레이어 시청자 수 표시<input type="checkbox" id="viewerOverlay"></label>
+</section>
+<section class="be-card">
 <h4>조작</h4>
 <label>방향키로 5초 이동<input type="checkbox" id="arrowSeek"></label>
 <label>건너뛰기 초<select id="seekSeconds"><option value="5">5초</option><option value="10">10초</option><option value="15">15초</option><option value="30">30초</option></select></label>
+</section>
+</div>
+<div class="col">
+<section class="be-card">
 <h4>채팅</h4>
 <label>채팅 헤더 시청자 수<input type="checkbox" id="viewerChat"></label>
 <label>주간 랭킹 가리기<input type="checkbox" id="hideRanking"></label>
-<label>후원 랭킹 닉네임 가리기 (주간 랭킹 가리기를 끄면 적용)<input type="checkbox" id="blurRankNames"></label>
-<label>채팅 글씨 크기 <span><input type="range" id="chatFontSize" min="12" max="28" step="1" style="width:80px;vertical-align:middle"> <b id="chatFontLabel">기본</b> <button id="chatFontReset" type="button">기본</button></span></label>
+<label>후원 랭킹 닉네임 가리기(주간 랭킹 가리기를 끄면 적용)<input type="checkbox" id="blurRankNames"></label>
+<label>채팅 글씨 크기 <span class="inline"><input type="range" id="chatFontSize" min="12" max="28" step="1" style="width:90px"> <b id="chatFontLabel">기본</b> <button id="chatFontReset" type="button">기본</button></span></label>
+</section>
+<section class="be-card">
 <h4>팔로잉</h4>
 <label>팔로잉 채널 자동 새로고침<input type="checkbox" id="followRefresh"></label>
 <label>새로고침 간격<select id="followInterval"><option value="5">5초</option><option value="10">10초</option><option value="30">30초</option><option value="60">60초</option></select></label>
+</section>
+<section class="be-card">
 <h4>관심 스트리머 자동 이동</h4>
 <label>방송 시작 시 자동 이동<input type="checkbox" id="watchEnabled"></label>
-<div style="display:flex;gap:4px"><input id="watchInput" placeholder="채널 URL 또는 ID" style="flex:1;min-width:0;font-size:11px"><button id="watchAdd" type="button">추가</button></div>
-<div style="display:flex;gap:4px;margin-top:4px"><button id="watchCurrent" type="button">현재 보는 채널 추가</button><button id="watchGoNow" type="button">지금 방송 중이면 이동</button></div>
-<p id="watchMsg" style="color:#aaa;margin:4px 0;font-size:11px"></p>
-<ul id="watchListEl" style="list-style:none;padding:0;margin:0;font-size:12px"></ul>
-<div class="c">복구 횟수: <b id="count">0</b> <button id="reset">초기화</button><div id="last"></div></div>
+<div class="watch-row"><input id="watchInput" placeholder="채널 URL 또는 ID"><button id="watchAdd" type="button" class="primary">추가</button></div>
+<div class="watch-row"><button id="watchCurrent" type="button">현재 보는 채널 추가</button><button id="watchGoNow" type="button">지금 방송 중이면 이동</button></div>
+<p id="watchMsg"></p>
+<ul id="watchListEl"></ul>
+</section>
+</div>
+</div>
 <script src="lib/ns.js"></script>
 <script src="lib/watch.js"></script>
 <script type="module" src="popup.js"></script></body></html>

@@ -16,7 +16,7 @@
     if (!cfg.toast || !document.body) return;
     const el = document.createElement('div');
     el.textContent = msg;
-    el.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:2147483647;background:rgba(0,0,0,.78);color:#00ffa3;padding:8px 12px;border-radius:8px;font:13px sans-serif;pointer-events:none;transition:opacity .4s';
+    el.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:2147483647;background:rgba(18,19,23,.92);color:#e8eaf0;border:1px solid #2c3039;border-left:3px solid #3ec5dc;padding:8px 12px;border-radius:8px;font:13px "Pretendard","Malgun Gothic",system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.35);pointer-events:none;transition:opacity .4s';
     document.body.appendChild(el);
     setTimeout(() => { el.style.opacity = '0'; }, 2200);
     setTimeout(() => el.remove(), 2800);

@@ -33,11 +33,11 @@ const getList = () => new Promise(r => BCStore.sync.get({ watchList: [] }, v => 
 const setList = l => new Promise(r => BCStore.sync.set({ watchList: l }, r));
 function renderList(list) {
   const ul = $('watchListEl'); ul.textContent = '';
-  if (!list.length) { const li = document.createElement('li'); li.style.color = '#777'; li.textContent = '등록된 스트리머 없음'; ul.appendChild(li); }
+  if (!list.length) { const li = document.createElement('li'); li.style.color = 'var(--be-muted)'; li.textContent = '등록된 스트리머 없음'; ul.appendChild(li); }
   for (const w of list) {
-    const li = document.createElement('li'); li.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin:3px 0';
+    const li = document.createElement('li'); li.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--be-border)';
     const s = document.createElement('span'); s.textContent = w.name || w.id.slice(0, 8) + '…'; s.title = w.id;
-    const b = document.createElement('button'); b.type = 'button'; b.textContent = '삭제';
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'danger'; b.textContent = '삭제';
     b.onclick = async () => { const l = (await getList()).filter(x => x.id !== w.id); await setList(l); renderList(l); };
     li.append(s, b); ul.appendChild(li);
   }

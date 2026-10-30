@@ -4,9 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>BongExtend 번역 설정</title>
+    <link rel="stylesheet" href="/theme/theme.css">
     <link rel="stylesheet" href="options.css">
   </head>
-  <body>
+  <body class="be-page">
     <main>
       <header>
         <img src="../icons/icon48.png" width="48" height="48" alt="">
@@ -16,7 +17,7 @@
         </div>
       </header>
 
-      <form id="settings">
+      <form class="be-card" id="settings">
         <label class="field" for="apiKey">
           <span>Gemini API 키</span>
           <input id="apiKey" name="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="AIza...">
@@ -109,12 +110,12 @@
           <p class="hint">기본 보관 기간은 90일입니다. 기간이 지난 항목을 지우고, 용량 한도를 넘으면 마지막 사용이 오래된 항목부터 지웁니다. 삭제 안 함과 제한 없음을 같이 고르면 자동으로 지우지 않습니다.</p>
           <div class="actions">
             <button id="resetCacheStats" type="button">통계 초기화</button>
-            <button id="clearCache" type="button">번역 캐시 지우기</button>
+            <button class="danger" id="clearCache" type="button">번역 캐시 지우기</button>
           </div>
         </fieldset>
 
         <div class="actions">
-          <button id="save" type="submit">저장</button>
+          <button class="primary" id="save" type="submit">저장</button>
           <button id="checkKey" type="button">키 확인</button>
         </div>
         <div class="actions">
@@ -126,7 +127,7 @@
         <p id="status" role="status"></p>
       </form>
 
-      <section class="note">
+      <section class="note be-card">
         <h2>버전</h2>
         <p id="versionLine"></p>
         <div class="actions">
@@ -135,13 +136,13 @@
         </div>
         <p id="updateStatus" role="status"></p>
         <p id="updateLinks" hidden>
-          <button id="doUpdate" type="button" hidden>지금 업데이트</button>
+          <button class="primary" id="doUpdate" type="button" hidden>지금 업데이트</button>
           <button id="openRelease" type="button">릴리스 페이지</button>
           <button id="openZip" type="button">zip 다운로드</button>
         </p>
       </section>
 
-      <section class="note">
+      <section class="note be-card">
         <h2>개인정보</h2>
         <p>번역하는 문장은 사용자의 API 키로 Google Gemini API에 전송됩니다. 이 확장 프로그램의 서버는 없습니다. 키와 번역 캐시는 이 기기의 <code>chrome.storage.local</code>과 IndexedDB에만 있습니다.</p>
         <p>무료 등급에서는 입력한 글이 Google 모델 개선에 쓰일 수 있습니다. 유료 등급의 데이터 사용 여부는 모델마다 다르니 <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">요금 페이지</a>를 확인하세요.</p>

@@ -86,7 +86,7 @@ const handlePointerOut = () => {
 
 <style lang="scss" scoped>
 .refresher-checkbox {
-  background-color: #e0e0e0;
+  background-color: var(--be-surface-3, #e0e0e0);
   border-radius: 25px;
   cursor: pointer;
   display: flex;
@@ -96,7 +96,7 @@ const handlePointerOut = () => {
   width: 38px;
 
   &[data-on="true"] {
-    background-color: #4caf50;
+    background-color: var(--be-accent, #4caf50);
   }
 
   &.disabled {
@@ -132,10 +132,10 @@ const handlePointerOut = () => {
 
 @media (prefers-color-scheme: dark) {
   .refresher-checkbox {
-    background-color: #555;
+    background-color: var(--be-surface-3, #555);
 
     &[data-on="true"] {
-      background-color: #66bb6a;
+      background-color: var(--be-accent, #66bb6a);
     }
 
     .selected {

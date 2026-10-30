@@ -1,4 +1,5 @@
 // BongExtend 팝업: 탭 하나에 모듈 화면 하나. 각 모듈 화면은 옛 확장 팝업을 그대로 iframe으로 띄운다.
+import "@/modules/theme/theme.css";
 import {sendMessage} from "@/http/messaging";
 // @ts-ignore 순수 JS
 import {getModules, setModuleEnabled} from "@/modules/core-modules.js";

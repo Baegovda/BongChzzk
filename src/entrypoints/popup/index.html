@@ -6,16 +6,16 @@
     <title>BongExtend</title>
     <link href="./style.css" rel="stylesheet">
 </head>
-<body>
+<body class="be-page">
 <nav class="tabs" role="tablist">
-    <strong class="brand">BongExtend</strong>
+    <strong class="brand"><img alt="" height="18" src="/icons/32.png" width="18">BongExtend</strong>
     <button data-tab="chzzk" role="tab" type="button">치지직</button>
     <button data-tab="trans" role="tab" type="button">번역</button>
     <button data-tab="dc" role="tab" type="button">디시</button>
     <button data-tab="update" role="tab" type="button">업데이트·설정</button>
 </nav>
 <div class="module-bar" id="moduleBar">
-    <label><input id="moduleSwitch" type="checkbox"> <span id="moduleLabel">모듈 사용</span></label>
+    <label class="module-switch"><input id="moduleSwitch" type="checkbox"> <span id="moduleLabel">모듈 사용</span></label>
     <small id="moduleNote"></small>
 </div>
 <main>
@@ -28,7 +28,7 @@
         <p id="updateStatus" role="status">확인 전</p>
         <div class="row">
             <button id="checkUpdate" type="button">업데이트 확인</button>
-            <button hidden id="doUpdate" type="button">지금 업데이트</button>
+            <button class="primary" hidden id="doUpdate" type="button">지금 업데이트</button>
             <button hidden id="openRelease" type="button">릴리스 페이지</button>
             <button id="manage" type="button">확장 프로그램 관리</button>
         </div>
