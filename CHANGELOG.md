@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2026-10-30
+
+### Fixed
+- 딸깍 업데이트가 "파일 쓰는 중…"에서 멈추고 설치 폴더가 반쯤만 바뀌던 문제를 고쳤습니다. 크롬이 manifest.json 변경을 감지해 확장 프로그램을 다시 로드하면서 업데이트 탭이 닫히던 것이 원인으로 보여, 이제 manifest.json을 맨 마지막에 쓰고, 내용이 같은 파일은 건너뛰며, 최대 6개씩 동시에 써서 시간을 줄였습니다.
+- 업데이트가 중간에 끊기면 받은 파일을 보관해 두었다가, 업데이트 페이지를 다시 열면 **중단된 업데이트가 있습니다. 이어서 완료** 버튼으로 마저 설치합니다.
+- 어떤 오류든 "폴더 선택이 취소되었습니다"로 표시되던 문제를 고쳤습니다. 이제 실제 단계와 오류 내용(예: `쓰기 실패(lib/watch.js): …`)을 보여 줍니다.
+
+### Added
+- 업데이트 페이지와 팝업에 `1.4.0 → 1.5.0`처럼 어떤 버전에서 어떤 버전으로 바뀌는지 표시하고, 파일 쓰기 진행률(예: 7/22)을 보여 줍니다.
+
 ## [1.5.0] - 2026-10-30
 
 ### Added
