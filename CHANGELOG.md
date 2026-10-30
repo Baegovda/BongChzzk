@@ -5,6 +5,12 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.2] - 2026-10-30
+
+### Fixed
+- 후원 랭킹 줄(채팅 제목 아래 가로로 흐르는 후원자 목록)이 숨겨지거나 닉네임이 가려지지 않던 문제를 고쳤습니다. 이제 채팅 제목과 채팅 목록 사이에 있는 줄을 위치와 내용(치즈 아이콘 등)으로도 찾아냅니다.
+- **주간 랭킹 가리기**가 켜져 있으면 줄 전체를 숨기고, 끄면 **후원 랭킹 닉네임 가리기**로 닉네임만 흐리게 가립니다(금액은 그대로 보임). 팝업 문구에 이 관계를 적었습니다.
+
 ## [1.6.1] - 2026-10-30
 
 ### Fixed

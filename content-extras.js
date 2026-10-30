@@ -22,27 +22,40 @@
     let css = '#bongchzzk-vov{position:absolute;top:12px;left:12px;z-index:2147483000;pointer-events:none;background:rgba(0,0,0,.55);color:#fff;font:600 13px/1 sans-serif;padding:5px 9px;border-radius:999px;white-space:nowrap}'
       + '#bongchzzk-vchat{display:inline-block;margin-left:8px;font-size:12px;font-weight:400;color:#9aa0a6;white-space:nowrap;vertical-align:middle;max-width:calc(100% - 60px);overflow:hidden;text-overflow:ellipsis}'
       + '.bongchzzk-seektoast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2147483000;pointer-events:none;background:rgba(0,0,0,.6);color:#fff;font:700 18px sans-serif;padding:8px 14px;border-radius:10px;transition:opacity .3s}';
-    const RANK = '#aside-chatting > div:has(> strong[class*="_ranking_"]), #aside-chatting > div:has(> strong[class*="_title_"][class*="_ranking"]), .bongchzzk-rank';
-    if (cfg.hideRanking) css += RANK.split(', ').join(', ') + '{display:none !important}';
-    else if (cfg.blurRankNames) css += RANK.split(', ').map(x => x + ' [class*="_nickname_"]').join(', ') + '{filter:blur(5px) !important;user-select:none !important}';
+    const RANK = ['#aside-chatting > div:has(> strong[class*="_ranking_"])', '#aside-chatting > div:has(> strong[class*="_title_"][class*="_ranking"])', '#aside-chatting > div:has([class*="_qxsox_"])', '#aside-chatting > div:has(i[class*="icon_cheese"]):not(:has([role="log"]))', '.bongchzzk-rank'];
+    // 숨기기가 우선, 숨기기를 끄면 닉네임만 흐리게
+    if (cfg.hideRanking) css += RANK.join(', ') + '{display:none !important}';
+    else if (cfg.blurRankNames) {
+      const names = ['[class*="_nickname_"]', '[class*="_ellipsis_"]', '[class*="_text_"]', '.bongchzzk-blurname'];
+      css += RANK.flatMap(r => names.map(n => `${r} ${n}`)).join(', ') + '{filter:blur(6px) !important;user-select:none !important}';
+      css += RANK.map(r => `${r} [class*="_money_"], ${r} [class*="_money_"] *`).join(', ') + '{filter:none !important}';
+    }
     if (cfg.hideTimeGuide) css += '.restart_guide, .bongchzzk-guidehide{display:none !important}';
     const fs = X.normalizeFontSize(cfg.chatFontSize);
     if (fs) css += `#aside-chatting [class*="_chatting_message_"], #aside-chatting [class*="_chatting_message_"] > span[class*="_text_"], #aside-chatting [class*="_chatting_message_"] [class*="_nickname_"] *{font-size:${fs}px !important;line-height:1.5 !important}`;
     st.textContent = css;
     
   }
-  // :has 미지원/구조 변경 대비 JS 보조: 첫 strong에 '랭킹'이 들어간 #aside-chatting 직계 div 숨김
+  // 위치/내용 기반 JS 보조: 헤더(0번)와 채팅 목록([role=log]) 사이의 div = 랭킹 줄
   function hideRankingFallback() {
-    if (!cfg.hideRanking && !cfg.blurRankNames) return;
     const aside = document.getElementById('aside-chatting');
     if (!aside) return;
-    [...aside.children].forEach((d, i) => {
-      if (i === 0 || d.tagName !== 'DIV' || d.querySelector('[role="log"], textarea, [contenteditable]')) return;
-      const s = d.querySelector('strong');
-      if (s && s.textContent.includes('랭킹')) d.classList.add('bongchzzk-rank');
-    });
+    const kids = [...aside.children];
+    const rows = X.rankRowIndices(kids.map(d => ({
+      isDiv: d.tagName === 'DIV',
+      hasLog: !!(d.matches('[role="log"]') || d.querySelector('[role="log"]')),
+      hasInput: !!d.querySelector('textarea, [contenteditable="true"], [contenteditable=""]'),
+      signal: !!d.querySelector('[class*="_qxsox_"], i[class*="icon_cheese"], strong[class*="_ranking"]') || /랭킹/.test(d.querySelector('strong')?.textContent || '')
+    })));
+    kids.forEach((d, i) => d.classList.toggle('bongchzzk-rank', rows.includes(i)));
+    // 닉네임 텍스트 표시(금액/제목/숫자는 제외)
+    for (const i of rows) {
+      for (const el of kids[i].querySelectorAll('*')) {
+        if (el.childElementCount || el.closest('[class*="_money_"], strong, button, [class*="blind"]')) continue;
+        el.classList.toggle('bongchzzk-blurname', X.isNameText(el.textContent));
+      }
+    }
   }
-
   // ── 선명한 화면 항상 켜기 ──
   const vividState = { nextAt: 0, lastPath: location.pathname };
   async function ensureVivid() {
@@ -275,11 +288,10 @@
   let lastPath = location.pathname;
   setInterval(() => {
     if (location.pathname !== lastPath) { lastPath = location.pathname; vividState.nextAt = 0; pollViewers(); }
-    hideRankingFallback();
     ensureVivid();
     if (!document.getElementById('bongchzzk-xstyle')) applyStyles();
   }, 3000);
-  setInterval(() => { if (!vBusy) refreshViewerUi(); }, 1000); // 플레이어/채팅 재렌더 시 재부착
+  setInterval(() => { if (!vBusy) refreshViewerUi(); hideRankingFallback(); }, 1000); // 플레이어/채팅 재렌더 시 재부착
   setInterval(() => { // 새 비디오(광고 후 재초기화 포함)마다 선명한 화면 재적용
     const v = mainVideo();
     if (v && !v._bongVivid) { v._bongVivid = 1; ['loadedmetadata', 'playing'].forEach(ev => v.addEventListener(ev, () => { vividState.nextAt = 0; setTimeout(ensureVivid, 1500); })); }

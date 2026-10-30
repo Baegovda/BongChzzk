@@ -24,7 +24,7 @@ test('404 error', async () => {
 });
 test('manifest version has changelog', () => {
   const v = JSON.parse(readFileSync('manifest.json', 'utf8')).version;
-  assert.match(extractChangelog(readFileSync('CHANGELOG.md', 'utf8'), v), /광고 감지/);
+  assert.match(extractChangelog(readFileSync('CHANGELOG.md', 'utf8'), v), /후원 랭킹/);
 });
 test('isBongManifest', () => {
   assert.equal(isBongManifest('{"name":"BongChzzk"}'), true);

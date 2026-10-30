@@ -44,3 +44,19 @@ test('normalizeFontSize / normalizeSeekSec', () => {
   assert.equal(X.normalizeSeekSec('10'), 10);
   assert.equal(X.normalizeSeekSec(7), 5);
 });
+test('isNameText', () => {
+  assert.equal(X.isNameText('SAKURA'), true);
+  assert.equal(X.isNameText('구구구ㅜㅜ'), true);
+  assert.equal(X.isNameText('13,020'), false);
+  assert.equal(X.isNameText(' 13000 '), false);
+  assert.equal(X.isNameText('1등'), false);
+  assert.equal(X.isNameText('주간 후원 랭킹'), false);
+  assert.equal(X.isNameText(''), false);
+});
+test('rankRowIndices', () => {
+  const d = (o = {}) => ({ isDiv: true, hasLog: false, hasInput: false, signal: false, ...o });
+  assert.deepEqual([...X.rankRowIndices([d(), d(), d({ hasLog: true }), d({ hasInput: true })])], [1]);
+  assert.deepEqual([...X.rankRowIndices([d(), d({ hasLog: true }), d({ hasInput: true })])], []);
+  assert.deepEqual([...X.rankRowIndices([d(), d({ signal: true }), d()])], [1]);
+  assert.deepEqual([...X.rankRowIndices([d(), d({ isDiv: false }), d({ hasLog: true })])], []);
+});
