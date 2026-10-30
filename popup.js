@@ -1,9 +1,9 @@
 import { checkForUpdate, openExtensionsPage } from './lib/updates.js';
 
-const DEF = { enabled: true, threshold: 5, cooldown: 10, toast: true };
+const DEF = { enabled: true, threshold: 5, cooldown: 10, toast: true, lockQuality: true, targetQuality: 1080 };
 const $ = id => document.getElementById(id);
 chrome.storage.sync.get(DEF, v => {
-  for (const k in DEF) { const el = $(k); if (el.type === 'checkbox') el.checked = v[k]; else el.value = v[k]; }
+  for (const k in DEF) { const el = $(k); if (el.type === 'checkbox') el.checked = v[k]; else el.value = String(v[k]); }
 });
 for (const k in DEF) $(k).addEventListener('change', e => {
   const el = e.target;

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "BongChzzk",
-  "version": "1.1.1",
-  "description": "치지직 영상이 무한 버퍼링에 빠지면 페이지 새로고침 없이 플레이어만 자동으로 복구합니다.",
+  "version": "1.2.0",
+  "description": "치지직 무한 버퍼링을 페이지 새로고침 없이 자동 복구하고, 화질을 1080p로 고정합니다.",
   "permissions": [
     "storage"
   ],
@@ -16,6 +16,7 @@
         "https://chzzk.naver.com/*"
       ],
       "js": [
+        "lib/quality.js",
         "content.js"
       ],
       "run_at": "document_idle",

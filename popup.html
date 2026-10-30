@@ -6,6 +6,8 @@
 <label>버퍼링 판정(초)<input type="number" id="threshold" min="2" max="60"></label>
 <label>복구 간격(초)<input type="number" id="cooldown" min="3" max="120"></label>
 <label>화면 알림 표시<input type="checkbox" id="toast"></label>
+<label>화질 1080p 고정<input type="checkbox" id="lockQuality"></label>
+<label>고정 화질<select id="targetQuality"><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="360">360p</option></select></label>
 <div class="c">복구 횟수: <b id="count">0</b> <button id="reset">초기화</button><div id="last"></div></div>
 <div class="tools">
   <button id="checkUpdate" type="button">업데이트 확인</button>
