@@ -7,6 +7,11 @@ BongExtend 변경 이력. GitHub **[Releases](https://github.com/Baegovda/BongEx
 
 ---
 
+## [1.0.3] - 2026-10-31
+
+### 수정
+- 치지직 방송 입장 시 나오는 영상 광고를 감지해 음소거·배속·끝으로 이동·SKIP 자동 클릭
+
 ## [1.0.2] - 2026-10-31
 
 ### 추가

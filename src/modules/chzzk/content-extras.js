@@ -248,40 +248,90 @@
     }
     return [];
   }
+  // 네이버 광고 플레이어(data-role) 전용: 광고 컨테이너/영상/SKIP 버튼
+  const commonAncestor = (x, y) => { if (!x) return null; if (!y) return x; let n = x; while (n && !n.contains(y)) n = n.parentElement; return n; };
+  function naverAdRoot(container) {
+    const ctl = document.querySelector('[data-role="adControlEl"]');
+    let r = commonAncestor(container, ctl) || container;
+    // SKIP 버튼이 컨테이너 형제일 수 있으니 플레이어 범위까지 한두 단계 올림
+    for (let i = 0; i < 3 && r.parentElement && r.parentElement !== document.body; i++) { r = r.parentElement; if (r.querySelector('video:not([data-role="videoEl"])')) break; }
+    return r;
+  }
+  function fireClick(el) {
+    const o = { bubbles: true, cancelable: true, composed: true, view: window, button: 0 };
+    try { el.dispatchEvent(new PointerEvent('pointerdown', o)); } catch (e) {}
+    try { el.dispatchEvent(new MouseEvent('mousedown', o)); } catch (e) {}
+    try { el.dispatchEvent(new PointerEvent('pointerup', o)); } catch (e) {}
+    try { el.dispatchEvent(new MouseEvent('mouseup', o)); } catch (e) {}
+    try { el.click(); } catch (e) {}
+  }
+  let lastSkipClick = 0;
+  function clickNaverSkip(r) {
+    if (Date.now() - lastSkipClick < 400) return false;
+    const cands = new Set(r.querySelectorAll('[data-role*="skip" i], .btn_skip, .skip_btn, button, [role="button"]'));
+    for (const el of r.querySelectorAll('*')) if (el.childElementCount <= 3 && /SKIP|건너뛰기/i.test(el.textContent || '')) cands.add(el);
+    for (const el of cands) {
+      if (el.id?.startsWith('bongchzzk') || !visible(el)) continue;
+      const info = { text: el.textContent, inCountdown: !!el.closest('[data-role="countDownEl"], [data-role="skipInfo"]'), inLink: !!el.closest('a[href], [data-role="adLink"]'), dataRole: el.getAttribute('data-role') || '', cls: String(el.className || '') };
+      if (!P.isSkipCandidate(info)) continue;
+      const c = el.closest('button, [role="button"], [tabindex]') || el;
+      if (c.closest('a[href], [data-role="adLink"], [data-role="countDownEl"]')) continue;
+      lastSkipClick = Date.now();
+      fireClick(c);
+      console.info('[BongChzzk] 광고 SKIP 클릭(네이버 광고)', c.outerHTML.slice(0, 200));
+      return true;
+    }
+    return false;
+  }
+  function boostAdVideo(v) {
+    if (!muteSaved.has(v)) muteSaved.set(v, v.muted);
+    v.muted = true;
+    try { if (v.playbackRate !== 16) v.playbackRate = 16; } catch (e) {}
+    const t = P.seekEndTime(v.duration);
+    if (t != null && v.currentTime < t) { try { v.currentTime = t; } catch (e) {} }
+    boosted.add(v);
+  }
   function adTick() {
     clearTimeout(adTimer);
     if (!chrome.runtime?.id) return;
+    const onVideoPage = /^\/(live|video)\//.test(location.pathname);
+    const container = cfg.adSkip ? document.querySelector(P.AD_CONTAINER_SEL) : null;
     const root = cfg.adSkip ? (document.querySelector(ROOT) || document.getElementById('live_player_layout')) : null;
-    let active = false, hits = [];
+    let active = !!container, hits = [];
     if (root) {
       const ui = root.querySelector('.webplayer-internal-core-ad-ui');
       hits = scanTexts(root);
-      active = P.isAdActive({ adUiExists: !!ui, adUiHidden: !!ui && ui.classList.contains('wpc-dis-hid'), indicatorVisible: visible(root.querySelector('.pzp-ad-break-indicator')), textHits: hits.length });
+      active = active || P.isAdActive({ adUiExists: !!ui, adUiHidden: !!ui && ui.classList.contains('wpc-dis-hid'), indicatorVisible: visible(root.querySelector('.pzp-ad-break-indicator')), textHits: hits.length });
     }
-    globalThis.__bongAdActive = active; // 버퍼링 복구가 광고 중엔 개입하지 않도록
+    globalThis.__bongAdActive = active; // 버퍼링 복구·자동 재생이 광고 중엔 개입하지 않도록
     if (active) {
-      const vids = adVideos(root);
-      if (!adWasActive) console.info('[BongChzzk] 광고 감지', { texts: hits.map(h => h.t), videos: [...root.querySelectorAll('video')].map(v => { const r = v.getBoundingClientRect(); return { cls: v.className, duration: v.duration, currentTime: v.currentTime, w: Math.round(r.width), h: Math.round(r.height) }; }) });
-      clickSkip(hits);
-      for (const v of vids) {
-        if (!muteSaved.has(v)) muteSaved.set(v, v.muted);
-        v.muted = true;
-        try { if (v.playbackRate !== 16) v.playbackRate = 16; } catch (e) {}
-        boosted.add(v);
+      if (!adWasActive) console.info('[BongChzzk] 광고 감지', { naver: !!container, texts: hits.map(h => h.t) });
+      if (container) {
+        const r = naverAdRoot(container);
+        for (const v of container.querySelectorAll('video')) boostAdVideo(v);
+        clickNaverSkip(r) || clickNaverSkip(document.body);
+      }
+      if (root) {
+        clickSkip(hits.filter(h => !h.el.closest('[data-role="countDownEl"], [data-role="adLink"]')));
+        for (const v of adVideos(root)) if (!v.closest(P.AD_CONTAINER_SEL) && !container) boostAdVideo(v);
       }
     } else if (adWasActive) {
       console.info('[BongChzzk] 광고 종료');
       for (const v of boosted) {
+        if (!v.isConnected) continue;
         try { v.playbackRate = 1; } catch (e) {}
-        if (muteSaved.has(v)) { v.muted = muteSaved.get(v); muteSaved.delete(v); }
+        if (muteSaved.has(v)) v.muted = muteSaved.get(v);
       }
       boosted.clear();
-      const main = root && root.querySelector('video.webplayer-internal-video');
-      if (main && main.paused) main.play().catch(() => {});
+      const resume = () => { const main = document.querySelector('video.webplayer-internal-video'); if (main && main.paused && !globalThis.__bongAdActive) main.play().catch(() => {}); };
+      resume(); setTimeout(resume, 800); setTimeout(resume, 2500);
+      try { globalThis.__bongAutoplayRetrigger?.(); } catch (e) {}
     }
     adWasActive = active;
-    adTimer = setTimeout(adTick, active ? 250 : 500); // 광고 중엔 카운트다운 → SKIP 전환을 빨리 잡음
+    adTimer = setTimeout(adTick, active ? 150 : (onVideoPage ? 200 : 1000)); // 방송 페이지에선 광고 시작을 빨리 잡음
   }
+  new MutationObserver(() => { if (!adWasActive && cfg.adSkip && document.querySelector(P.AD_CONTAINER_SEL)) adTick(); })
+    .observe(document.documentElement, { childList: true, subtree: true });
   adTick();
 
   // ── 주기 점검 (URL 변경, 재렌더 대비) ──

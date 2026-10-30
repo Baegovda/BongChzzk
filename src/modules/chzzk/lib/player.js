@@ -20,5 +20,21 @@
   const isAdDuration = d => Number.isFinite(d) && d > 0 && d <= 180;
   const isGuideText = t => /치트키|타임\s?머신|되감기|다시보기\s*안내/.test(String(t || ''));
   const isSkipText = t => /건너뛰기|skip|광고\s*닫기/i.test(String(t || ''));
-  root.BongPlayer = { isAdActive, isGuideText, isSkipText, adTextKind, isSafeSkipLabel, isAdDuration };
+  // 네이버 광고 플레이어의 SKIP 버튼 라벨 (뒤에 ▶| 같은 아이콘 문자 허용). 카운트다운('1초 후 SKIP')은 제외
+  function isSkipButtonLabel(t) {
+    const s = String(t || '').replace(/\s+/g, ' ').trim();
+    if (/\d\s*초/.test(s)) return false;
+    return /^SKIP\b[\s\u25B6\u25BA\u23ED\u23E9|>▶►⏭⏩]*$/i.test(s) || /^(광고\s*)?건너뛰기[\s▶►⏭|>]*$/.test(s);
+  }
+  // 요소 자체 정보로 SKIP 클릭 후보 판정. info {text, inCountdown, inLink, dataRole, cls}
+  function isSkipCandidate(info) {
+    if (!info || info.inCountdown || info.inLink) return false;
+    if (/adLink/i.test(info.dataRole || '') || /countDown|skipInfo/i.test(info.dataRole || '')) return false;
+    return isSkipButtonLabel(info.text);
+  }
+  const AD_CONTAINER_SEL = '[data-role="adVideoContainerEl"]';
+  const hasAdContainer = doc => { const el = doc && doc.querySelector && doc.querySelector(AD_CONTAINER_SEL); return !!(el && el.isConnected !== false); };
+  // 끝으로 이동할 시각 (유한한 길이일 때만)
+  const seekEndTime = d => (Number.isFinite(d) && d > 0 ? Math.max(0, d - 0.05) : null);
+  root.BongPlayer = { isSkipButtonLabel, isSkipCandidate, hasAdContainer, seekEndTime, AD_CONTAINER_SEL, isAdActive, isGuideText, isSkipText, adTextKind, isSafeSkipLabel, isAdDuration };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

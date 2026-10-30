@@ -24,7 +24,9 @@
   }
   function tick() {
     clearTimeout(timer);
-    if (!chrome.runtime?.id || Date.now() > deadline) return;
+    if (!chrome.runtime?.id) return;
+    if (globalThis.__bongAdActive) deadline = Math.max(deadline, Date.now() + 15000); // 광고 끝날 때까지 기다림
+    if (Date.now() > deadline) return;
     const v = document.querySelector(VIDEO);
     const st = { enabled, onVideoPage: A.isVideoPage(location.pathname), hasVideo: !!v, userPaused, adActive: !!globalThis.__bongAdActive, done, paused: v && v.paused, ended: v && v.ended };
     if (v && !v.paused && v.currentTime > 0) { done = true; console.debug('[BongChzzk] 자동 재생: 재생 중 확인'); return; }
@@ -46,6 +48,8 @@
     deadline = Date.now() + 15000;
     clearTimeout(timer); timer = setTimeout(tick, 800);
   }
+  // 광고 종료 시 content-extras가 호출: 직접 멈춘 게 아니면 다시 재생 시도
+  globalThis.__bongAutoplayRetrigger = () => { if (userPaused) return; done = false; deadline = Date.now() + 15000; clearTimeout(timer); timer = setTimeout(tick, 300); };
   let last = location.pathname;
   setInterval(() => { if (location.pathname !== last) { last = location.pathname; start(); } }, 1000);
 })();
