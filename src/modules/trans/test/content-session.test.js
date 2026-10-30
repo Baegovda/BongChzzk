@@ -210,8 +210,11 @@ test('the page shows an error toast only, not a success banner', async () => {
 
   host.shadow.children[1].children[1].onclick();
   assert.equal(host.hidden, true);
+  // :host { all: initial } 이 [hidden]을 무시하므로 인라인 display로 확실히 숨긴다
+  assert.equal(host.style.display, 'none');
   session.setShowOriginal(true);
   assert.equal(host.hidden, true);
+  assert.equal(host.style.display, 'none');
   assert.equal(visible.classList.contains('pt-page-translator-pending'), false);
 });
 

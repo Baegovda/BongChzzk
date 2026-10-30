@@ -51,7 +51,7 @@ describe("checkLatestRelease", () => {
                     json: async () => ({
                         tag_name: "v5.2.21",
                         html_url: "https://github.com/Baegovda/BongExtend/releases/tag/5.2.21",
-                        assets: [{name: "bongextend-5.2.21-chrome.zip", browser_download_url: "https://example.invalid/chrome.zip"}]
+                        assets: [{name: "bongextend-5.2.21-chrome.zip", browser_download_url: "https://example.invalid/chrome.zip", size: 7340032}]
                     })
                 };
             }
@@ -62,6 +62,7 @@ describe("checkLatestRelease", () => {
         expect(result.upToDate).toBe(false);
         expect(result.latest).toBe("5.2.21");
         expect(result.assetUrl).toBe("https://example.invalid/chrome.zip");
+        expect(result.assetSize).toBe(7340032);
         expect(result.message).toBe("5.2.20 → 5.2.21 업데이트 가능");
     });
 

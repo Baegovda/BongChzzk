@@ -3,6 +3,7 @@ import {canApplyVersion, checkLatestRelease, isBongExtendManifest, type LatestRe
 import {installSession, pendingDecision, versionLine, type WriteProgress} from "@/core/update/installPlan";
 import {fileKey, type PendingUpdate, type ZipFile} from "@/core/update/types";
 import {extractAll} from "@/core/update/zip";
+import {computeProgress, createMonotonic, pickTotalBytes, readAllWithProgress, type ProgressStage} from "@/core/update/progress";
 
 const $ = (id: string) => document.getElementById(id);
 const statusEl = $("status");
@@ -13,6 +14,31 @@ const resumeButton = $("resume") as HTMLButtonElement | null;
 
 const setStatus = (text: string) => {
     if (statusEl) statusEl.textContent = text;
+};
+
+const progressWrap = $("progress");
+const progressBar = $("progressBar");
+const progressText = $("progressText");
+let monotonic = createMonotonic();
+
+const showProgress = (stage: ProgressStage, done = 0, total: number | null = null) => {
+    const view = computeProgress(stage, done, total);
+    const percent = monotonic(view.percent);
+    if (progressWrap) {
+        progressWrap.hidden = false;
+        progressWrap.classList.toggle("indeterminate", percent === null);
+        if (percent === null) progressWrap.removeAttribute("aria-valuenow");
+        else progressWrap.setAttribute("aria-valuenow", String(Math.round(percent)));
+    }
+    if (progressBar) progressBar.style.width = percent === null ? "" : `${percent}%`;
+    if (progressText) progressText.textContent = percent === null ? "" : `전체 ${Math.floor(percent)}%`;
+    setStatus(view.label);
+};
+
+const resetProgress = () => {
+    monotonic = createMonotonic();
+    if (progressWrap) progressWrap.hidden = true;
+    if (progressBar) progressBar.style.width = "0%";
 };
 
 const setError = (text: string) => {
@@ -164,7 +190,8 @@ if (import.meta.env.FIREFOX) {
     };
 
     const reportProgress = (progress: WriteProgress) => {
-        setStatus(`파일 쓰는 중… ${progress.done}/${progress.total} (변경 없는 ${progress.skipped}개 건너뜀)`);
+        showProgress("write", progress.done, progress.total);
+        if (progress.skipped) setStatus(`${statusEl?.textContent ?? ""} · 변경 없는 ${progress.skipped}개 건너뜀`);
     };
 
     const manifestVersionOf = (files: ZipFile[]): string => {
@@ -190,6 +217,7 @@ if (import.meta.env.FIREFOX) {
         });
         if (result.aborted) return;
 
+        showProgress("done");
         setStatus(`${versionLine(running, to)} 업데이트 완료, 다시 로드합니다`);
         setTimeout(() => browser.runtime.reload(), 800);
     };
@@ -240,6 +268,7 @@ if (import.meta.env.FIREFOX) {
 
     const showFail = (error: unknown) => {
         const cancel = error instanceof Error && error.name === "AbortError";
+        if (progressWrap) progressWrap.classList.remove("indeterminate");
         setStatus(cancel ? "폴더 선택이 취소되었습니다." : "업데이트하지 못했습니다.");
         if (!cancel) {
             setError(error instanceof Error ? error.message : String(error));
@@ -253,17 +282,24 @@ if (import.meta.env.FIREFOX) {
 
         try {
             const dir = await getInstallDir(true);
-            setStatus("새 버전 다운로드 중…");
+            resetProgress();
+            showProgress("download", 0, release.assetSize);
             let bytes: ArrayBuffer;
             try {
                 const response = await fetch(release.assetUrl);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                bytes = await response.arrayBuffer();
+                const total = pickTotalBytes(response.headers.get("content-length"), release.assetSize);
+                if (response.body) {
+                    bytes = await readAllWithProgress(response.body.getReader(), (received) => showProgress("download", received, total));
+                } else {
+                    bytes = await response.arrayBuffer();
+                }
+                showProgress("download", bytes.byteLength, total ?? bytes.byteLength);
             } catch (error) {
                 throw new StepError("다운로드 실패", error);
             }
 
-            setStatus("압축 해제 중…");
+            showProgress("unzip");
             let files: ZipFile[];
             try {
                 files = await extractAll(bytes);
@@ -301,6 +337,8 @@ if (import.meta.env.FIREFOX) {
             }
 
             const dir = await getInstallDir(true);
+            resetProgress();
+            showProgress("unzip");
             await installFiles(dir, pending.files, pending.version);
         } catch (error) {
             showFail(error);

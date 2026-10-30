@@ -10,6 +10,7 @@ export type UpdateBrowserName = "chrome" | "firefox";
 export type ReleaseZipAsset = {
     name?: string;
     browser_download_url?: string;
+    size?: number;
 };
 
 export type LatestRelease = {
@@ -19,6 +20,7 @@ export type LatestRelease = {
     htmlUrl: string;
     zipUrl: string;
     assetUrl: string | null;
+    assetSize: number | null;
     message: string;
     releaseNotes: string;
 };
@@ -97,6 +99,7 @@ export const checkLatestRelease = async (
         htmlUrl,
         zipUrl: assetUrl || htmlUrl,
         assetUrl,
+        assetSize: typeof zip?.size === "number" && zip.size > 0 ? zip.size : null,
         message: describeUpdate(currentVersion, latest || null),
         releaseNotes: typeof body?.body === "string" ? body.body : ""
     };

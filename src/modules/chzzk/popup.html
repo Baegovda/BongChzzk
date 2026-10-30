@@ -10,6 +10,9 @@ body{padding:14px 16px}
 .be-card h4{margin:8px 0 2px}
 label{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:30px;margin:0;color:var(--be-text-2)}
 label+label{border-top:1px solid rgba(255,255,255,.035)}
+label.is-disabled{opacity:.45}
+label.sub{padding-left:14px;border-top:0;font-size:.95em}
+.hint{margin:0 0 6px;color:var(--be-muted);font-size:11px;line-height:1.5;word-break:keep-all}
 input[type=number]{width:64px;text-align:right}
 select{min-width:76px}
 .inline{display:flex;align-items:center;gap:6px}
@@ -49,8 +52,8 @@ select{min-width:76px}
 </section>
 <section class="be-card">
 <h4>조작</h4>
-<label>방향키로 5초 이동<input type="checkbox" id="arrowSeek"></label>
-<label>건너뛰기 초<select id="seekSeconds"><option value="5">5초</option><option value="10">10초</option><option value="15">15초</option><option value="30">30초</option></select></label>
+<label>방향키로 영상 이동 (← →)<input type="checkbox" id="arrowSeek"></label>
+<label class="sub">이동 간격<select id="seekSeconds"><option value="5">5초</option><option value="10">10초</option><option value="15">15초</option><option value="30">30초</option></select></label>
 </section>
 </div>
 <div class="col">
@@ -58,7 +61,8 @@ select{min-width:76px}
 <h4>채팅</h4>
 <label>채팅 헤더 시청자 수<input type="checkbox" id="viewerChat"></label>
 <label>주간 랭킹 가리기<input type="checkbox" id="hideRanking"></label>
-<label>후원 랭킹 닉네임 가리기(주간 랭킹 가리기를 끄면 적용)<input type="checkbox" id="blurRankNames"></label>
+<label>후원 랭킹 닉네임 가리기<input type="checkbox" id="blurRankNames"></label>
+<p class="hint" id="blurRankHint" hidden>주간 랭킹을 가리는 중이라 적용되지 않아요. 주간 랭킹 가리기를 끄면 사용할 수 있어요.</p>
 <label>채팅 글씨 크기 <span class="inline"><input type="range" id="chatFontSize" min="12" max="28" step="1" style="width:90px"> <b id="chatFontLabel">기본</b> <button id="chatFontReset" type="button">기본</button></span></label>
 </section>
 <section class="be-card">

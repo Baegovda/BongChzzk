@@ -23,9 +23,9 @@
       + '#bongchzzk-vchat{display:inline-block;margin-left:8px;font-size:12px;font-weight:400;color:#9aa0a6;white-space:nowrap;vertical-align:middle;max-width:calc(100% - 60px);overflow:hidden;text-overflow:ellipsis}'
       + '.bongchzzk-seektoast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2147483000;pointer-events:none;background:rgba(0,0,0,.6);color:#fff;font:700 18px sans-serif;padding:8px 14px;border-radius:10px;transition:opacity .3s}';
     const RANK = ['#aside-chatting > div:has(> strong[class*="_ranking_"])', '#aside-chatting > div:has(> strong[class*="_title_"][class*="_ranking"])', '#aside-chatting > div:has([class*="_qxsox_"])', '#aside-chatting > div:has(i[class*="icon_cheese"]):not(:has([role="log"]))', '.bongchzzk-rank'];
-    // 숨기기가 우선, 숨기기를 끄면 닉네임만 흐리게
+    // 줄 숨기기와 닉네임 흐림은 각자 스위치대로. 줄이 숨겨지면 흐림은 보이지 않을 뿐.
     if (cfg.hideRanking) css += RANK.join(', ') + '{display:none !important}';
-    else if (cfg.blurRankNames) {
+    if (cfg.blurRankNames) {
       const names = ['[class*="_nickname_"]', '[class*="_ellipsis_"]', '[class*="_text_"]', '.bongchzzk-blurname'];
       css += RANK.flatMap(r => names.map(n => `${r} ${n}`)).join(', ') + '{filter:blur(6px) !important;user-select:none !important}';
       css += RANK.map(r => `${r} [class*="_money_"], ${r} [class*="_money_"] *`).join(', ') + '{filter:none !important}';

@@ -331,6 +331,7 @@
       button.addEventListener('click', () => {
         dismissedError = message.textContent || dismissedError;
         host.hidden = true;
+        host.style.display = 'none';
       });
       box.append(message, button);
       shadow.append(style, box);
@@ -343,13 +344,14 @@
       if (!enableBanner) return;
       const text = status.error || '';
       if (!text || text === dismissedError) {
-        if (bannerHost) bannerHost.hidden = true;
+        if (bannerHost) { bannerHost.hidden = true; bannerHost.style.display = 'none'; }
         return;
       }
       ensureBanner();
       if (!bannerHost) return;
       bannerMessage.textContent = text;
       bannerHost.hidden = false;
+      bannerHost.style.display = '';
     }
 
     function ensureMotionStyle() {

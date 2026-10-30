@@ -1,7 +1,7 @@
 {
     "displayName": "BongExtend",
     "name": "bongextend",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "description": "치지직·디시인사이드 개선과 Gemini 페이지 번역을 하나로 합친 크롬 확장 프로그램",
     "homepage": "https://github.com/Baegovda/BongExtend",
     "repository": {

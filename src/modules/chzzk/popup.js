@@ -4,7 +4,24 @@ const $ = id => document.getElementById(id);
 BCStore.sync.get(DEF, v => {
   for (const k in DEF) { const el = $(k); if (el.type === 'checkbox') el.checked = v[k]; else el.value = String(v[k]); }
   showFont(Number(v.chatFontSize) || 0);
+  syncBlurRank();
+  syncSeek();
 });
+// 방향키 이동이 꺼져 있으면 이동 간격은 잠금
+function syncSeek() {
+  const off = !$('arrowSeek').checked;
+  $('seekSeconds').disabled = off;
+  $('seekSeconds').closest('label').classList.toggle('is-disabled', off);
+}
+$('arrowSeek').addEventListener('change', syncSeek);
+// 주간 랭킹 줄을 숨기는 중이면 닉네임 흐림 스위치는 의미가 없으므로 잠그고 안내
+function syncBlurRank() {
+  const off = $('hideRanking').checked;
+  $('blurRankNames').disabled = off;
+  $('blurRankNames').closest('label').classList.toggle('is-disabled', off);
+  $('blurRankHint').hidden = !off;
+}
+$('hideRanking').addEventListener('change', syncBlurRank);
 // 채팅 글씨 크기 슬라이더: 움직이는 즉시 저장(라이브 미리보기), '기본'은 0(주입 안 함)
 function showFont(n) {
   $('chatFontLabel').textContent = n >= 12 && n <= 28 ? n + 'px' : '기본';
