@@ -30,3 +30,8 @@ iframe.active { display: block; }
 .be-notes p { margin: 2px 0 0; max-height: 84px; overflow: auto; white-space: pre-wrap; word-break: break-word; font-size: 12px; color: var(--be-text-2); }
 .be-links { display: flex; gap: 12px; }
 #lastChecked { color: var(--be-text-2); }
+/* 탭 순서 바꾸기 */
+.tabs.order-pending button[data-tab] { visibility: hidden; }
+.be-page .tabs button[data-tab] { cursor: grab; user-select: none; touch-action: none; }
+.tabs.reordering, .tabs.reordering button { cursor: grabbing !important; }
+.be-page .tabs button.dragging { z-index: 2; opacity: .95; color: var(--be-text); background: var(--be-surface-2); border-radius: var(--be-radius-sm); box-shadow: 0 6px 16px rgba(0,0,0,.45), inset 0 0 0 1px var(--be-accent); }

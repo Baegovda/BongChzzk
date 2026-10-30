@@ -4,6 +4,7 @@ import {sendMessage} from "@/http/messaging";
 import {isNewerVersion} from "@/core/update/availability";
 // @ts-ignore 순수 JS
 import {getModules, setModuleEnabled} from "@/modules/core-modules.js";
+import {moveItem, normalizeTabOrder} from "@/core/popup/tabOrder";
 import {exportAllSettings, importSettingsText} from "@/modules/settings-io";
 
 type TabId = "chzzk" | "trans" | "dc" | "update";
@@ -15,6 +16,9 @@ const FRAMES: Record<Exclude<TabId, "update">, string> = {
 };
 const NAMES: Record<Exclude<TabId, "update">, string> = {chzzk: "치지직", trans: "번역", dc: "디시"};
 const TAB_KEY = "core.popupTab";
+// 탭 순서. core.* 이라 전체 백업·복원에 포함되고, 디시 초기화(refresher:*)와는 무관.
+const ORDER_KEY = "core.popupTabOrder";
+const DEFAULT_ORDER: TabId[] = ["chzzk", "trans", "dc", "update"];
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 const moduleBar = $("moduleBar");
@@ -48,9 +52,83 @@ const showTab = async (tab: TabId) => {
     void chrome.storage.local.set({[TAB_KEY]: tab});
 };
 
-document.querySelectorAll<HTMLButtonElement>(".tabs button").forEach((b) => {
-    b.addEventListener("click", () => void showTab(b.dataset.tab as TabId));
+// ===== 탭 끌어서 순서 바꾸기 (포인터 이벤트, 의존성 없음) =====
+const tabsNav = document.querySelector<HTMLElement>(".tabs")!;
+const tabButtons = () => [...tabsNav.querySelectorAll<HTMLButtonElement>("button[data-tab]")];
+const currentOrder = () => tabButtons().map((b) => b.dataset.tab as TabId);
+const applyOrder = (order: TabId[]) => {
+    for (const id of order) {
+        const b = tabsNav.querySelector(`button[data-tab="${id}"]`);
+        if (b) tabsNav.appendChild(b);
+    }
+};
+const saveOrder = () => void chrome.storage.local.set({[ORDER_KEY]: currentOrder()});
+
+let suppressClick = false;
+tabButtons().forEach((b) => {
+    b.addEventListener("click", (e) => {
+        if (suppressClick) { e.preventDefault(); e.stopImmediatePropagation(); suppressClick = false; return; }
+        void showTab(b.dataset.tab as TabId);
+    });
+    b.addEventListener("keydown", (e) => {
+        if (!e.altKey || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
+        e.preventDefault();
+        const order = currentOrder();
+        const from = order.indexOf(b.dataset.tab as TabId);
+        applyOrder(moveItem(order, from, from + (e.key === "ArrowLeft" ? -1 : 1)));
+        b.focus();
+        saveOrder();
+    });
+    b.addEventListener("pointerdown", (e) => {
+        if (e.button !== 0) return;
+        const startX = e.clientX;
+        let dragging = false;
+        const onMove = (ev: PointerEvent) => {
+            const dx = ev.clientX - startX;
+            if (!dragging) {
+                if (Math.abs(dx) < 5) return;
+                dragging = true;
+                b.setPointerCapture(ev.pointerId);
+                b.classList.add("dragging");
+                tabsNav.classList.add("reordering");
+            }
+            // 위치가 바뀌면 끌던 탭이 손가락을 따라오도록 transform 기준점을 다시 잡는다.
+            b.style.transform = "";
+            const others = tabButtons().filter((x) => x !== b);
+            const before = others.find((x) => { const r = x.getBoundingClientRect(); return ev.clientX < r.left + r.width / 2; });
+            const prevLeft = b.getBoundingClientRect().left;
+            const first = new Map(others.map((x) => [x, x.getBoundingClientRect().left]));
+            if (before) { if (b.nextElementSibling !== before) tabsNav.insertBefore(b, before); }
+            else if (tabsNav.lastElementChild !== b) tabsNav.appendChild(b);
+            // 이웃 탭이 부드럽게 밀려나는 애니메이션 (FLIP)
+            for (const [x, left] of first) {
+                const d = left - x.getBoundingClientRect().left;
+                if (d) x.animate([{transform: `translateX(${d}px)`}, {transform: "none"}], {duration: 150, easing: "ease-out"});
+            }
+            const shift = b.getBoundingClientRect().left - prevLeft;
+            (b as any)._base = ((b as any)._base ?? startX) + shift;
+            b.style.transform = `translateX(${ev.clientX - (b as any)._base}px)`;
+        };
+        const onUp = () => {
+            b.removeEventListener("pointermove", onMove);
+            b.removeEventListener("pointerup", onUp);
+            b.removeEventListener("pointercancel", onUp);
+            delete (b as any)._base;
+            if (!dragging) return;
+            b.classList.remove("dragging");
+            tabsNav.classList.remove("reordering");
+            b.style.transform = "";
+            suppressClick = true;
+            setTimeout(() => { suppressClick = false; }, 0);
+            saveOrder();
+        };
+        b.addEventListener("pointermove", onMove);
+        b.addEventListener("pointerup", onUp);
+        b.addEventListener("pointercancel", onUp);
+    });
 });
+// 로고 더블클릭 = 기본 순서로 되돌리기
+document.querySelector(".brand")?.addEventListener("dblclick", () => { applyOrder(DEFAULT_ORDER); saveOrder(); });
 
 moduleSwitch.addEventListener("change", async () => {
     if (current === "update") return;
@@ -178,7 +256,9 @@ $("importPaste").addEventListener("click", async () => {
     if (text) await runImport(text);
 });
 
-chrome.storage.local.get(TAB_KEY).then((v) => {
+chrome.storage.local.get([TAB_KEY, ORDER_KEY]).then((v) => {
+    applyOrder(normalizeTabOrder(v[ORDER_KEY], DEFAULT_ORDER));
+    tabsNav.classList.remove("order-pending");
     const saved = v[TAB_KEY] as TabId | undefined;
     void showTab(saved && ["chzzk", "trans", "dc", "update"].includes(saved) ? saved : "chzzk");
 });
