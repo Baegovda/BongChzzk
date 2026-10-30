@@ -5,6 +5,14 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2026-10-30
+
+### Fixed
+- 광고 감지 강화: 플레이어 안의 "AD 1/1", "N 초 후 SKIP", "SKIP/건너뛰기", "광고 페이지 보기" 문구로도 광고를 감지합니다. 카운트다운이 끝나 SKIP이 되면 바로 누르고(광고 페이지로 이동하는 버튼은 누르지 않음), 광고 영상(길이 3분 이하이거나 라이브가 작은 화면으로 줄었을 때 가장 큰 영상)을 음소거·16배속으로 넘깁니다. 광고가 끝나면 원래 음소거 상태와 재생 속도로 되돌립니다. 라이브 영상은 건너뛰지 않습니다.
+- 광고 화면을 투명하게 가리던 처리를 없앴습니다(SKIP 버튼이 가려지지 않도록).
+- 광고 감지/SKIP 클릭/종료를 콘솔에 `console.info`로 남깁니다.
+- 확장 프로그램을 다시 로드한 뒤 이전 탭에서 "Extension context invalidated" 오류가 반복되던 문제를 고쳤습니다. 이전 스크립트는 조용히 멈춥니다.
+
 ## [1.6.0] - 2026-10-30
 
 ### Fixed

@@ -21,7 +21,6 @@
     if (!st) { st = document.createElement('style'); st.id = 'bongchzzk-xstyle'; (document.head || document.documentElement).appendChild(st); }
     let css = '#bongchzzk-vov{position:absolute;top:12px;left:12px;z-index:2147483000;pointer-events:none;background:rgba(0,0,0,.55);color:#fff;font:600 13px/1 sans-serif;padding:5px 9px;border-radius:999px;white-space:nowrap}'
       + '#bongchzzk-vchat{display:inline-block;margin-left:8px;font-size:12px;font-weight:400;color:#9aa0a6;white-space:nowrap;vertical-align:middle;max-width:calc(100% - 60px);overflow:hidden;text-overflow:ellipsis}'
-      + 'html.bongchzzk-ad .webplayer-internal-core-ad-ui, html.bongchzzk-ad .pzp-ad-break-indicator, html.bongchzzk-ad .pzp-ad-click-through-button, html.bongchzzk-ad .advertisement_guide{opacity:0 !important}'
       + '.bongchzzk-seektoast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2147483000;pointer-events:none;background:rgba(0,0,0,.6);color:#fff;font:700 18px sans-serif;padding:8px 14px;border-radius:10px;transition:opacity .3s}';
     const RANK = '#aside-chatting > div:has(> strong[class*="_ranking_"]), #aside-chatting > div:has(> strong[class*="_title_"][class*="_ranking"]), .bongchzzk-rank';
     if (cfg.hideRanking) css += RANK.split(', ').join(', ') + '{display:none !important}';
@@ -195,34 +194,82 @@
     guideObs.observe(root, { childList: true, subtree: true });
   }, 1000);
 
-  // ── 광고 방지 (best effort, 실제 광고로 검증 안 됨) ──
-  let adWasActive = false;
-  const visible = el => !!el && el.offsetParent !== null && el.getBoundingClientRect().width > 0;
-  setInterval(() => {
-    if (!cfg.adSkip) return;
-    const root = document.querySelector(ROOT);
-    if (!root) return;
-    const ui = root.querySelector('.webplayer-internal-core-ad-ui');
-    const active = P.isAdActive({ adUiExists: !!ui, adUiHidden: !!ui && ui.classList.contains('wpc-dis-hid'), indicatorVisible: visible(root.querySelector('.pzp-ad-break-indicator')) });
+  // ── 광고 방지 (best effort): 클래스 + 화면 텍스트(AD 1/1, N 초 후 SKIP, SKIP, 광고 페이지 보기)로 감지 ──
+  let adWasActive = false, adTimer = 0;
+  const muteSaved = new WeakMap(); // 광고 영상의 원래 음소거 상태
+  const boosted = new Set();
+  const visible = el => {
+    if (!el || !el.isConnected) return false;
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0 && getComputedStyle(el).display !== 'none' && getComputedStyle(el).visibility !== 'hidden';
+  };
+  const ownText = el => { let t = ''; for (const n of el.childNodes) if (n.nodeType === 3) t += n.nodeValue; return t.trim(); };
+  function scanTexts(root) {
+    const hits = [];
+    for (const el of root.querySelectorAll('*')) {
+      if (el.id?.startsWith('bongchzzk') || el.tagName === 'VIDEO' || el.tagName === 'svg') continue;
+      const t = (el.childElementCount === 0 ? el.textContent : ownText(el)).trim();
+      if (t && t.length < 40 && P.adTextKind(t) && visible(el)) hits.push({ el, t, kind: P.adTextKind(t) });
+    }
+    return hits;
+  }
+  function clickSkip(hits) {
+    for (const h of hits) {
+      if (h.kind !== 'skip') continue;
+      const c = h.el.closest('button, [role="button"], a, [tabindex]') || h.el;
+      if (c.closest('a[href]') || c.closest('.pzp-ad-click-through-button')) continue; // 광고 페이지로 이동하는 요소는 누르지 않음
+      if (!P.isSafeSkipLabel(ownText(c) || c.textContent || h.t)) continue;
+      c.click();
+      console.info('[BongChzzk] 광고 SKIP 클릭', h.t);
+      return true;
+    }
+    return false;
+  }
+  function adVideos(root) {
+    const vs = [...root.querySelectorAll('video')].filter(visible).map(v => { const r = v.getBoundingClientRect(); return { v, area: r.width * r.height, w: r.width, h: r.height }; });
+    const shortOnes = vs.filter(x => P.isAdDuration(x.v.duration));
+    if (shortOnes.length) return shortOnes.map(x => x.v);
+    if (vs.length >= 2) { // 라이브가 작은 PIP로 줄어든 경우: 가장 큰 영상을 광고로 봄
+      vs.sort((x, y) => y.area - x.area);
+      if (vs[vs.length - 1].area < vs[0].area * 0.25) return [vs[0].v];
+    }
+    return [];
+  }
+  function adTick() {
+    clearTimeout(adTimer);
+    if (!chrome.runtime?.id) return;
+    const root = cfg.adSkip ? (document.querySelector(ROOT) || document.getElementById('live_player_layout')) : null;
+    let active = false, hits = [];
+    if (root) {
+      const ui = root.querySelector('.webplayer-internal-core-ad-ui');
+      hits = scanTexts(root);
+      active = P.isAdActive({ adUiExists: !!ui, adUiHidden: !!ui && ui.classList.contains('wpc-dis-hid'), indicatorVisible: visible(root.querySelector('.pzp-ad-break-indicator')), textHits: hits.length });
+    }
     globalThis.__bongAdActive = active; // 버퍼링 복구가 광고 중엔 개입하지 않도록
-    document.documentElement.classList.toggle('bongchzzk-ad', active);
     if (active) {
-      if (!adWasActive) console.debug('[BongChzzk] 광고 감지', { ui: !!ui, videos: root.querySelectorAll('video').length });
-      for (const b of root.querySelectorAll('button, [role="button"]')) if (visible(b) && P.isSkipText(b.textContent || b.getAttribute('aria-label'))) { b.click(); break; }
-      for (const v of root.querySelectorAll('video')) {
-        if (v.classList.contains('webplayer-internal-video')) continue;
-        if (Number.isFinite(v.duration) && v.duration > 0) {
-          v.muted = true;
-          try { v.playbackRate = 16; } catch (e) {}
-          if (v.currentTime < v.duration - 0.1) v.currentTime = v.duration - 0.05;
-        }
+      const vids = adVideos(root);
+      if (!adWasActive) console.info('[BongChzzk] 광고 감지', { texts: hits.map(h => h.t), videos: [...root.querySelectorAll('video')].map(v => { const r = v.getBoundingClientRect(); return { cls: v.className, duration: v.duration, currentTime: v.currentTime, w: Math.round(r.width), h: Math.round(r.height) }; }) });
+      clickSkip(hits);
+      for (const v of vids) {
+        if (!muteSaved.has(v)) muteSaved.set(v, v.muted);
+        v.muted = true;
+        try { if (v.playbackRate !== 16) v.playbackRate = 16; } catch (e) {}
+        boosted.add(v);
       }
     } else if (adWasActive) {
-      const main = root.querySelector('video.webplayer-internal-video');
+      console.info('[BongChzzk] 광고 종료');
+      for (const v of boosted) {
+        try { v.playbackRate = 1; } catch (e) {}
+        if (muteSaved.has(v)) { v.muted = muteSaved.get(v); muteSaved.delete(v); }
+      }
+      boosted.clear();
+      const main = root && root.querySelector('video.webplayer-internal-video');
       if (main && main.paused) main.play().catch(() => {});
     }
     adWasActive = active;
-  }, 500);
+    adTimer = setTimeout(adTick, active ? 250 : 500); // 광고 중엔 카운트다운 → SKIP 전환을 빨리 잡음
+  }
+  adTick();
 
   // ── 주기 점검 (URL 변경, 재렌더 대비) ──
   let lastPath = location.pathname;

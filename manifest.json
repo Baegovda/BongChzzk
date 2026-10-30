@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "BongChzzk",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "치지직 무한 버퍼링 자동 복구, 화질·선명한 화면 고정, 시청자 수 표시, 팔로잉 자동 새로고침, 방향키 이동 등을 제공합니다.",
   "permissions": [
     "storage"
@@ -20,6 +20,7 @@
         "https://chzzk.naver.com/*"
       ],
       "js": [
+        "lib/guard.js",
         "lib/quality.js",
         "lib/following.js",
         "lib/extras.js",

@@ -35,3 +35,22 @@ test('formatCount / changeDirection / eyeColor', () => {
   assert.equal(X.eyeColor('/live/abc'), '#ff4d4f');
   assert.equal(X.eyeColor('/video/123'), '#8a8f98');
 });
+test('adTextKind / isSafeSkipLabel / isAdDuration', () => {
+  assert.equal(P.adTextKind('AD 1/1'), 'counter');
+  assert.equal(P.adTextKind('ad 2 / 3'), 'counter');
+  assert.equal(P.adTextKind('1 초 후 SKIP'), 'countdown');
+  assert.equal(P.adTextKind('5초 후 skip'), 'countdown');
+  assert.equal(P.adTextKind('SKIP'), 'skip');
+  assert.equal(P.adTextKind('건너뛰기'), 'skip');
+  assert.equal(P.adTextKind('광고 페이지 보기'), 'clickthrough');
+  assert.equal(P.adTextKind('00:04 / 00:15'), null);
+  assert.equal(P.adTextKind('실시간'), null);
+  assert.equal(P.isSafeSkipLabel(' SKIP '), true);
+  assert.equal(P.isSafeSkipLabel('1 초 후 SKIP'), false);
+  assert.equal(P.isSafeSkipLabel('광고 페이지 보기'), false);
+  assert.equal(P.isAdDuration(15), true);
+  assert.equal(P.isAdDuration(Infinity), false);
+  assert.equal(P.isAdDuration(600), false);
+  assert.equal(P.isAdDuration(NaN), false);
+  assert.equal(P.isAdActive({ textHits: 1 }), true);
+});

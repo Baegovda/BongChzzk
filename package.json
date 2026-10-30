@@ -1,6 +1,6 @@
 {
   "name": "bongchzzk",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "private": true,
   "type": "module",
   "description": "치지직 무한 버퍼링 자동 복구 Chrome 확장 프로그램",
