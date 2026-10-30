@@ -5,6 +5,12 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-10-30
+
+### Fixed
+- 릴리스 zip에 `content-following.js`, `content-extras.js`가 빠져 확장 프로그램을 불러오지 못하던 문제 수정
+- 릴리스 빌드 시 manifest가 참조하는 파일이 zip에 모두 있는지 검사하는 단계 추가
+
 ## [1.3.0] - 2026-10-30
 
 ### Added

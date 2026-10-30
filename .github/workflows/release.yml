@@ -41,12 +41,24 @@ jobs:
           zip -r "bongchzzk-${VERSION}.zip" \
             manifest.json \
             content.js \
+            content-following.js \
+            content-extras.js \
             popup.html \
             popup.js \
             README.md \
             CHANGELOG.md \
             lib \
             icons
+
+      - name: Verify zip contains every file the manifest references
+        run: |
+          set -eu
+          VERSION="${GITHUB_REF_NAME#v}"
+          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('manifest.json','utf8'));const f=new Set();(m.content_scripts||[]).forEach(c=>(c.js||[]).concat(c.css||[]).forEach(x=>f.add(x)));if(m.action&&m.action.default_popup)f.add(m.action.default_popup);Object.values(m.icons||{}).forEach(x=>f.add(x));fs.writeFileSync('required-files.txt',[...f].join('\n')+'\n')"
+          unzip -Z1 "bongchzzk-${VERSION}.zip" | sort > zip-files.txt
+          while read -r f; do
+            grep -qx "$f" zip-files.txt || { echo "missing in zip: $f"; exit 1; }
+          done < required-files.txt
 
       - name: Extract changelog notes
         run: |
