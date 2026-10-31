@@ -49,10 +49,10 @@
 </template>
 
 <script lang="ts" setup>
-import {inject} from "vue";
 import RefresherModule from "../components/module.vue";
+import {injectSettings} from "../inject";
 
-const {modules, loadState, reload} = inject("settings")!;
+const {modules, loadState, reload} = injectSettings();
 </script>
 
 <style lang="scss" scoped>

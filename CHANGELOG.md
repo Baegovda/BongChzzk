@@ -7,6 +7,12 @@ BongExtend 변경 이력. GitHub **[Releases](https://github.com/Baegovda/BongEx
 
 ---
 
+## [Unreleased]
+
+- 개발 안내를 지금 상태(AGENTS.md, MERGE_NOTES.md)로 다시 정리했어요. 옛 BongDC 문서를 가리키던 링크도 고쳤어요
+- 설정 파일에 치지직 설정과 번역 설정이 들어가고 다시 불러와져요. 번역 횟수 기록도 같이 저장돼요. Gemini API 키는 예전처럼 파일에 들어 있으니 남에게 보내지 마세요
+- 타입 검사 명령 `bun run typecheck`를 넣었어요
+
 ## [1.0.13] - 2026-10-31
 
 - 버퍼링이 걸리면 영상 위에 다음 복구까지 남은 시간을 크게 보여 줘요 (설정: 버퍼링 때 복구 타이머 크게 표시)

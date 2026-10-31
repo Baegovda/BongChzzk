@@ -47,9 +47,9 @@
 </template>
 
 <script lang="ts" setup>
-import {inject} from "vue";
 import RefresherBubble from "../components/bubble.vue";
 import {PlusIcon, RemoveIcon} from "../components/icons";
+import {injectMemos} from "../inject";
 
 const {
   memos,
@@ -61,7 +61,7 @@ const {
   editMemoUser,
   exportMemo,
   importMemo
-} = inject("memos")!;
+} = injectMemos();
 
 const open = (url: string) => {
   browser.tabs.create({url});

@@ -1,3 +1,5 @@
+> **레거시 전용.** 옛 BongDC 에이전트 안내입니다. BongExtend에서는 따르지 마세요. 현재 안내는 루트의 `AGENTS.md`와 `MERGE_NOTES.md`입니다. 아래가 가리키는 `docs/HANDOFF.md`는 이 저장소에 없습니다.
+
 # AGENTS.md
 
 ## Agent protocol

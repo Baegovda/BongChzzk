@@ -19,6 +19,7 @@
         "build": "wxt build",
         "zip": "wxt zip",
         "test": "bun run test:dc && bun run test:js",
+        "typecheck": "vue-tsc --noEmit",
         "postinstall": "wxt prepare",
         "build:firefox": "wxt build -b firefox",
         "zip:firefox": "wxt zip -b firefox",
@@ -31,6 +32,7 @@
     },
     "devDependencies": {
         "@types/bun": "^1.3.14",
+        "@types/chrome": "^0.3.7",
         "@types/js-cookie": "^3.0.6",
         "@webext-core/messaging": "^4.0.0",
         "@wxt-dev/auto-icons": "^1.1.1",
@@ -39,6 +41,8 @@
         "js-cookie": "^3.0.8",
         "ky": "^2.0.2",
         "sass": "^1.102.0",
+        "typescript": "5.9.3",
+        "vue-tsc": "^3.3.14",
         "webextension-polyfill": "^0.12.0",
         "wxt": "^0.20.27"
     },

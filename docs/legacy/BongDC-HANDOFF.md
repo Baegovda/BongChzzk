@@ -1,3 +1,10 @@
+# 옛 BongDC 인수인계 (지금은 쓰지 않음)
+
+> 이 파일은 2026-10-26 당시 **BongDC** 저장소(`Baegovda/BongDC`) 기록입니다. **BongExtend의 현재 안내가 아닙니다.**
+> 지금 작업할 때는 루트의 `AGENTS.md`와 `MERGE_NOTES.md`만 따르세요. 아래의 `docs/HANDOFF.md`, 버전 5.2.x, `develop` 브랜치, 통신사 표를 `Baegovda/BongDC`에서 받는 내용은 당시 기록이라 고치지 않습니다.
+
+---
+
 # HANDOFF
 
 Agent-to-agent continuation for this repo. Read `AGENTS.md` first, then this file. Facts below were checked against the tree and GitHub on 2026-10-26. Re-check anything you are about to change. If a command was not run, say **확인 필요**. Do not guess.

@@ -160,10 +160,11 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, inject, ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import {DEFAULT_BLOCK_DETECT_MODE} from "@/storage/wxtStorage";
 import BlockListItem from "../components/BlockListItem.vue";
 import {PlusIcon} from "../components/icons";
+import {injectBlocks} from "../inject";
 
 const {
   blocks,
@@ -177,7 +178,7 @@ const {
   setBlockMode,
   exportBlock,
   importBlock
-} = inject("blocks")!;
+} = injectBlocks();
 
 const blockGroups = [
   {label: "유저", types: ["NICK", "ID", "IP"] as const},

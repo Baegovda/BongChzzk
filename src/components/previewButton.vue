@@ -23,6 +23,7 @@
 
 <script lang="ts" setup>
 import {computed, ref} from "vue";
+import {assetUrl} from "@/utils/assetUrl";
 
 import upvoteIcon from "@/assets/icons/upvote.webp?no-inline";
 import downvoteIcon from "@/assets/icons/downvote.webp?no-inline";
@@ -47,13 +48,13 @@ const props = withDefaults(defineProps<Props>(), {
 const error = ref(0);
 
 const iconMap: Record<string, string> = {
-  upvote: browser.runtime.getURL(upvoteIcon),
-  downvote: browser.runtime.getURL(downvoteIcon),
-  share: browser.runtime.getURL(shareIcon),
-  newtab: browser.runtime.getURL(newtabIcon),
-  write: browser.runtime.getURL(writeIcon),
-  refresh: browser.runtime.getURL(refreshIcon),
-  dccon: browser.runtime.getURL(dcconIcon)
+  upvote: assetUrl(upvoteIcon),
+  downvote: assetUrl(downvoteIcon),
+  share: assetUrl(shareIcon),
+  newtab: assetUrl(newtabIcon),
+  write: assetUrl(writeIcon),
+  refresh: assetUrl(refreshIcon),
+  dccon: assetUrl(dcconIcon)
 };
 
 const iconSrc = computed(() => iconMap[String(props.id)]);

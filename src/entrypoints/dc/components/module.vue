@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts" setup>
-import {inject} from "vue";
 import RefresherCheckbox from "./checkbox.vue";
+import {injectSettings} from "../inject";
 
 interface Props {
   name: string;
@@ -29,7 +29,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const {updateModuleStatus} = inject("settings")!;
+const {updateModuleStatus} = injectSettings();
 
 const handleToggle = async (value: boolean) => {
   try {

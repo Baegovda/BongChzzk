@@ -52,7 +52,7 @@
       <div
           :class="{
                     'refresher-comment-util': true,
-                    'refresher-comment-util-show': !(hoverUserInfo && !user.id)
+                    'refresher-comment-util-show': !(hoverUserInfo && !user?.id)
                 }"
           class="whoami"
       >
@@ -67,7 +67,7 @@
           :class="{
                     'refresher-comment-util': true,
                     'refresher-comment-util-edit': true,
-                    'refresher-comment-util-show': hoverUserInfo && user.isLogout()
+                    'refresher-comment-util-show': hoverUserInfo && !!user?.isLogout()
                 }"
           class="whoami"
       >
@@ -192,9 +192,7 @@ const toggleEditUser = (): void => {
   }
 };
 
-const renderDcconPopup = (): void => {
-  props.renderDcconPopup();
-};
+const renderDcconPopup = (): boolean => props.renderDcconPopup();
 
 const write = async (): Promise<boolean> => {
   disabled.value = true;

@@ -61,12 +61,13 @@ import {onBeforeUnmount, onMounted, provide, ref, watch} from "vue";
 import RefresherFrame from "./frame.vue";
 import upvoteIcon from "@/assets/icons/upvote.webp?no-inline";
 import downvoteIcon from "@/assets/icons/downvote.webp?no-inline";
+import {assetUrl} from "@/utils/assetUrl";
 import RefresherScroll from "./scroll.vue";
 import type {PreviewFrame} from "../../previewFrame";
 import type {FrameStackOption} from "../../frame";
 
-const upvoteUrl = browser.runtime.getURL(upvoteIcon);
-const downvoteUrl = browser.runtime.getURL(downvoteIcon);
+const upvoteUrl = assetUrl(upvoteIcon);
+const downvoteUrl = assetUrl(downvoteIcon);
 
 interface Props {
   frames: PreviewFrame[];

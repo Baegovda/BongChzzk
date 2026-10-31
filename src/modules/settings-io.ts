@@ -1,6 +1,6 @@
 // BongExtend 설정 내보내기·가져오기
 // 받는 형식
-//  1) BongExtend 파일: {type:"bongextend-settings", chzzk:{sync,local}, trans:{settings}, dc:{...}, core:{...}}
+//  1) BongExtend 파일: {type:"bongextend-settings", chzzk:{sync,local}, trans:{settings, ...그 외 trans.*}, dc:{...}, core:{...}}
 //  2) 옛 BongTrans 파일: {type:"page-translator-settings", settings:{...}}
 //  3) 옛 BongDC 데이터: 디시 탭 → 데이터 → 내보내기로 복사한 JSON (refresher:* 키)
 //  4) 옛 BongChzzk 설정 객체: {enabled, watchList, ...} (옛 확장에는 내보내기 버튼이 없어서 직접 만든 경우만)
@@ -53,9 +53,21 @@ export const planImport = (text: string): ImportPlan => {
             Object.assign(plan.local, prefixed("chzzk.", chzzk.local as Rec));
             plan.labels.push("치지직");
         }
-        if (isObj(parsed.trans) && isObj(parsed.trans.settings)) {
-            plan.local[TRANS_KEY] = normalizeSettings(parsed.trans.settings);
-            plan.labels.push("번역");
+        if (isObj(parsed.trans)) {
+            // trans.settings 는 정규화하고, trans.cacheStats 같은 나머지 trans.* 키도 그대로 되돌린다.
+            // Gemini 키는 trans.settings.apiKey 로 기존 백업 형식에 포함된다.
+            const extra = prefixed("trans.", parsed.trans);
+            delete extra[TRANS_KEY];
+            let got = false;
+            if (isObj(parsed.trans.settings)) {
+                plan.local[TRANS_KEY] = normalizeSettings(parsed.trans.settings);
+                got = true;
+            }
+            if (Object.keys(extra).length) {
+                Object.assign(plan.local, extra);
+                got = true;
+            }
+            if (got) plan.labels.push("번역");
         }
         if (isObj(parsed.dc)) {
             plan.dcReplace = normalizeStorageData(onlyDcKeys(parsed.dc));
@@ -120,13 +132,17 @@ export const buildExport = (local: Rec, sync: Rec): Rec => {
     };
     const dc = onlyDcKeys(local);
     for (const k of Object.keys(dc)) if (k.startsWith("refresher:database:")) delete dc[k];
+    // chzzk.* / trans.* 는 이름 목록으로 고르지 않는다. 접두사가 붙은 키는 빠짐없이 넣는다.
+    // (CHZZK_KEYS 는 옛 BongChzzk 객체를 알아볼 때만 쓴다.)
+    const trans = pick(local, "trans.");
+    trans.settings = local[TRANS_KEY] ?? null;
     return {
         type: BONGEXTEND_FILE_TYPE,
         version: 1,
         exportedAt: new Date().toISOString(),
         app: "BongExtend",
         chzzk: {sync: pick(sync, "chzzk."), local: pick(local, "chzzk.")},
-        trans: {settings: local[TRANS_KEY] ?? null},
+        trans,
         dc,
         core: pick(local, "core.")
     };

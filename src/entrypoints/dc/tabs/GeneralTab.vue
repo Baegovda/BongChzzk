@@ -22,13 +22,13 @@
 </template>
 
 <script lang="ts" setup>
-import {inject} from "vue";
 import SettingsModule from "../components/settingsModule.vue";
+import {injectSettings} from "../inject";
 
 const {
   modules,
   settings,
   loadState,
   modulesWithBasicSettings
-} = inject("settings")!;
+} = injectSettings();
 </script>

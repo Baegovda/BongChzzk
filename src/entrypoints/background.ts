@@ -107,7 +107,8 @@ export default defineBackground(() => {
                     await browser.contextMenus.remove(item.id).catch(() => {});
                 }
 
-                await browser.contextMenus.create(item);
+                // @types/chrome 의 create 와 폴리필 Browser 타입이 메뉴 type 에서만 어긋난다. 넘기는 항목에는 separator 가 없다.
+                await browser.contextMenus.create(item as chrome.contextMenus.CreateProperties);
             }
 
             // 번역 모듈 메뉴 (removeAll 뒤에 같이 만든다)

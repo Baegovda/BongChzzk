@@ -27,15 +27,15 @@
 </template>
 
 <script lang="ts" setup>
-import {inject} from "vue";
 import SettingsModule from "../components/settingsModule.vue";
+import {injectSettings} from "../inject";
 
 const {
   modules,
   settings,
   loadState,
   modulesWithAdvancedSettings
-} = inject("settings")!;
+} = injectSettings();
 </script>
 
 <style lang="scss" scoped>

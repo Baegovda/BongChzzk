@@ -25,7 +25,8 @@
 </template>
 
 <script lang="ts" setup>
-import {inject, onMounted} from "vue";
+import {onMounted} from "vue";
+import {injectData} from "../inject";
 
 const {
   lastUpdate,
@@ -34,7 +35,7 @@ const {
   backupCloud,
   recoverCloud,
   clearData
-} = inject("data")!;
+} = injectData();
 
 onMounted(refreshLastUpdate);
 </script>
